@@ -4,6 +4,7 @@
  */
 
 import { TERMINAL_INITIAL_LINES, DIAGNOSTIC_DELAYS_MS } from '../config/app.config.js';
+import { playThermalPrinterTear } from './audio.js';
 
 /**
  * Append a line to the terminal output element.
@@ -78,6 +79,7 @@ export function runDiagnosticSequence(params, deps) {
   setTimeout(() => {
     if (!successOverlay) return;
     successOverlay.style.display = 'flex';
+    playThermalPrinterTear();
 
     if (ticketEls.club)       ticketEls.club.innerText       = clubName.toUpperCase();
     if (ticketEls.pseudonym)  ticketEls.pseudonym.innerText  = pseudo;

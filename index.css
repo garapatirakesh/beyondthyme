@@ -437,3 +437,232 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
 .calibration-sliders-col{display:flex;flex-direction:column;gap:0.75rem;}
 
 @media (min-width:768px){.community-grid{grid-template-columns:1fr 1fr;}}
+
+/* ─── Immersive Vetting & Rotary Dials additions ────────────────────────── */
+
+/* Rotary Dial Component Styles */
+.calibration-dials-col {
+  display: flex;
+  justify-content: space-around;
+  gap: 1.5rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.dial-container-slot {
+  flex: 1;
+  min-width: 100px;
+  display: flex;
+  justify-content: center;
+}
+.rotary-dial-wrapper {
+  text-align: center;
+  user-select: none;
+}
+.rotary-dial-label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.rotary-dial-graphic {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto;
+}
+.rotary-svg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+.rotary-svg:active {
+  cursor: grabbing;
+}
+.dial-track {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.dial-fill {
+  fill: none;
+  stroke: var(--color-coral);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.08s linear;
+}
+.dial-cap {
+  fill: var(--bg-surface);
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+}
+.dial-pointer {
+  fill: var(--color-coral);
+  transition: transform 0.08s linear;
+}
+.rotary-dial-value-display {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: bold;
+  pointer-events: none;
+  color: var(--text-primary);
+  padding-top: 4px;
+}
+.calibration-dials-col.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Dual Panel Vetting Overlay Layout */
+.vetting-panel-wrapper {
+  background-color: var(--bg-surface);
+  padding: 3rem 2rem;
+  max-width: 820px;
+  width: 95%;
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  position: relative;
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+.vetting-split-container {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2.5rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 767px) {
+  .vetting-split-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+.vetting-split-left {
+  display: flex;
+  flex-direction: column;
+}
+.vetting-split-right {
+  background: linear-gradient(135deg, var(--bg-recessed) 0%, var(--bg-base) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.preview-ticket-watermark {
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-style: italic;
+  font-weight: 900;
+  opacity: 0.03;
+  color: var(--text-primary);
+  pointer-events: none;
+  user-select: none;
+}
+.preview-ticket-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px dashed var(--border-subtle);
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.preview-avatar-spot {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  border: 1.5px solid var(--color-coral);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(255, 90, 46, 0.15);
+}
+.preview-ticket-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+.preview-ticket-name {
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.preview-ticket-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.preview-detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  border-bottom: 1px dashed var(--border-subtle);
+  padding-bottom: 0.5rem;
+}
+.preview-detail-row--last {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.preview-detail-label {
+  color: var(--text-muted);
+}
+.preview-detail-val {
+  font-weight: 600;
+}
+
+/* scanning CRT grid overlay on terminal boot */
+.scanning-boot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 4px, 6px 100%;
+  z-index: 99;
+  pointer-events: none;
+  animation: scanline-pulse 1s linear infinite;
+}
+@keyframes scanline-pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.8; }
+}
+
+/* Success Ticket Container Print Feed Simulation */
+.ticket-panel {
+  transform: translateY(100px);
+  opacity: 0;
+  animation: ticket-print-slide 1.3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.2s;
+}
+@keyframes ticket-print-slide {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Side-panel modifications for relocated Vault Breaker Panel */
+.vault-breaker-panel--side {
+  width: 90%;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  text-align: left;
+  box-sizing: border-box;
+}
+.vault-status-text--compact {
+  margin-bottom: 0.75rem !important;
+}

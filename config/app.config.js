@@ -55,6 +55,19 @@ export const AUDIO = {
   BUZZER_FREQ2_HZ:     104,
   BUZZER_GAIN:         0.02,
   BUZZER_DURATION_S:   0.35,
+
+  // New Synthesized Vetting Audio chimes
+  BOOT_START_FREQ_HZ:  80,
+  BOOT_END_FREQ_HZ:    680,
+  BOOT_SWEEP_DURATION_S:0.8,
+  BOOT_GAIN:           0.025,
+
+  DIAL_TICK_FREQ_HZ:   1200,
+  DIAL_TICK_GAIN:      0.008,
+  DIAL_TICK_DURATION_S:0.005,
+
+  PRINTER_NOISE_DURATION_S: 1.2,
+  PRINTER_NOISE_GAIN:       0.03,
 };
 
 /** Slider → drone freq mapping: baseFreq + (sliderValue - 50) * multiplier */
@@ -77,6 +90,13 @@ export const RADAR = {
   DOT_RADIUS:      3,
   DEFAULT_VALUE:   50,
 };
+
+// ─── Rotary Dials ────────────────────────────────────────────────────────────
+export const DIAL_CONFIG = {
+  RADIUS: 40,
+  STROKE_WIDTH: 3,
+};
+
 
 // ─── Form Validation ─────────────────────────────────────────────────────────
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

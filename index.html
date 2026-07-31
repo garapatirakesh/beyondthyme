@@ -211,28 +211,6 @@
           <!-- Console output — boot lines injected by terminal.js -->
           <div class="terminal-output" id="terminalOutput"></div>
 
-          <!-- Vault decryption panel -->
-          <div class="vault-breaker-panel">
-            <div class="vault-breaker-header font-mono text-coral">
-              <span class="status-pulse-active status-pulse-active--sm"></span>
-              AMRIT VAULT BREAKER CONSOLE
-            </div>
-            <div class="vault-breaker-inputs">
-              <div class="vault-breaker-field">
-                <label class="editorial-label vault-key-label">CHRONO-KEY X</label>
-                <input type="text" id="chronoKeyX" class="editorial-input editorial-input--compact nav-interactive" placeholder="HH:MM">
-              </div>
-              <div class="vault-breaker-field">
-                <label class="editorial-label vault-key-label">CHRONO-KEY Y</label>
-                <input type="text" id="chronoKeyY" class="editorial-input editorial-input--compact nav-interactive" placeholder="HH:MM">
-              </div>
-              <button id="btnDecryptVault" class="btn-pill btn-coral btn-breach nav-interactive">BREACH <span class="arrow">→</span></button>
-            </div>
-            <div id="vaultBreakerStatus" class="vault-breaker-status font-mono text-ash">
-              > Enter correct daily X &amp; Y coordinate signals to unlock the celestial Amrit Yuga menu &amp; VIP pass.
-            </div>
-          </div>
-
           <!-- Member registration form -->
           <form class="terminal-form" id="chronoForm" autocomplete="off" onsubmit="return false;">
 
@@ -252,34 +230,10 @@
                 <div class="calibration-title">Calibrate Vibe Fingerprint</div>
                 <canvas id="radarCanvas" width="120" height="120" class="radar-canvas"></canvas>
               </div>
-              <div class="calibration-sliders-col">
-
-                <div class="slider-group">
-                  <div class="slider-label-row">
-                    <span>Time (Past)</span>
-                    <span id="valOpenness">50%</span>
-                    <span>(Future)</span>
-                  </div>
-                  <input type="range" class="calibrated-slider nav-interactive" id="sliderOpenness" min="0" max="100" value="50">
-                </div>
-
-                <div class="slider-group">
-                  <div class="slider-label-row">
-                    <span>Social Vector (Solitude)</span>
-                    <span id="valDepth">50%</span>
-                    <span>(Symbiosis)</span>
-                  </div>
-                  <input type="range" class="calibrated-slider nav-interactive" id="sliderDepth" min="0" max="100" value="50">
-                </div>
-
-                <div class="slider-group">
-                  <div class="slider-label-row">
-                    <span>Flavor (Nostalgic)</span>
-                    <span id="valEnergy">50%</span>
-                    <span>(Molecular)</span>
-                  </div>
-                  <input type="range" class="calibrated-slider nav-interactive" id="sliderEnergy" min="0" max="100" value="50">
-                </div>
+              <div class="calibration-dials-col" id="calibrationDialsRow">
+                <div class="dial-container-slot" id="dialOpennessSlot"></div>
+                <div class="dial-container-slot" id="dialDepthSlot"></div>
+                <div class="dial-container-slot" id="dialEnergySlot"></div>
               </div>
             </div>
 
@@ -304,10 +258,32 @@
             </div>
           </div>
           <h3 class="vault-title font-display text-bone">Amrit Vault</h3>
-          <p class="vault-status-text text-ash font-mono">
+          <p class="vault-status-text vault-status-text--compact text-ash font-mono">
             VAULT STATUS: <span class="text-coral" id="vaultTextStatusLabel">LOCKED</span><br>
             TIMELINE COORDINATES X &amp; Y REQUIRED TO BREACH SATYA SECTOR.
           </p>
+
+          <!-- Vault decryption panel relocated here -->
+          <div class="vault-breaker-panel vault-breaker-panel--side">
+            <div class="vault-breaker-header font-mono text-coral">
+              <span class="status-pulse-active status-pulse-active--sm"></span>
+              AMRIT VAULT BREAKER CONSOLE
+            </div>
+            <div class="vault-breaker-inputs">
+              <div class="vault-breaker-field">
+                <label class="editorial-label vault-key-label">CHRONO-KEY X</label>
+                <input type="text" id="chronoKeyX" class="editorial-input editorial-input--compact nav-interactive" placeholder="HH:MM">
+              </div>
+              <div class="vault-breaker-field">
+                <label class="editorial-label vault-key-label">CHRONO-KEY Y</label>
+                <input type="text" id="chronoKeyY" class="editorial-input editorial-input--compact nav-interactive" placeholder="HH:MM">
+              </div>
+              <button id="btnDecryptVault" class="btn-pill btn-coral btn-breach nav-interactive">BREACH <span class="arrow">→</span></button>
+            </div>
+            <div id="vaultBreakerStatus" class="vault-breaker-status font-mono text-ash">
+              > Enter correct daily X &amp; Y coordinate signals to unlock the celestial Amrit Yuga menu &amp; VIP pass.
+            </div>
+          </div>
         </div>
 
         <!-- Unlocked state (hidden by default) -->
@@ -436,7 +412,7 @@
 
   <!-- ═══════════════════════════ VETTING OVERLAY ══════════════════════════════ -->
   <div id="vettingOverlay" class="overlay-backdrop overlay-backdrop--hidden">
-    <div class="vetting-panel border-grid">
+    <div class="vetting-panel-wrapper border-grid">
       <div class="vetting-panel-accent-bar"></div>
 
       <div class="vetting-panel-header">
@@ -444,71 +420,106 @@
         <button id="closeVettingBtn" class="vetting-close-btn nav-interactive">&times;</button>
       </div>
 
-      <form id="vettingForm" autocomplete="off" onsubmit="return false;">
+      <div class="vetting-split-container">
+        <!-- Left: Form Steps -->
+        <div class="vetting-split-left">
+          <form id="vettingForm" autocomplete="off" onsubmit="return false;">
 
-        <!-- Step 1: Identity -->
-        <div class="vetting-step" id="vettingStep1">
-          <div class="vetting-step-label label-mono">Step 1 of 3: Identity &amp; Coordinates</div>
-          <div class="form-group vetting-form-group">
-            <label class="editorial-label">User Pseudonym / Alias</label>
-            <input type="text" id="vettingPseudo" class="editorial-input nav-interactive" placeholder="e.g. Vedic_Chrono" required>
-          </div>
-          <div class="form-group vetting-form-group vetting-form-group--last">
-            <label class="editorial-label">Member Access ID (Email)</label>
-            <input type="email" id="vettingEmail" class="editorial-input nav-interactive" placeholder="e.g. member@beyondthyme.in" required>
-          </div>
-          <button type="button" class="btn-terminal-submit nav-interactive" id="toStep2Btn">Proceed to Calibration</button>
+            <!-- Step 1: Identity -->
+            <div class="vetting-step" id="vettingStep1">
+              <div class="vetting-step-label label-mono">Step 1 of 3: Identity &amp; Coordinates</div>
+              <div class="form-group vetting-form-group">
+                <label class="editorial-label">User Pseudonym / Alias</label>
+                <input type="text" id="vettingPseudo" class="editorial-input nav-interactive" placeholder="e.g. Vedic_Chrono" required>
+              </div>
+              <div class="form-group vetting-form-group vetting-form-group--last">
+                <label class="editorial-label">Member Access ID (Email)</label>
+                <input type="email" id="vettingEmail" class="editorial-input nav-interactive" placeholder="e.g. member@beyondthyme.in" required>
+              </div>
+              <button type="button" class="btn-terminal-submit nav-interactive" id="toStep2Btn">Proceed to Calibration</button>
+            </div>
+
+            <!-- Step 2: Dietary -->
+            <div class="vetting-step" id="vettingStep2" hidden>
+              <div class="vetting-step-label label-mono">Step 2 of 3: Dietary Calibration</div>
+              <p class="vetting-step-desc text-ash">Select your culinary coordinate profile. Our villa kitchen matches ingredients to your calibration.</p>
+              <div class="dietary-options-grid">
+                <label class="diet-card nav-interactive">
+                  <input type="radio" name="dietProfile" value="Sattvic" checked hidden>
+                  <div class="diet-card-inner"><span class="diet-title">Sattvic</span><span class="diet-desc">Pure Vegetarian, no onions/garlic.</span></div>
+                </label>
+                <label class="diet-card nav-interactive">
+                  <input type="radio" name="dietProfile" value="Shakahari" hidden>
+                  <div class="diet-card-inner"><span class="diet-title">Shakahari</span><span class="diet-desc">Heirloom Vegetarian villa feasts.</span></div>
+                </label>
+                <label class="diet-card nav-interactive">
+                  <input type="radio" name="dietProfile" value="Nirvana" hidden>
+                  <div class="diet-card-inner"><span class="diet-title">Nirvana Omnivore</span><span class="diet-desc">Charcoal venison &amp; coastal sea catch.</span></div>
+                </label>
+                <label class="diet-card nav-interactive">
+                  <input type="radio" name="dietProfile" value="KalaSpecial" hidden>
+                  <div class="diet-card-inner"><span class="diet-title">Kala Special</span><span class="diet-desc">Speculative molecular experiment.</span></div>
+                </label>
+              </div>
+              <div class="vetting-btn-row">
+                <button type="button" class="btn-pill btn-ghost nav-interactive" id="backToStep1">Back</button>
+                <button type="button" class="btn-terminal-submit nav-interactive" id="toStep3Btn">Choose Avatar</button>
+              </div>
+            </div>
+
+            <!-- Step 3: Avatar -->
+            <div class="vetting-step" id="vettingStep3" hidden>
+              <div class="vetting-step-label label-mono">Step 3 of 3: Select Temporal Avatar</div>
+              <p class="vetting-step-desc text-ash">Select a 2D symbol to represent your coordinates anonymously on the floorplan.</p>
+              <div class="avatar-select-grid">
+                <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="⏳" checked hidden><span class="avatar-emoji-btn active">⏳</span></label>
+                <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="⌛" hidden><span class="avatar-emoji-btn">⌛</span></label>
+                <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🪩" hidden><span class="avatar-emoji-btn">🪩</span></label>
+                <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="☸️" hidden><span class="avatar-emoji-btn">☸️</span></label>
+                <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🕉️" hidden><span class="avatar-emoji-btn">🕉️</span></label>
+                <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🕯️" hidden><span class="avatar-emoji-btn">🕯️</span></label>
+                <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🧭" hidden><span class="avatar-emoji-btn">🧭</span></label>
+                <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🌀" hidden><span class="avatar-emoji-btn">🌀</span></label>
+              </div>
+              <div class="vetting-btn-row">
+                <button type="button" class="btn-pill btn-ghost nav-interactive" id="backToStep2">Back</button>
+                <button type="button" class="btn-terminal-submit nav-interactive" id="submitVettingBtn">Calibrate &amp; RSVP</button>
+              </div>
+            </div>
+
+          </form>
         </div>
 
-        <!-- Step 2: Dietary -->
-        <div class="vetting-step" id="vettingStep2" hidden>
-          <div class="vetting-step-label label-mono">Step 2 of 3: Dietary Calibration</div>
-          <p class="vetting-step-desc text-ash">Select your culinary coordinate profile. Our villa kitchen matches ingredients to your calibration.</p>
-          <div class="dietary-options-grid">
-            <label class="diet-card nav-interactive">
-              <input type="radio" name="dietProfile" value="Sattvic" checked hidden>
-              <div class="diet-card-inner"><span class="diet-title">Sattvic</span><span class="diet-desc">Pure Vegetarian, no onions/garlic.</span></div>
-            </label>
-            <label class="diet-card nav-interactive">
-              <input type="radio" name="dietProfile" value="Shakahari" hidden>
-              <div class="diet-card-inner"><span class="diet-title">Shakahari</span><span class="diet-desc">Heirloom Vegetarian villa feasts.</span></div>
-            </label>
-            <label class="diet-card nav-interactive">
-              <input type="radio" name="dietProfile" value="Nirvana" hidden>
-              <div class="diet-card-inner"><span class="diet-title">Nirvana Omnivore</span><span class="diet-desc">Charcoal venison &amp; coastal sea catch.</span></div>
-            </label>
-            <label class="diet-card nav-interactive">
-              <input type="radio" name="dietProfile" value="KalaSpecial" hidden>
-              <div class="diet-card-inner"><span class="diet-title">Kala Special</span><span class="diet-desc">Speculative molecular experiment.</span></div>
-            </label>
+        <!-- Right: Real-time Coordinate Ticket Pass Preview -->
+        <div class="vetting-split-right border-grid">
+          <div class="preview-ticket-watermark">PREVIEW PASS</div>
+          <div class="preview-ticket-header">
+            <div class="preview-avatar-spot" id="previewAvatar">⏳</div>
+            <div>
+              <div class="preview-ticket-label font-mono">TEMPORAL IDENTITY</div>
+              <div class="preview-ticket-name font-display" id="previewPseudo">PENDING ALIAS</div>
+            </div>
           </div>
-          <div class="vetting-btn-row">
-            <button type="button" class="btn-pill btn-ghost nav-interactive" id="backToStep1">Back</button>
-            <button type="button" class="btn-terminal-submit nav-interactive" id="toStep3Btn">Choose Avatar</button>
-          </div>
-        </div>
-
-        <!-- Step 3: Avatar -->
-        <div class="vetting-step" id="vettingStep3" hidden>
-          <div class="vetting-step-label label-mono">Step 3 of 3: Select Temporal Avatar</div>
-          <p class="vetting-step-desc text-ash">Select a 2D symbol to represent your coordinates anonymously on the floorplan.</p>
-          <div class="avatar-select-grid">
-            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="⏳" checked hidden><span class="avatar-emoji-btn active">⏳</span></label>
-            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="⌛" hidden><span class="avatar-emoji-btn">⌛</span></label>
-            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🪩" hidden><span class="avatar-emoji-btn">🪩</span></label>
-            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="☸️" hidden><span class="avatar-emoji-btn">☸️</span></label>
-            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🕉️" hidden><span class="avatar-emoji-btn">🕉️</span></label>
-            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🕯️" hidden><span class="avatar-emoji-btn">🕯️</span></label>
-            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🧭" hidden><span class="avatar-emoji-btn">🧭</span></label>
-            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🌀" hidden><span class="avatar-emoji-btn">🌀</span></label>
-          </div>
-          <div class="vetting-btn-row">
-            <button type="button" class="btn-pill btn-ghost nav-interactive" id="backToStep2">Back</button>
-            <button type="button" class="btn-terminal-submit nav-interactive" id="submitVettingBtn">Calibrate &amp; RSVP</button>
+          <div class="preview-ticket-details font-mono">
+            <div class="preview-detail-row">
+              <span class="preview-detail-label">SEAT POSITION:</span>
+              <span class="preview-detail-val" id="previewSeat">UNASSIGNED</span>
+            </div>
+            <div class="preview-detail-row">
+              <span class="preview-detail-label">DIETARY SYNC:</span>
+              <span class="preview-detail-val text-candle" id="previewDiet">SATTVIC</span>
+            </div>
+            <div class="preview-detail-row">
+              <span class="preview-detail-label">VIBE COORDINATES:</span>
+              <span class="preview-detail-val text-coral" id="previewVector">[50%, 50%, 50%]</span>
+            </div>
+            <div class="preview-detail-row preview-detail-row--last">
+              <span class="preview-detail-label">CLEARANCE:</span>
+              <span class="preview-detail-val text-gold">TEMPORAL STAGING</span>
+            </div>
           </div>
         </div>
-
-      </form>
+      </div>
     </div>
   </div>
 

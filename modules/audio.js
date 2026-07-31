@@ -149,6 +149,91 @@ export function playErrorBuzzer() {
   gain.connect(audioCtx.destination);
 }
 
+/** Synthesizes a mechanical clock click for dial increments */
+export function playCalibrationTick() {
+  if (!isPlaying || !audioCtx || audioCtx.state === 'suspended') return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(AUDIO.DIAL_TICK_FREQ_HZ, audioCtx.currentTime);
+
+  gain.gain.setValueAtTime(AUDIO.DIAL_TICK_GAIN, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + AUDIO.DIAL_TICK_DURATION_S);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + AUDIO.DIAL_TICK_DURATION_S + 0.01);
+}
+
+/** Synthesizes an ascending terminal boot sweep when vetting overlay opens */
+export function playTerminalBootSweep() {
+  if (!isPlaying || !audioCtx || audioCtx.state === 'suspended') return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(AUDIO.BOOT_START_FREQ_HZ, audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(AUDIO.BOOT_END_FREQ_HZ, audioCtx.currentTime + AUDIO.BOOT_SWEEP_DURATION_S);
+
+  gain.gain.setValueAtTime(AUDIO.BOOT_GAIN, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + AUDIO.BOOT_SWEEP_DURATION_S);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + AUDIO.BOOT_SWEEP_DURATION_S + 0.05);
+}
+
+/** Synthesizes a thermal printer whirring + cutting blade paper tear sound */
+export function playThermalPrinterTear() {
+  if (!isPlaying || !audioCtx || audioCtx.state === 'suspended') return;
+
+  const noiseNode = audioCtx.createBufferSource();
+  noiseNode.buffer = _createWhiteNoiseBuffer();
+
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+  filter.frequency.linearRampToValueAtTime(1600, audioCtx.currentTime + 0.8);
+  filter.frequency.setValueAtTime(3000, audioCtx.currentTime + 0.9);
+  filter.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + AUDIO.PRINTER_NOISE_DURATION_S);
+
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(AUDIO.PRINTER_NOISE_GAIN, audioCtx.currentTime);
+  
+  // Printing pulses (whirr-whirr-whirr)
+  for (let t = 0.1; t < 0.8; t += 0.15) {
+    gain.gain.setValueAtTime(AUDIO.PRINTER_NOISE_GAIN * 0.4, audioCtx.currentTime + t);
+    gain.gain.setValueAtTime(AUDIO.PRINTER_NOISE_GAIN, audioCtx.currentTime + t + 0.05);
+  }
+  
+  // Sharp pop at tear/cut moment
+  gain.gain.setValueAtTime(AUDIO.PRINTER_NOISE_GAIN * 1.5, audioCtx.currentTime + 0.85);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + AUDIO.PRINTER_NOISE_DURATION_S);
+
+  noiseNode.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  noiseNode.start();
+  noiseNode.stop(audioCtx.currentTime + AUDIO.PRINTER_NOISE_DURATION_S + 0.05);
+}
+
+function _createWhiteNoiseBuffer() {
+  const bufferSize = audioCtx.sampleRate * AUDIO.PRINTER_NOISE_DURATION_S;
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  return buffer;
+}
+
+
 // ─── Private helpers ──────────────────────────────────────────────────────────
 
 function triggerTickClick() {

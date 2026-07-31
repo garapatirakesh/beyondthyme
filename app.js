@@ -14,7 +14,7 @@ import { initCursor, bindCursorHover } from './modules/cursor.js';
 import {
   startAmbientAudio, stopAmbientAudio, isAudioPlaying,
   updateAudioCalibration, playBeaconChime, playResonanceChime,
-  playSuccessArpeggio, playErrorBuzzer,
+  playSuccessArpeggio, playErrorBuzzer, playThermalPrinterTear,
 } from './modules/audio.js';
 import { printToTerminal, resetTerminal, runDiagnosticSequence } from './modules/terminal.js';
 import { startCountdown }    from './modules/countdown.js';
@@ -28,6 +28,8 @@ import { initVetting }       from './modules/vetting.js';
 import {
   renderClubCards, renderMenu, renderGuestbook, appendGuestbookEntry,
 } from './modules/renderer.js';
+import { createRotaryDial }  from './modules/dials.js';
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -42,14 +44,29 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGuestbook(SEED_GUESTBOOK_ENTRIES);
   renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
 
-  // ── 3. Seating state ───────────────────────────────────────────────────────
+  // ── 3. Seating state & Rotary Dials ────────────────────────────────────────
   let selectedSeat   = null;   // 'Seat_03' etc.
   let selectedSeatEl = null;   // HTMLElement
 
+  const dialValues = { openness: 50, depth: 50, energy: 50 };
+
+  const dialOpenness = createRotaryDial(document.getElementById('dialOpennessSlot'), 'TIME', 50, (val) => {
+    dialValues.openness = val;
+    onDialUpdate();
+  });
+  const dialDepth = createRotaryDial(document.getElementById('dialDepthSlot'), 'SOCIAL', 50, (val) => {
+    dialValues.depth = val;
+    onDialUpdate();
+  });
+  const dialEnergy = createRotaryDial(document.getElementById('dialEnergySlot'), 'FLAVOR', 50, (val) => {
+    dialValues.energy = val;
+    onDialUpdate();
+  });
+
   const sliders = {
-    openness: document.getElementById('sliderOpenness'),
-    depth:    document.getElementById('sliderDepth'),
-    energy:   document.getElementById('sliderEnergy'),
+    get openness() { return { value: Math.round(dialValues.openness) }; },
+    get depth() { return { value: Math.round(dialValues.depth) }; },
+    get energy() { return { value: Math.round(dialValues.energy) }; }
   };
 
   const countdownEls = {
@@ -219,28 +236,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   drawRadar();
 
-  // Slider event wiring
+  // Dials event wiring
   let printTimeout;
-  const sliderDisplays = {
-    openness: document.getElementById('valOpenness'),
-    depth:    document.getElementById('valDepth'),
-    energy:   document.getElementById('valEnergy'),
-  };
+  function onDialUpdate() {
+    drawRadar();
+    updateAudioCalibration(sliders);
 
-  Object.entries(sliders).forEach(([key, slider]) => {
-    if (!slider) return;
-    slider.addEventListener('input', () => {
-      if (sliderDisplays[key]) sliderDisplays[key].innerText = `${slider.value}%`;
-      drawRadar();
-      updateAudioCalibration(sliders);
-      clearTimeout(printTimeout);
-      printTimeout = setTimeout(() => {
-        printToTerminal(
-          `> TEMPORAL VECTOR ADJUSTED: [TIME: ${sliders.openness?.value}% | SOCIAL: ${sliders.depth?.value}% | FLAVOR: ${sliders.energy?.value}%]`
-        );
-      }, DEBOUNCE_PRINT_MS);
-    });
-  });
+    // Sync vetting overlay ticket preview coordinates block
+    const previewVector = document.getElementById('previewVector');
+    if (previewVector) {
+      previewVector.innerText = `[${Math.round(dialValues.openness)}%, ${Math.round(dialValues.depth)}%, ${Math.round(dialValues.energy)}%]`;
+    }
+
+    clearTimeout(printTimeout);
+    printTimeout = setTimeout(() => {
+      printToTerminal(
+        `> TEMPORAL VECTOR ADJUSTED: [TIME: ${Math.round(dialValues.openness)}% | SOCIAL: ${Math.round(dialValues.depth)}% | FLAVOR: ${Math.round(dialValues.energy)}%]`
+      );
+    }, DEBOUNCE_PRINT_MS);
+  }
 
   // ── 8. Audio toggle ────────────────────────────────────────────────────────
   const audioToggleBtn = document.getElementById('audioToggleBtn');
@@ -278,17 +292,15 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.disabled = true;
     pseudonymInput?.setAttribute('disabled', 'true');
     emailInput?.setAttribute('disabled', 'true');
-    sliders.openness?.setAttribute('disabled', 'true');
-    sliders.depth?.setAttribute('disabled', 'true');
-    sliders.energy?.setAttribute('disabled', 'true');
+    document.getElementById('calibrationDialsRow')?.classList.add('disabled');
 
     runDiagnosticSequence(
       {
         pseudo: pseudonymInput?.value.trim(),
         seat:   selectedSeat,
-        o:      sliders.openness?.value ?? '50',
-        d:      sliders.depth?.value    ?? '50',
-        eVal:   sliders.energy?.value   ?? '50',
+        o:      String(Math.round(dialValues.openness)),
+        d:      String(Math.round(dialValues.depth)),
+        eVal:   String(Math.round(dialValues.energy)),
       },
       {
         terminalBox,
@@ -310,8 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (successOverlay) successOverlay.style.display = 'none';
     terminalBox?.classList.remove('diagnostic-running');
 
-    [pseudonymInput, emailInput, sliders.openness, sliders.depth, sliders.energy]
-      .forEach(el => el?.removeAttribute('disabled'));
+    [pseudonymInput, emailInput].forEach(el => el?.removeAttribute('disabled'));
+    document.getElementById('calibrationDialsRow')?.classList.remove('disabled');
 
     chronoForm?.reset();
     document.getElementById('vettingForm')?.reset();
@@ -325,10 +337,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('dotProgress2')?.classList.remove('active');
     document.getElementById('dotProgress3')?.classList.remove('active');
 
-    ['valOpenness', 'valDepth', 'valEnergy'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerText = '50%';
-    });
+    // Reset dials back to 50% baseline values
+    dialOpenness.setValue(50);
+    dialDepth.setValue(50);
+    dialEnergy.setValue(50);
+    dialValues.openness = 50;
+    dialValues.depth = 50;
+    dialValues.energy = 50;
 
     drawRadar();
     resetTerminal();
