@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Beyond Thyme — Time Stops at the Table</title>
+  <meta name="description" content="A private chronological supper club. An asymmetric digital loop for stranger dining, matched by vibe calibration vectors. Issue 01, Vol. 2026.">
+  <meta name="keywords" content="Beyond Thyme, supper club, curated dining, Delhi dinners, Bangalore dinners, six strangers, vibe calibration">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Beyond Thyme — A Private Chronological Supper Club">
+  <meta property="og:description" content="Six strangers. One banquet table. Continuous time. Matches delivered via WhatsApp.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%23ff5a2e%22/></svg>" type="image/svg+xml">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Custom cursor element (desktop only via CSS) -->
+  <div class="custom-cursor" id="customCursor"></div>
+
+  <!-- ═══════════════════════════════════ HEADER ═══════════════════════════════ -->
+  <header class="max-width-container">
+    <nav class="nav-container">
+      <a href="#" class="logo font-display">
+        <span class="logo-dot"></span>
+        <span>beyond <span class="italic">thyme</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#manifesto" class="nav-interactive">Manifesto</a></li>
+        <li><a href="#eras"      class="nav-interactive">Eras of Flavor</a></li>
+        <li><a href="#schematic" class="nav-interactive">Floorplan</a></li>
+        <li><a href="#vault"     class="nav-interactive">Access Terminal</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Decorative sun indicator — theme is permanently light -->
+        <button id="lightModeToggle" class="light-mode-toggle nav-interactive" aria-label="Light mode active">
+          <span class="toggle-track">
+            <span class="toggle-thumb">
+              <span class="toggle-icon-sun">☀</span>
+            </span>
+          </span>
+        </button>
+
+        <!-- Audio toggle -->
+        <button id="audioToggleBtn" class="btn-pill btn-ghost btn-audio nav-interactive">
+          <span class="audio-pulse" id="audioPulse"></span>SOUND_PROTOCOL: OFF
+        </button>
+
+        <a href="#vault"     class="btn-pill btn-ghost nav-interactive">Initialize Access</a>
+        <a href="#schematic" class="btn-pill btn-coral nav-interactive">Claim Seat <span class="arrow">→</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════════════════ HERO ════════════════════════════════ -->
+  <main class="max-width-container hero-section" id="manifesto">
+    <div class="hero-immersive-card">
+      <div class="manifesto-subtitle">Kala Chakra · The Indian Time Loop</div>
+      <h1 class="manifesto-title font-display">TIME STOPS AT THE TABLE</h1>
+      <p class="manifesto-description manifesto-description--centered">
+        "Time stops at the table. A multi-course dining experiment frozen in time, hosted for exactly 25 members in the secrecy of a private villa."
+      </p>
+
+      <!-- Orbital countdown clock -->
+      <div class="clock-orbital-container" id="chronoClock">
+        <div class="clock-orbital-segment">
+          <div class="clock-orbital-digit" id="daysBox">00</div>
+          <span class="clock-orbital-label">DAYS</span>
+        </div>
+        <div class="clock-orbital-divider">:</div>
+        <div class="clock-orbital-segment">
+          <div class="clock-orbital-digit" id="hoursBox">00</div>
+          <span class="clock-orbital-label">HOURS</span>
+        </div>
+        <div class="clock-orbital-divider">:</div>
+        <div class="clock-orbital-segment">
+          <div class="clock-orbital-digit" id="minutesBox">00</div>
+          <span class="clock-orbital-label">MINS</span>
+        </div>
+        <div class="clock-orbital-divider">:</div>
+        <div class="clock-orbital-segment">
+          <div class="clock-orbital-digit" id="secondsBox">00</div>
+          <span class="clock-orbital-label">SECS</span>
+        </div>
+      </div>
+
+      <div class="hero-cta-row">
+        <a href="#schematic" class="btn-pill btn-coral nav-interactive">Explore Dining Layout <span class="arrow">↓</span></a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════ ERAS OF FLAVOR (menu) ════════════════════════ -->
+  <section class="max-width-container menu-section" id="eras">
+    <div class="section-header section-header--centered">
+      <span class="section-tag section-tag--centered">
+        <span class="section-tag-line"></span>Temporal Menu Grid
+      </span>
+      <h2 class="section-title font-display">Eras of Flavor</h2>
+    </div>
+
+    <!-- Populated by renderer.js → renderMenu(MENU_ERAS) -->
+    <div class="menu-grid" id="menuGrid"></div>
+  </section>
+
+  <!-- ═══════════════════════════ SEATING SCHEMATIC ═══════════════════════════ -->
+  <section class="max-width-container seating-section" id="schematic">
+
+    <!-- Club Selector — populated by renderer.js → renderClubCards() -->
+    <div class="club-selector-strip">
+      <div class="club-selector-label">SELECT YOUR SUPPER CLUB</div>
+      <div class="club-cards-row" id="clubCardsRow"></div>
+    </div>
+
+    <div class="seating-grid">
+      <div class="seating-info">
+        <span class="section-tag" id="activeClubLocationTag">Grand Banquet Layout</span>
+        <h2 class="section-title font-display" id="activeClubNameTitle">Seating Schematic</h2>
+        <p class="seating-lead text-ash">
+          Beyond Thyme hosts 25 members at a single grand banquet table. Click any flashing dashed orange seat to claim an available position. Occupied seats display the digital avatars of other synced members.
+        </p>
+
+        <div class="seating-legend">
+          <div class="legend-item">
+            <span class="legend-dot legend-dot--occupied legend-dot--round"></span>
+            <span>RESERVED POSITION (DIGITAL AVATAR)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot legend-available"></span>
+            <span>OPEN SEAT (NEON ORANGE)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot legend-selected"></span>
+            <span>YOUR CALIBRATED POSITION</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2D Schematic Floorplan — chairs rendered by seating.js -->
+      <div class="schematic-visualizer">
+        <div class="dining-table-complex">
+
+          <!-- Top row: seats 1–12 -->
+          <div class="chair-row-top" id="chairRowTop"></div>
+
+          <!-- Middle row: head chair (25) + table body -->
+          <div class="table-row-middle">
+            <div id="headChairContainer" class="head-chair-slot"></div>
+            <div class="table-body">
+              <div class="table-centerpiece"></div>
+              <div class="table-label">
+                BEYOND THYME<br>
+                <span class="table-sub-label font-mono text-ash" id="tableSubLabel">GRAND VILLA BANQUET • 25 POSITION LAYOUT</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom row: seats 13–24 -->
+          <div class="chair-row-bottom" id="chairRowBottom"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ CHRONO-VAULT TERMINAL ═══════════════════════ -->
+  <section class="max-width-container vault-section" id="vault">
+    <div class="vault-grid">
+
+      <!-- Left: description panel -->
+      <div class="vault-desc">
+        <span class="section-tag">Security Terminal</span>
+        <h2 class="section-title font-display">Chrono-Vault Access</h2>
+        <p class="seating-lead text-ash vault-lead">
+          To register for the upcoming dining experiment, calibrate your vault vectors.
+        </p>
+        <p class="vault-body-text text-ash font-body">
+          Enter your member details, click an OPEN SEAT on the grand banquet floorplan above, and adjust your personal vibe parameters. The system will verify your vector before authorizing reservation clearance.
+        </p>
+        <div class="vault-diagnostic-quote border-grid">
+          <div class="vault-diagnostic-label font-mono text-coral">Diagnostic Checkpoint</div>
+          <div class="vault-diagnostic-text font-display italic text-bone">
+            "Exclusive to 25 registered members. Calibration determines your chronological placement at the table."
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: interactive terminal -->
+      <div class="terminal-box" id="terminalBox">
+        <div class="terminal-header">
+          <div class="terminal-status-badge">
+            <span class="status-pulse-active"></span>
+            <span class="terminal-title">VAULT SYSTEM SECURE</span>
+          </div>
+          <div class="terminal-indicator-nodes">
+            <span class="indicator-node active"></span>
+            <span class="indicator-node" id="dotProgress2"></span>
+            <span class="indicator-node" id="dotProgress3"></span>
+          </div>
+        </div>
+
+        <div class="terminal-screen">
+          <!-- Console output — boot lines injected by terminal.js -->
+          <div class="terminal-output" id="terminalOutput"></div>
+
+          <!-- Vault decryption panel -->
+          <div class="vault-breaker-panel">
+            <div class="vault-breaker-header font-mono text-coral">
+              <span class="status-pulse-active status-pulse-active--sm"></span>
+              AMRIT VAULT BREAKER CONSOLE
+            </div>
+            <div class="vault-breaker-inputs">
+              <div class="vault-breaker-field">
+                <label class="editorial-label vault-key-label">CHRONO-KEY X</label>
+                <input type="text" id="chronoKeyX" class="editorial-input editorial-input--compact nav-interactive" placeholder="HH:MM">
+              </div>
+              <div class="vault-breaker-field">
+                <label class="editorial-label vault-key-label">CHRONO-KEY Y</label>
+                <input type="text" id="chronoKeyY" class="editorial-input editorial-input--compact nav-interactive" placeholder="HH:MM">
+              </div>
+              <button id="btnDecryptVault" class="btn-pill btn-coral btn-breach nav-interactive">BREACH <span class="arrow">→</span></button>
+            </div>
+            <div id="vaultBreakerStatus" class="vault-breaker-status font-mono text-ash">
+              > Enter correct daily X &amp; Y coordinate signals to unlock the celestial Amrit Yuga menu &amp; VIP pass.
+            </div>
+          </div>
+
+          <!-- Member registration form -->
+          <form class="terminal-form" id="chronoForm" autocomplete="off" onsubmit="return false;">
+
+            <div class="form-group">
+              <label for="pseudonymInput" class="editorial-label">User Pseudonym</label>
+              <input type="text" id="pseudonymInput" class="editorial-input nav-interactive" placeholder="e.g. Chrono_Explorer" required>
+            </div>
+
+            <div class="form-group">
+              <label for="emailInput" class="editorial-label">Member Access ID</label>
+              <input type="email" id="emailInput" class="editorial-input nav-interactive" placeholder="e.g. member@beyondthyme.com" required>
+            </div>
+
+            <!-- Vibe Calibration -->
+            <div class="calibration-container">
+              <div class="calibration-radar-col">
+                <div class="calibration-title">Calibrate Vibe Fingerprint</div>
+                <canvas id="radarCanvas" width="120" height="120" class="radar-canvas"></canvas>
+              </div>
+              <div class="calibration-sliders-col">
+
+                <div class="slider-group">
+                  <div class="slider-label-row">
+                    <span>Time (Past)</span>
+                    <span id="valOpenness">50%</span>
+                    <span>(Future)</span>
+                  </div>
+                  <input type="range" class="calibrated-slider nav-interactive" id="sliderOpenness" min="0" max="100" value="50">
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-label-row">
+                    <span>Social Vector (Solitude)</span>
+                    <span id="valDepth">50%</span>
+                    <span>(Symbiosis)</span>
+                  </div>
+                  <input type="range" class="calibrated-slider nav-interactive" id="sliderDepth" min="0" max="100" value="50">
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-label-row">
+                    <span>Flavor (Nostalgic)</span>
+                    <span id="valEnergy">50%</span>
+                    <span>(Molecular)</span>
+                  </div>
+                  <input type="range" class="calibrated-slider nav-interactive" id="sliderEnergy" min="0" max="100" value="50">
+                </div>
+              </div>
+            </div>
+
+            <div class="terminal-actions">
+              <button type="submit" class="btn-terminal-submit nav-interactive" id="submitBtn" disabled>
+                Verify &amp; Transmit Protocol
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- Right: vault door -->
+      <div class="terminal-box vault-door" id="chronoVaultContainer">
+        <!-- Locked state -->
+        <div id="vaultStateLocked" class="vault-state">
+          <div id="vaultDialWheel" class="vault-dial">
+            <div class="vault-dial-ring"></div>
+            <div id="vaultInnerGear" class="vault-inner-gear">
+              <span class="vault-lock-icon">🔒</span>
+            </div>
+          </div>
+          <h3 class="vault-title font-display text-bone">Amrit Vault</h3>
+          <p class="vault-status-text text-ash font-mono">
+            VAULT STATUS: <span class="text-coral" id="vaultTextStatusLabel">LOCKED</span><br>
+            TIMELINE COORDINATES X &amp; Y REQUIRED TO BREACH SATYA SECTOR.
+          </p>
+        </div>
+
+        <!-- Unlocked state (hidden by default) -->
+        <div id="vaultStateUnlocked" class="vault-state vault-state--hidden">
+          <div class="vault-unlocked-icon">🔓</div>
+          <h3 class="vault-title vault-title--unlocked font-display">Vault Breached</h3>
+          <p class="vault-status-text text-ash font-mono">
+            STATUS: <span class="vault-unlocked-status">UNLOCKED</span><br>
+            SATYA SANCTUM ACCESSIBLE. GOLDEN PASS GRANTED.
+          </p>
+          <button id="btnOpenVIPPass" class="btn-pill btn-vip nav-interactive">View VIP Golden Pass</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ COMMUNITY (waitlist + capsule) ══════════════ -->
+  <section class="max-width-container community-section" id="community">
+    <div class="community-grid">
+
+      <!-- Waitlist card -->
+      <div class="community-card">
+        <span class="section-tag text-coral">The Secret Drop</span>
+        <h2 class="community-card-title font-display text-bone">The Vault Waitlist</h2>
+        <p class="community-card-desc text-ash font-body">
+          Due to strictly limited seating of 25 members per session at the private villa, dinners are claimed immediately. Register your coordinate channel below to receive tiered, private WhatsApp/email drop notifications when the next Yuga table opens.
+        </p>
+        <form class="waitlist-form" id="waitlistForm">
+          <input type="email" id="waitlistEmail" class="editorial-input nav-interactive" placeholder="Enter member email channel..." required>
+          <button type="submit" class="btn-pill btn-coral nav-interactive">Sync Coordinates <span class="arrow">→</span></button>
+        </form>
+      </div>
+
+      <!-- Time Capsule archives -->
+      <div class="community-card">
+        <div class="community-capsule-layout">
+          <div class="community-capsule-top">
+            <span class="section-tag text-candle">Historical Archives</span>
+            <h2 class="community-card-title font-display text-bone">The Time Capsule</h2>
+            <p class="community-card-desc text-ash font-body">
+              Post-event archives of past dinners. Click the glowing capsule core below to synchronize and reveal the daily <strong>Temporal Coordinate X</strong> needed to breach the VIP Vault.
+            </p>
+
+            <!-- Capsule core -->
+            <div class="capsule-core-row">
+              <button id="timeCapsuleCoreBtn" class="capsule-core-btn nav-interactive">
+                <span class="capsule-core-icon">⏳</span>
+              </button>
+              <div>
+                <div class="font-mono text-coral capsule-status-label" id="timeCapsuleLabel">CAPSULE STATUS: DORMANT</div>
+                <div class="font-mono text-bone capsule-status-text" id="timeCapsuleStatusText">Click to breach temporal locks...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Guestbook -->
+          <div class="guestbook-container">
+            <h3 class="guestbook-title font-mono text-bone">Timeline Guestbook Logs</h3>
+            <!-- Populated by renderer.js → renderGuestbook(SEED_GUESTBOOK_ENTRIES) -->
+            <div id="guestbookOutput" class="guestbook-output"></div>
+
+            <form id="guestbookForm" class="guestbook-form">
+              <input type="text"  id="guestbookName" placeholder="Your Alias (e.g. SOMA_25)" required class="editorial-input nav-interactive">
+              <input type="text"  id="guestbookMsg"  placeholder="Leave your message in time..." required class="editorial-input nav-interactive">
+              <button type="submit" class="btn-pill btn-ghost nav-interactive">Log Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ FOOTER ══════════════════════════════════ -->
+  <footer>
+    <div class="max-width-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo font-display footer-logo">
+            <span class="logo-dot"></span>
+            <span>beyond <span class="italic">thyme</span></span>
+          </a>
+          <p>An offline temporal third-place built around conversations, time calibration, and private villa dining.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Coordinates</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="nav-interactive">South Delhi Villa</a></li>
+            <li><a href="#" class="nav-interactive">Bandra Villa, Mumbai</a></li>
+            <li><a href="#" class="nav-interactive">Indiranagar Villa, Bengaluru</a></li>
+            <li><a href="#" class="nav-interactive">New Yugas <span class="text-coral">*</span></a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">The Club</h4>
+          <ul class="footer-links">
+            <li><a href="#manifesto" class="nav-interactive">Manifesto</a></li>
+            <li><a href="#eras"      class="nav-interactive">Eras of Flavor</a></li>
+            <li><a href="#schematic" class="nav-interactive">The Tables</a></li>
+            <li><a href="#"          class="nav-interactive">Member Safety</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Diagnostic</h4>
+          <ul class="footer-links">
+            <li><a href="#vault"                        class="nav-interactive">Vault Calibration</a></li>
+            <li><a href="#"                             class="nav-interactive">FAQ &amp; Answers</a></li>
+            <li><a href="mailto:hello@beyondthyme.com"  class="nav-interactive">hello@beyondthyme.com</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Beyond Thyme Supper Society. Curated Offline since MMXXVI.</div>
+        <div class="footer-bottom-links">
+          <a href="#" class="nav-interactive">Privacy Policy</a>
+          <a href="#" class="nav-interactive">Terms of Calibration</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════ VETTING OVERLAY ══════════════════════════════ -->
+  <div id="vettingOverlay" class="overlay-backdrop overlay-backdrop--hidden">
+    <div class="vetting-panel border-grid">
+      <div class="vetting-panel-accent-bar"></div>
+
+      <div class="vetting-panel-header">
+        <h3 class="vetting-panel-title font-display text-bone">Chrono-Vetting Protocol</h3>
+        <button id="closeVettingBtn" class="vetting-close-btn nav-interactive">&times;</button>
+      </div>
+
+      <form id="vettingForm" autocomplete="off" onsubmit="return false;">
+
+        <!-- Step 1: Identity -->
+        <div class="vetting-step" id="vettingStep1">
+          <div class="vetting-step-label label-mono">Step 1 of 3: Identity &amp; Coordinates</div>
+          <div class="form-group vetting-form-group">
+            <label class="editorial-label">User Pseudonym / Alias</label>
+            <input type="text" id="vettingPseudo" class="editorial-input nav-interactive" placeholder="e.g. Vedic_Chrono" required>
+          </div>
+          <div class="form-group vetting-form-group vetting-form-group--last">
+            <label class="editorial-label">Member Access ID (Email)</label>
+            <input type="email" id="vettingEmail" class="editorial-input nav-interactive" placeholder="e.g. member@beyondthyme.in" required>
+          </div>
+          <button type="button" class="btn-terminal-submit nav-interactive" id="toStep2Btn">Proceed to Calibration</button>
+        </div>
+
+        <!-- Step 2: Dietary -->
+        <div class="vetting-step" id="vettingStep2" hidden>
+          <div class="vetting-step-label label-mono">Step 2 of 3: Dietary Calibration</div>
+          <p class="vetting-step-desc text-ash">Select your culinary coordinate profile. Our villa kitchen matches ingredients to your calibration.</p>
+          <div class="dietary-options-grid">
+            <label class="diet-card nav-interactive">
+              <input type="radio" name="dietProfile" value="Sattvic" checked hidden>
+              <div class="diet-card-inner"><span class="diet-title">Sattvic</span><span class="diet-desc">Pure Vegetarian, no onions/garlic.</span></div>
+            </label>
+            <label class="diet-card nav-interactive">
+              <input type="radio" name="dietProfile" value="Shakahari" hidden>
+              <div class="diet-card-inner"><span class="diet-title">Shakahari</span><span class="diet-desc">Heirloom Vegetarian villa feasts.</span></div>
+            </label>
+            <label class="diet-card nav-interactive">
+              <input type="radio" name="dietProfile" value="Nirvana" hidden>
+              <div class="diet-card-inner"><span class="diet-title">Nirvana Omnivore</span><span class="diet-desc">Charcoal venison &amp; coastal sea catch.</span></div>
+            </label>
+            <label class="diet-card nav-interactive">
+              <input type="radio" name="dietProfile" value="KalaSpecial" hidden>
+              <div class="diet-card-inner"><span class="diet-title">Kala Special</span><span class="diet-desc">Speculative molecular experiment.</span></div>
+            </label>
+          </div>
+          <div class="vetting-btn-row">
+            <button type="button" class="btn-pill btn-ghost nav-interactive" id="backToStep1">Back</button>
+            <button type="button" class="btn-terminal-submit nav-interactive" id="toStep3Btn">Choose Avatar</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Avatar -->
+        <div class="vetting-step" id="vettingStep3" hidden>
+          <div class="vetting-step-label label-mono">Step 3 of 3: Select Temporal Avatar</div>
+          <p class="vetting-step-desc text-ash">Select a 2D symbol to represent your coordinates anonymously on the floorplan.</p>
+          <div class="avatar-select-grid">
+            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="⏳" checked hidden><span class="avatar-emoji-btn active">⏳</span></label>
+            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="⌛" hidden><span class="avatar-emoji-btn">⌛</span></label>
+            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🪩" hidden><span class="avatar-emoji-btn">🪩</span></label>
+            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="☸️" hidden><span class="avatar-emoji-btn">☸️</span></label>
+            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🕉️" hidden><span class="avatar-emoji-btn">🕉️</span></label>
+            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🕯️" hidden><span class="avatar-emoji-btn">🕯️</span></label>
+            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🧭" hidden><span class="avatar-emoji-btn">🧭</span></label>
+            <label class="avatar-node-label nav-interactive"><input type="radio" name="tempAvatar" value="🌀" hidden><span class="avatar-emoji-btn">🌀</span></label>
+          </div>
+          <div class="vetting-btn-row">
+            <button type="button" class="btn-pill btn-ghost nav-interactive" id="backToStep2">Back</button>
+            <button type="button" class="btn-terminal-submit nav-interactive" id="submitVettingBtn">Calibrate &amp; RSVP</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ════════════════════════ SUCCESS / TICKET OVERLAY ═══════════════════════ -->
+  <div id="successOverlay" class="overlay-backdrop overlay-backdrop--hidden">
+    <div class="ticket-panel border-grid">
+      <div class="ticket-accent-bar"></div>
+
+      <div class="label-mono text-coral ticket-heading-label">Transmission Clear</div>
+      <h3 class="ticket-title font-display">CHRONO PROTOCOL SECURED</h3>
+      <p class="ticket-desc font-mono text-ash">
+        Your calibration fingerprint vector has been synced with our villa secure records. Your physical member packet will be dispatched to your registered address.
+      </p>
+
+      <div class="ticket-receipt border-grid">
+        <div class="ticket-row">
+          <span class="ticket-label text-ash">SUPPER CLUB:</span>
+          <span class="ticket-value text-candle" id="ticketClub">VEDIC FIRE</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label text-ash">PSEUDONYM:</span>
+          <span class="ticket-value text-bone" id="ticketPseudonym">EXPLORER</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label text-ash">CALIBRATED SEAT:</span>
+          <span class="ticket-value text-coral" id="ticketSeat">SEAT_03</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label text-ash">CALIBRATION VECTOR:</span>
+          <span class="ticket-value text-candle" id="ticketVector">[50%, 50%, 50%]</span>
+        </div>
+        <div class="ticket-row ticket-row--last">
+          <span class="ticket-label text-ash">STATUS:</span>
+          <span class="ticket-value ticket-verified">VERIFIED MEMBER RSVP</span>
+        </div>
+      </div>
+
+      <button class="btn-pill btn-ghost nav-interactive btn-full" id="closeSuccessBtn">
+        Reset Terminal Protocol
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ VIP GOLDEN TICKET ═══════════════════════════ -->
+  <div id="vipOverlay" class="overlay-backdrop overlay-backdrop--hidden">
+    <div class="vip-panel border-grid">
+      <div class="vip-accent-bar"></div>
+
+      <div class="vip-emblem">🕉️</div>
+      <div class="label-mono vip-access-label">AMRIT YUGA ACCESS CARD</div>
+      <h3 class="vip-title font-display text-bone">VIP TIME TRAVELER</h3>
+      <p class="vip-desc font-body text-ash">
+        This golden coordinate key certifies you have successfully breached the temporal locks. Show this receipt at the villa entrance for zero-latency priority entry and seating overrides.
+      </p>
+
+      <div class="vip-receipt border-grid">
+        <div class="vip-receipt-row">
+          <span class="vip-receipt-label">SUPPER CLUB:</span>
+          <span class="vip-receipt-value text-bone" id="vipClub">VEDIC FIRE</span>
+        </div>
+        <div class="vip-receipt-row">
+          <span class="vip-receipt-label">MEMBER DESIGNATION:</span>
+          <span class="vip-receipt-value text-bone">SOMA VEDIC VIP</span>
+        </div>
+        <div class="vip-receipt-row">
+          <span class="vip-receipt-label">BREACH TIMESTAMP:</span>
+          <span class="vip-receipt-value text-bone" id="vipTimestamp">00:00:00</span>
+        </div>
+        <div class="vip-receipt-row vip-receipt-row--last">
+          <span class="vip-receipt-label">TEMPORAL EPOCH:</span>
+          <span class="vip-receipt-value text-bone">SATYA YUGA CLEARANCE</span>
+        </div>
+      </div>
+
+      <div class="vip-btn-row">
+        <button class="btn-pill btn-ghost nav-interactive" id="closeVipBtn">Close Pass</button>
+        <button class="btn-pill btn-vip-print nav-interactive" onclick="window.print()">Print Ticket</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JS entry point (ES module) -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
