@@ -984,3 +984,182 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
   font-size: 0.45rem !important;
   color: var(--text-muted) !important;
 }
+
+/* ─── ENHANCED SEATING SCHEMA (Neon Orange, Black, Green, Gold) ───────────── */
+
+/* High-frequency Scanlines and Dust Particles background */
+.schematic-visualizer {
+  background: radial-gradient(circle, #fcfaf0 0%, #f4e9d0 100%) !important;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-mid) !important;
+}
+.schematic-visualizer::before {
+  content: "" !important;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(255, 90, 46, 0.05) 50%) !important;
+  background-size: 100% 3px !important;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 28px;
+}
+
+/* Floating Ambient Dust Particles Animation */
+.schematic-visualizer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle, rgba(255, 90, 46, 0.15) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255, 180, 0, 0.12) 1.5px, transparent 1.5px);
+  background-size: 80px 80px, 120px 120px;
+  background-position: 0 0, 40px 40px;
+  animation: float-particles 20s linear infinite;
+  pointer-events: none;
+  opacity: 0.7;
+}
+@keyframes float-particles {
+  0% { background-position: 0 0, 40px 40px; }
+  100% { background-position: 80px 160px, -80px 280px; }
+}
+
+/* Dining Table Double border minimalist 3D look */
+.dining-table-complex {
+  transform: perspective(800px) rotateX(15deg);
+  transform-style: preserve-3d;
+}
+.table-body {
+  background: #111111 !important; /* solid black table core */
+  border: 2px solid #222222 !important;
+  box-shadow: 
+    0 10px 0 #000000, /* 3D table edge thickness */
+    0 15px 30px rgba(0, 0, 0, 0.3) !important;
+  position: relative;
+}
+.table-body::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--color-coral); /* neon orange inside line */
+  border-radius: 96px;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(255, 90, 46, 0.4);
+}
+.table-label {
+  color: var(--color-coral) !important; /* neon orange text */
+  text-shadow: 0 0 6px rgba(255, 90, 46, 0.6);
+  font-weight: 700;
+}
+.table-sub-label {
+  color: var(--color-gold) !important; /* gold subtext */
+}
+
+/* Minimalist Isometric 3D Chairs */
+.chair {
+  background-color: #111111 !important; /* solid black top */
+  border: 1px solid #222222 !important;
+  box-shadow: 
+    0 3px 0 #000000, /* isometric dark shadow */
+    0 5px 10px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.2s ease !important;
+  border-radius: 6px !important;
+}
+
+/* Open neon orange seat */
+.chair.available {
+  border: 1.5px dashed var(--color-coral) !important;
+  background-color: rgba(255, 90, 46, 0.04) !important;
+  box-shadow: 0 4px 10px rgba(255, 90, 46, 0.1) !important;
+  animation: glitch-blink 3.5s infinite steps(1);
+}
+.chair.available::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 4px;
+  height: 4px;
+  background-color: #28a854; /* green active indicator dot */
+  border-radius: 50%;
+  box-shadow: 0 0 5px #28a854;
+  animation: pulse-dot 1.5s infinite;
+}
+.chair.available:hover {
+  background-color: var(--color-coral) !important;
+  border-color: var(--color-coral) !important;
+  box-shadow: 
+    0 0 15px rgba(255, 90, 46, 0.5) !important;
+  transform: translateY(-3px) translateZ(10px) !important;
+}
+.chair.available .chair-label-open {
+  color: var(--color-coral) !important;
+  text-shadow: 0 0 4px rgba(255, 90, 46, 0.5);
+}
+
+/* Selected seat */
+.chair.selected {
+  border: 2px solid var(--color-gold) !important; /* yellow/gold outline */
+  background-color: #111111 !important;
+  box-shadow: 
+    0 0 20px rgba(212, 175, 55, 0.6) !important;
+  transform: translateY(-4px) translateZ(15px) !important;
+}
+.chair.selected::before {
+  content: "⌖"; /* green crosshair icon */
+  color: #28a854;
+  font-size: 1rem;
+  font-weight: bold;
+  animation: spin 6s linear infinite;
+}
+.chair.selected .chair-label-open {
+  display: none !important;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Occupied seat - black center, gold border, green beacon */
+.chair.occupied {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+.chrono-avatar-ring {
+  background: #111111 !important; /* black interior */
+  border: 1.5px solid var(--color-gold) !important; /* yellow/gold border */
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
+}
+.chrono-avatar-ring::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background-color: #28a854; /* green signal beacon */
+  border-radius: 50%;
+  box-shadow: 0 0 6px #28a854;
+}
+.avatar-emoji {
+  filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.5));
+}
+.avatar-alias {
+  color: var(--color-gold) !important; /* gold text */
+}
+
+/* Legend adjustments */
+.legend-available {
+  border: 1.5px dashed var(--color-coral) !important;
+  background-color: rgba(255, 90, 46, 0.05);
+}
+.legend-selected {
+  border: 2px solid var(--color-gold) !important;
+  background-color: #111111;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+.legend-dot--occupied {
+  border: 1.5px solid var(--color-gold) !important;
+  background-color: #111111;
+}
