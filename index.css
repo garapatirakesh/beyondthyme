@@ -1,4 +1,4 @@
-﻿/* index.css — Beyond Thyme Design System · Premium Light Edition */
+﻿/* index.css â€” Beyond Thyme Design System Â· Premium Light Edition */
 
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Geist+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
@@ -280,7 +280,7 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
 
 @media (max-width:900px){.nav-actions .btn-ghost:not(#audioToggleBtn){display:none;}}
 
-/* ─── New semantic utility classes (replacing inline styles) ──────────────── */
+/* â”€â”€â”€ New semantic utility classes (replacing inline styles) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Hero */
 .manifesto-description--centered{margin:0 auto 3rem auto;text-align:center;}
@@ -414,7 +414,7 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
 .vip-btn-row .btn-pill{flex:1;justify-content:center;}
 .btn-vip-print{background-color:var(--color-gold);color:var(--text-primary);font-weight:bold;border:none;box-shadow:0 4px 15px rgba(196,120,0,0.2);}
 
-/* Amrit Yuga card (VIP menu — vault unlocked) */
+/* Amrit Yuga card (VIP menu â€” vault unlocked) */
 .menu-column--vip{border:2px solid var(--color-gold);box-shadow:0 0 25px rgba(196,120,0,0.2);}
 .menu-col-num--vip{color:var(--color-gold);}
 .menu-col-title--vip{color:var(--color-gold);}
@@ -438,7 +438,7 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
 
 @media (min-width:768px){.community-grid{grid-template-columns:1fr 1fr;}}
 
-/* ─── Immersive Vetting & Rotary Dials additions ────────────────────────── */
+/* â”€â”€â”€ Immersive Vetting & Rotary Dials additions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Rotary Dial Component Styles */
 .calibration-dials-col {
@@ -667,7 +667,7 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
   margin-bottom: 0.75rem !important;
 }
 
-/* ─── Centered Console Card Styles ──────────────────────────────────────── */
+/* â”€â”€â”€ Centered Console Card Styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .centered-console-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -769,7 +769,7 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
   border-radius: 4px;
 }
 
-/* ─── Left Slide-out Archives Drawer Styles ───────────────────────────────── */
+/* â”€â”€â”€ Left Slide-out Archives Drawer Styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .floating-archives-tab {
   position: fixed;
   left: 0;
@@ -892,7 +892,7 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
   margin: 0;
 }
 
-/* ─── Radical Seating CRT Glitch visual modifications ─────────────────────── */
+/* â”€â”€â”€ Radical Seating CRT Glitch visual modifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .blinking-glitch {
   position: relative;
   animation: glitch-blink 3s infinite steps(1);
@@ -985,7 +985,7 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
   color: var(--text-muted) !important;
 }
 
-/* ─── ENHANCED SEATING SCHEMA (Neon Orange, Black, Green, Gold) ───────────── */
+/* â”€â”€â”€ ENHANCED SEATING SCHEMA (Neon Orange, Black, Green, Gold) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* High-frequency Scanlines and Dust Particles background */
 .schematic-visualizer {
@@ -1106,7 +1106,7 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
   transform: translateY(-4px) translateZ(15px) !important;
 }
 .chair.selected::before {
-  content: "⌖"; /* green crosshair icon */
+  content: "âŒ–"; /* green crosshair icon */
   color: #28a854;
   font-size: 1rem;
   font-weight: bold;
@@ -1162,4 +1162,2638 @@ footer{border-top:1px solid var(--border-subtle);background-color:var(--bg-foote
 .legend-dot--occupied {
   border: 1.5px solid var(--color-gold) !important;
   background-color: #111111;
+}
+
+/* Hero card selector strip positioning and alignment */
+.club-selector-strip--hero {
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.club-selector-strip--hero .club-cards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* â”€â”€â”€ DOUBLE-CHRONO & HORIZONTAL SLIDER VISUALS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+/* Wrapper side-by-side or stacked on mobile */
+.double-chrono-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  margin: 3rem auto 1rem auto;
+  width: 100%;
+  max-width: 900px;
+}
+@media (max-width: 768px) {
+  .double-chrono-wrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .chrono-panel-divider {
+    display: none;
+  }
+}
+
+.chrono-subpanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+.chrono-subpanel-title {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+.chrono-panel-divider {
+  width: 1px;
+  align-self: stretch;
+  background-color: var(--border-subtle);
+  margin: 1rem 0;
+  opacity: 0.6;
+}
+
+/* Static clock layout variation for Target Date circles */
+.clock-orbital-container--static .clock-orbital-digit {
+  color: var(--text-primary);
+  border-color: var(--border-mid);
+}
+
+/* Red indicator outline when event is closed/archived */
+.clock-orbital-container--closed .clock-orbital-digit {
+  border-color: var(--color-coral) !important;
+  color: var(--color-coral) !important;
+  animation: pulse-border 1.5s infinite;
+  box-shadow: 0 0 10px rgba(255, 90, 46, 0.2);
+}
+.clock-orbital-container--closed .clock-orbital-label {
+  color: var(--color-coral) !important;
+}
+
+/* Slider containers */
+.slider-viewport {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  width: 100%;
+  max-width: 780px; /* limits viewport width to display exactly 2 elements nicely */
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+.slider-nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.slider-nav-btn:hover {
+  background: var(--color-coral);
+  border-color: var(--color-coral);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(255, 90, 46, 0.35);
+}
+
+/* Selector override inside hero */
+.club-selector-strip--hero {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+.club-selector-strip--hero .club-cards-row {
+  display: flex;
+  flex-wrap: nowrap !important; /* side by side row scrolling */
+  gap: 1.5rem;
+  width: max-content;
+}
+
+/* Expired club card visuals */
+.club-card.expired {
+  filter: grayscale(100%) opacity(0.65);
+  border-style: dotted !important;
+  position: relative;
+  overflow: hidden;
+}
+.club-card.expired:hover, .club-card.expired.active {
+  filter: grayscale(40%) opacity(0.9);
+}
+.club-card.expired::after {
+  content: "ARCHIVED";
+  position: absolute;
+  top: 14px;
+  right: -25px;
+  background-color: var(--color-coral);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+  font-weight: 700;
+  padding: 0.15rem 1.5rem;
+  transform: rotate(45deg);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  letter-spacing: 0.05em;
+  z-index: 10;
+}
+
+/* â”€â”€â”€ EVENT SCHEDULE HEADER TEXT ON TOP OF TIME â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.event-schedule-header {
+  text-align: center;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+.schedule-tagline {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+.schedule-datetime-display {
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: uppercase;
+}
+.schedule-datetime-display span {
+  transition: all 0.3s ease;
+}
+.chrono-countdown-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* â”€â”€â”€ PREMIUM OVERHAUL CARD FEATURES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.club-card {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(var(--tilt-scale, 1));
+  transition: transform 0.15s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+/* 3D Content Lifting */
+.club-card-inner {
+  transform: translateZ(30px);
+  transform-style: preserve-3d;
+}
+.club-card-emblem, .club-card-numeral, .club-card-name {
+  transform: translateZ(15px);
+}
+
+/* 2. Chrono-Aura Border Laser Sweep */
+.club-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 19px;
+  padding: 1.5px;
+  background: conic-gradient(
+    transparent,
+    rgba(var(--glow-color), 0.8),
+    transparent 40%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 5;
+}
+.club-card.active::after {
+  opacity: 1;
+  animation: rotate-glow 4s linear infinite;
+}
+@keyframes rotate-glow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 3. Celestial/Geometric Constellation backdrops */
+.club-constellation {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 120px;
+  height: 120px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  transform-origin: center center;
+}
+.club-card.active .club-constellation {
+  opacity: 0.12;
+  animation: rotate-constellation 45s linear infinite;
+}
+@keyframes rotate-constellation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 4. Mini Vibe Radar Indicator */
+.mini-radar-container {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 24px;
+  height: 24px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.club-card.active .mini-radar-container {
+  opacity: 0.8;
+}
+.mini-radar-canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--glow-color), 0.3);
+}
+
+/* â”€â”€â”€ UNIFORM SIZE & SHAPE FOR ALL 4 THEME CARDS (No animation) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.club-card {
+  width: 220px !important;
+  height: 280px !important;
+  flex-shrink: 0 !important;
+  transform: none !important;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+  perspective: none !important;
+  transform-style: flat !important;
+  border-radius: 20px !important;
+  border: 1px solid var(--border-subtle) !important;
+  background: var(--bg-surface) !important;
+}
+
+/* Remove laser rotating glow sweeps */
+.club-card::after {
+  display: none !important;
+}
+
+/* Remove 3D translation */
+.club-card-inner {
+  transform: none !important;
+  transform-style: flat !important;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem !important;
+}
+
+/* Reset individual elements translation */
+.club-card-emblem, .club-card-numeral, .club-card-name {
+  transform: none !important;
+}
+
+/* Ensure clean active outline state */
+.club-card.active {
+  border-color: var(--color-coral) !important;
+  box-shadow: 0 0 15px rgba(255, 90, 46, 0.25) !important;
+}
+
+/* Expired cards grayscale and identical dimensions */
+.club-card.expired {
+  filter: grayscale(100%) opacity(0.6) !important;
+  border-style: solid !important;
+}
+.club-card.expired:hover, .club-card.expired.active {
+  filter: grayscale(30%) opacity(0.9) !important;
+}
+
+/* Archive diagonal top-right ribbon */
+.club-card.expired::before {
+  content: "ARCHIVED" !important;
+  position: absolute !important;
+  top: 15px !important;
+  right: -25px !important;
+  background-color: var(--color-coral) !important;
+  color: #ffffff !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.45rem !important;
+  font-weight: 700 !important;
+  padding: 0.15rem 1.5rem !important;
+  transform: rotate(45deg) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
+  letter-spacing: 0.05em !important;
+  z-index: 10 !important;
+}
+
+/* â”€â”€â”€ PREMIUM COLLAGE IMAGERY CARDS & GOLD BUTTONS OVERHAUL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+/* Viewport padding adjust to prevent clipping */
+.slider-viewport {
+  padding: 0.5rem 1.5rem !important;
+}
+
+/* Card basic shape overrides */
+.club-card {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 230px !important;
+  height: 330px !important;
+  overflow: hidden !important;
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.club-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-md), 0 0 15px rgba(255, 90, 46, 0.12) !important;
+}
+.club-card.active {
+  border: 1.5px solid var(--color-coral) !important;
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(255, 90, 46, 0.22) !important;
+}
+
+/* Top half image box */
+.club-card-image-box {
+  width: 100% !important;
+  height: 150px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+}
+.club-card-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.5s ease !important;
+}
+.club-card:hover .club-card-image {
+  transform: scale(1.06) !important;
+}
+
+/* Bottom half contents */
+.club-card-content {
+  flex-grow: 1 !important;
+  padding: 1.1rem 1.2rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  background: var(--bg-surface) !important;
+}
+.club-card-name {
+  font-family: var(--font-display) !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  margin: 0 0 0.4rem 0 !important;
+  line-height: 1.2 !important;
+}
+.club-card-description {
+  font-family: var(--font-body) !important;
+  font-size: 0.68rem !important;
+  line-height: 1.4 !important;
+  color: var(--text-muted) !important;
+  margin: 0 0 1rem 0 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* Gold Button at the bottom */
+.club-card-btn-container {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+.club-card-action-btn {
+  display: block !important;
+  width: 100% !important;
+  padding: 0.45rem 0 !important;
+  text-align: center !important;
+  border-radius: 6px !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  box-shadow: 0 2px 5px rgba(100, 60, 20, 0.15) !important;
+  transition: all 0.25s ease !important;
+}
+
+/* Active card gold button style */
+.club-card-action-btn {
+  background: linear-gradient(180deg, #d4af37 0%, #b8972c 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #9e7f22 !important;
+}
+.club-card:hover .club-card-action-btn {
+  background: linear-gradient(180deg, #e4bf47 0%, #c8a73c 100%) !important;
+  box-shadow: 0 4px 8px rgba(100, 60, 20, 0.25) !important;
+}
+
+/* Inactive/expired card grey button style */
+.club-card.expired .club-card-action-btn {
+  background: linear-gradient(180deg, #a0a0a0 0%, #858585 100%) !important;
+  border: 1px solid #757575 !important;
+  color: #ffffff !important;
+}
+
+/* Gold scroll buttons */
+.slider-nav-btn {
+  background: linear-gradient(180deg, #d4af37 0%, #b8972c 100%) !important;
+  border: 1px solid #9e7f22 !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  width: 42px !important;
+  height: 42px !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15) !important;
+  font-weight: 700 !important;
+  transition: all 0.25s ease !important;
+}
+.slider-nav-btn:hover {
+  background: linear-gradient(180deg, #e4bf47 0%, #c8a73c 100%) !important;
+  transform: scale(1.08) !important;
+}
+
+/* Thick diagonal corner archived banner */
+.club-card.expired::before {
+  content: "ARCHIVED" !important;
+  position: absolute !important;
+  top: 15px !important;
+  right: -30px !important;
+  background-color: var(--color-coral) !important;
+  color: #ffffff !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.48rem !important;
+  font-weight: 700 !important;
+  padding: 0.2rem 2.2rem !important;
+  transform: rotate(45deg) !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+  letter-spacing: 0.08em !important;
+  z-index: 10 !important;
+}
+
+/* Slider height and flex-shrink fixes to prevent collapse */
+.slider-viewport {
+  height: 360px !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+.club-selector-strip--hero .club-cards-row {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  flex-shrink: 0 !important;
+  height: 100% !important;
+  align-items: center !important;
+  width: max-content !important;
+}
+
+/* â•â•â• THEME CARDS â€” FIT 4 PERFECTLY, NO SCROLL â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* Make the whole strip take full width */
+.club-selector-strip--hero {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  justify-content: center !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 2rem !important;
+  padding: 0 1rem !important;
+  box-sizing: border-box !important;
+}
+
+/* Viewport fills the space between the two arrows */
+.slider-viewport {
+  flex: 1 1 auto !important;
+  max-width: none !important;
+  width: 0 !important;          /* flex will expand it */
+  overflow: hidden !important;
+  height: auto !important;
+  display: block !important;
+  padding: 0.5rem 0 !important;
+}
+
+/* 4-column grid, fills 100% of viewport */
+.club-selector-strip--hero .club-cards-row {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1rem !important;
+  width: 100% !important;
+  flex-wrap: unset !important;
+}
+
+/* Card fills its grid cell â€” no fixed width */
+.club-card {
+  width: 100% !important;
+  height: 340px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transform: none !important;
+  perspective: none !important;
+}
+.club-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-lg), 0 0 14px rgba(255,90,46,0.15) !important;
+  border-color: rgba(255,90,46,0.3) !important;
+}
+.club-card.active {
+  border: 1.5px solid var(--color-coral) !important;
+  box-shadow: var(--shadow-xl), 0 0 20px rgba(255,90,46,0.22) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* Remove all previous ::after laser/glow overrides */
+.club-card::after {
+  display: none !important;
+}
+
+/* Top image â€” takes ~45% of card height */
+.club-card-image-box {
+  width: 100% !important;
+  height: 145px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+}
+.club-card-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.5s ease !important;
+  display: block !important;
+}
+.club-card:hover .club-card-image {
+  transform: scale(1.06) !important;
+}
+
+/* Roman numeral watermark over image */
+.club-card-image-box .club-card-numeral {
+  position: absolute !important;
+  top: 0.6rem !important;
+  right: 0.75rem !important;
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
+  font-size: 1.6rem !important;
+  color: rgba(255,255,255,0.55) !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+}
+
+/* Bottom content pane */
+.club-card-content {
+  flex: 1 1 auto !important;
+  padding: 0.85rem 1rem 0.85rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  overflow: hidden !important;
+}
+
+/* Emoji emblem â€” small, inline */
+.club-card-content .club-card-emblem {
+  font-size: 1.1rem !important;
+  margin-bottom: 0.2rem !important;
+  display: block !important;
+  line-height: 1 !important;
+  transform: none !important;
+}
+.club-card-content .club-card-name {
+  font-family: var(--font-display) !important;
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 0.15rem !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.01em !important;
+}
+.club-card-content .club-card-location {
+  font-family: var(--font-mono) !important;
+  font-size: 0.55rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted) !important;
+  margin-bottom: 0.45rem !important;
+}
+.club-card-content .club-card-night {
+  font-family: var(--font-mono) !important;
+  font-size: 0.62rem !important;
+  color: var(--color-gold) !important;
+  letter-spacing: 0.06em !important;
+  margin-bottom: 0.55rem !important;
+}
+.club-card-content .club-card-availability {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  margin-top: auto !important;
+}
+
+/* Nav arrow buttons â€” keep original round style */
+.slider-nav-btn {
+  flex-shrink: 0 !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  color: var(--text-secondary) !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.3s ease !important;
+  background: linear-gradient(180deg, #d4af37 0%, #b8972c 100%) !important;
+  border-color: #9e7f22 !important;
+  color: #ffffff !important;
+}
+.slider-nav-btn:hover {
+  background: linear-gradient(180deg, #e4bf47 0%, #c8a73c 100%) !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 12px rgba(212,175,55,0.4) !important;
+}
+
+/* Archived ribbon â€” diagonal top-right */
+.club-card.expired::before {
+  content: "ARCHIVED" !important;
+  position: absolute !important;
+  top: 16px !important;
+  right: -26px !important;
+  background-color: var(--color-coral) !important;
+  color: #ffffff !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.44rem !important;
+  font-weight: 700 !important;
+  padding: 0.18rem 2rem !important;
+  transform: rotate(45deg) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+  letter-spacing: 0.1em !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+}
+.club-card.expired {
+  filter: grayscale(85%) opacity(0.7) !important;
+}
+.club-card.expired:hover, .club-card.expired.active {
+  filter: grayscale(30%) opacity(0.95) !important;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   DEFINITIVE CARD STRIP FIX â€” resolves all 8 layout/visual issues
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* 1. Strip wrapper: relative so we can position arrows absolutely */
+.club-selector-strip--hero {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 1000px !important;
+  margin: 0 auto 2rem auto !important;
+  padding: 0 3rem !important;   /* 3rem each side = room for the abs-pos arrows */
+  box-sizing: border-box !important;
+}
+
+/* 2. Arrows: absolutely positioned, vertically centered, outside the cards */
+.slider-nav-btn {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #d4af37, #b8972c) !important;
+  border: none !important;
+  color: #fff !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  z-index: 20 !important;
+  flex-shrink: unset !important;
+}
+.slider-nav-btn.slider-nav-btn--left  { left: 0 !important; }
+.slider-nav-btn.slider-nav-btn--right { right: 0 !important; left: auto !important; }
+.slider-nav-btn:hover {
+  transform: translateY(-50%) scale(1.12) !important;
+  box-shadow: 0 5px 16px rgba(212,175,55,0.45) !important;
+}
+
+/* 3. Viewport: full width of the padded strip, scroll for archived overflow */
+.slider-viewport {
+  width: 100% !important;
+  max-width: none !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;   /* hide scrollbar visually */
+  display: block !important;
+  height: auto !important;
+  padding: 0.75rem 0 1rem !important;
+  box-sizing: border-box !important;
+}
+.slider-viewport::-webkit-scrollbar { display: none !important; }
+
+/* 4. Cards row: 4-equal-column grid, fills viewport width */
+.club-selector-strip--hero .club-cards-row {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1rem !important;
+  width: 100% !important;
+  align-items: stretch !important;
+  flex-wrap: unset !important;
+}
+
+/* 5. Card: fills its grid cell, uniform height, clean flex column */
+.club-card {
+  width: 100% !important;
+  min-height: 320px !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transform: none !important;
+  perspective: none !important;
+  transform-style: flat !important;
+}
+.club-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,90,46,0.15) !important;
+}
+.club-card.active {
+  border: 1.5px solid var(--color-coral) !important;
+  box-shadow: 0 8px 28px rgba(255,90,46,0.2), 0 0 0 1px rgba(255,90,46,0.1) !important;
+  transform: translateY(-3px) !important;
+  background: linear-gradient(160deg, #fffcf9 0%, #fff7f0 100%) !important;
+}
+
+/* Remove all ::after pseudo-elements (laser glow etc.) */
+.club-card::after { display: none !important; }
+
+/* 6. Image box: fixed height, no squash */
+.club-card-image-box {
+  width: 100% !important;
+  height: 130px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+}
+.club-card-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  transition: transform 0.5s ease !important;
+}
+.club-card:hover .club-card-image { transform: scale(1.07) !important; }
+
+/* Roman numeral watermark over image */
+.club-card-image-box .club-card-numeral {
+  position: absolute !important;
+  top: 0.5rem !important;
+  right: 0.75rem !important;
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
+  font-size: 1.8rem !important;
+  color: rgba(255,255,255,0.6) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.35) !important;
+  pointer-events: none !important;
+  line-height: 1 !important;
+  z-index: 2 !important;
+}
+
+/* 7. Bottom content: proper breathing room, vertical layout */
+.club-card-content {
+  flex: 1 1 auto !important;
+  padding: 0.9rem 1rem 1rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  background: unset !important;
+}
+
+/* Emoji emblem â€” bigger, clear anchor */
+.club-card-content .club-card-emblem {
+  font-size: 1.5rem !important;
+  margin-bottom: 0.3rem !important;
+  display: block !important;
+  line-height: 1 !important;
+  transform: none !important;
+}
+
+/* Name */
+.club-card-content .club-card-name {
+  font-family: var(--font-display) !important;
+  font-size: 1.1rem !important;
+  font-weight: 500 !important;
+  color: var(--text-primary) !important;
+  margin: 0 0 0.2rem 0 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Location */
+.club-card-content .club-card-location {
+  font-family: var(--font-mono) !important;
+  font-size: 0.55rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted) !important;
+  margin: 0 0 0.5rem 0 !important;
+  line-height: 1.3 !important;
+}
+
+/* Date */
+.club-card-content .club-card-night {
+  font-family: var(--font-mono) !important;
+  font-size: 0.65rem !important;
+  color: var(--color-gold) !important;
+  letter-spacing: 0.06em !important;
+  margin: 0 0 0.6rem 0 !important;
+}
+
+/* Availability row â€” pushed to bottom */
+.club-card-content .club-card-availability {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  margin-top: auto !important;
+}
+
+/* 8. ARCHIVED ribbon â€” thick, bold, unmissable */
+.club-card.expired::before {
+  content: "ARCHIVED" !important;
+  position: absolute !important;
+  top: 20px !important;
+  right: -28px !important;
+  width: 110px !important;
+  background: var(--color-coral) !important;
+  color: #fff !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.5rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-align: center !important;
+  padding: 0.25rem 0 !important;
+  transform: rotate(45deg) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25) !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+}
+.club-card.expired {
+  filter: grayscale(85%) opacity(0.72) !important;
+  border-style: dashed !important;
+}
+.club-card.expired:hover,
+.club-card.expired.active {
+  filter: grayscale(20%) opacity(1) !important;
+}
+
+/* â”€â”€â”€ Small font accent: dark neon orange on non-archived cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.club-card:not(.expired) .club-card-location {
+  color: var(--color-coral) !important;
+  opacity: 0.8 !important;
+}
+.club-card:not(.expired) .club-card-night {
+  color: var(--color-coral) !important;
+}
+.club-card:not(.expired) .club-avail-text {
+  color: var(--color-coral) !important;
+}
+.club-card:not(.expired) .club-avail-dot {
+  background: var(--color-coral) !important;
+  box-shadow: 0 0 4px rgba(255,90,46,0.5) !important;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SEATING SECTION â€” FULL WIDTH HORIZONTAL LAYOUT + LOGIN PANEL
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* Section: no max-width, edge-to-edge */
+.seating-section--fullwidth {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 5rem 0 0 0 !important;
+  border-top: 1px solid var(--border-subtle) !important;
+  overflow: hidden !important;
+}
+
+/* â”€â”€ Info bar: 3-column horizontal strip â”€â”€ */
+.seating-info-bar {
+  display: grid !important;
+  grid-template-columns: 1fr 1.6fr 1fr !important;
+  align-items: center !important;
+  gap: 2rem !important;
+  padding: 0 4rem 2.5rem 4rem !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+.seating-info-left {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.4rem !important;
+}
+.seating-info-left .section-title {
+  font-size: 2.4rem !important;
+  line-height: 1.1 !important;
+  margin: 0 !important;
+}
+.seating-info-mid .seating-lead {
+  font-size: 0.85rem !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Legend: inline horizontal on the right */
+.seating-legend--inline {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.55rem !important;
+  align-items: flex-start !important;
+  padding-left: 2rem !important;
+  border-left: 1px solid var(--border-subtle) !important;
+}
+.seating-legend--inline .legend-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.6rem !important;
+  letter-spacing: 0.1em !important;
+  color: var(--text-muted) !important;
+  white-space: nowrap !important;
+}
+
+/* â”€â”€ Full-width floorplan â”€â”€ */
+.schematic-visualizer--fullwidth {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 0 !important;
+  min-height: 320px !important;
+  padding: 3rem 4rem !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(160deg, #1a120a 0%, #0d0906 60%, #1a120a 100%) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+/* Subtle grid overlay */
+.schematic-visualizer--fullwidth::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    linear-gradient(rgba(255,90,46,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,90,46,0.04) 1px, transparent 1px) !important;
+  background-size: 40px 40px !important;
+  pointer-events: none !important;
+}
+/* The inner complex fills wide viewport */
+.schematic-visualizer--fullwidth .dining-table-complex {
+  width: 100% !important;
+  max-width: 1200px !important;
+}
+.schematic-visualizer--fullwidth .table-body {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+/* Expand chair rows to fill full width */
+.schematic-visualizer--fullwidth .chair-row-top,
+.schematic-visualizer--fullwidth .chair-row-bottom {
+  width: 100% !important;
+  justify-content: space-between !important;
+}
+.schematic-visualizer--fullwidth .table-row-middle {
+  width: 100% !important;
+}
+
+/* â”€â”€ Login panel below floorplan â”€â”€ */
+.seating-login-panel {
+  background: var(--bg-surface) !important;
+  border-top: 1px solid var(--border-subtle) !important;
+  padding: 3.5rem 4rem !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+.seating-login-inner {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 2rem !important;
+}
+.seating-login-header {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+.seating-login-title {
+  font-size: 2rem !important;
+  font-weight: 500 !important;
+  color: var(--text-primary) !important;
+  margin: 0.2rem 0 0 0 !important;
+  letter-spacing: -0.02em !important;
+}
+.seating-login-sub {
+  font-size: 0.85rem !important;
+  color: var(--text-muted) !important;
+  margin: 0 !important;
+}
+.seating-login-form {
+  width: 100% !important;
+}
+.seating-login-fields {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr auto !important;
+  gap: 1rem !important;
+  align-items: end !important;
+  width: 100% !important;
+}
+.seating-login-fields .form-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.35rem !important;
+}
+.seating-login-submit {
+  height: 48px !important;
+  white-space: nowrap !important;
+  padding: 0 2rem !important;
+  font-size: 0.85rem !important;
+  align-self: end !important;
+}
+
+/* Mobile: stack login fields vertically */
+@media (max-width: 768px) {
+  .seating-info-bar {
+    grid-template-columns: 1fr !important;
+    padding: 0 1.5rem 2rem !important;
+  }
+  .seating-legend--inline {
+    border-left: none !important;
+    padding-left: 0 !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+  }
+  .seating-login-fields {
+    grid-template-columns: 1fr !important;
+  }
+  .seating-login-panel { padding: 2.5rem 1.5rem !important; }
+  .schematic-visualizer--fullwidth { padding: 2rem 1rem !important; }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SEATING SECTION â€” PREMIUM REDESIGN v3
+   Aligned to 1000px (card width), warm parchment, no dark band
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* Section container â€” matches card strip width */
+.seating-section--fullwidth {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 5rem 0 4rem 0 !important;
+  border-top: 1px solid var(--border-subtle) !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+/* Inner wrapper â€” 1000px max matching cards */
+.seating-section--fullwidth .seating-info-bar,
+.seating-section--fullwidth .schematic-visualizer--fullwidth,
+.seating-section--fullwidth .seating-login-panel {
+  max-width: 1000px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* â”€â”€ INFO HEADER BAR: centered, elegant â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.seating-info-bar {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  gap: 0.75rem !important;
+  padding: 0 2rem 2.5rem 2rem !important;
+  width: 100% !important;
+}
+.seating-info-left {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+}
+.seating-info-left .section-title {
+  font-size: 2.8rem !important;
+  line-height: 1.05 !important;
+  margin: 0.2rem 0 0 0 !important;
+  letter-spacing: -0.03em !important;
+}
+.seating-info-mid .seating-lead {
+  font-size: 0.82rem !important;
+  line-height: 1.65 !important;
+  max-width: 520px !important;
+  margin: 0 auto !important;
+  color: var(--text-secondary) !important;
+  font-style: normal !important;
+  font-family: var(--font-body) !important;
+}
+.seating-legend--inline {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  gap: 2rem !important;
+  border-left: none !important;
+  padding-left: 0 !important;
+  margin-top: 0.5rem !important;
+}
+.seating-legend--inline .legend-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.6rem !important;
+  letter-spacing: 0.12em !important;
+  color: var(--text-muted) !important;
+}
+
+/* Decorative separator line */
+.seating-info-bar::after {
+  content: "" !important;
+  display: block !important;
+  width: 60px !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, var(--color-coral), transparent) !important;
+  border-radius: 2px !important;
+  margin-top: 0.5rem !important;
+}
+
+/* â”€â”€ FLOORPLAN VISUALIZER: warm card, no dark band â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.schematic-visualizer--fullwidth {
+  /* Reset all --fullwidth overrides and restore premium warm card look */
+  width: calc(100% - 4rem) !important;
+  border-radius: 28px !important;
+  min-height: 280px !important;
+  padding: 3.5rem 3rem !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(145deg, #fdfaf3 0%, #f7eedc 50%, #fdf8ef 100%) !important;
+  border: 1px solid rgba(212,175,55,0.25) !important;
+  box-shadow: 0 4px 32px rgba(100,60,20,0.08), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+/* Subtle oval ring decoration */
+.schematic-visualizer--fullwidth::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 20px !important;
+  border: 1px dashed rgba(255,90,46,0.08) !important;
+  border-radius: 20px !important;
+  pointer-events: none !important;
+}
+/* Remove grid bg */
+.schematic-visualizer--fullwidth::after {
+  display: none !important;
+}
+
+/* Dining table complex fills the warm card */
+.schematic-visualizer--fullwidth .dining-table-complex {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.schematic-visualizer--fullwidth .chair-row-top,
+.schematic-visualizer--fullwidth .chair-row-bottom {
+  width: 100% !important;
+  justify-content: space-between !important;
+  gap: 0.4rem !important;
+}
+.schematic-visualizer--fullwidth .table-row-middle {
+  width: 100% !important;
+}
+.schematic-visualizer--fullwidth .table-body {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+/* â”€â”€ LOGIN PANEL: clean, minimal, premium â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.seating-login-panel {
+  background: transparent !important;
+  border-top: none !important;
+  padding: 3rem 2rem 1rem 2rem !important;
+  width: 100% !important;
+}
+.seating-login-inner {
+  max-width: 680px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1.75rem !important;
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 22px !important;
+  padding: 2.5rem 3rem !important;
+  box-shadow: 0 4px 24px rgba(100,60,20,0.07) !important;
+}
+.seating-login-header {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+}
+.seating-login-title {
+  font-size: 1.8rem !important;
+  font-weight: 400 !important;
+  color: var(--text-primary) !important;
+  margin: 0.15rem 0 0 0 !important;
+  letter-spacing: -0.03em !important;
+}
+.seating-login-sub {
+  font-size: 0.82rem !important;
+  color: var(--text-muted) !important;
+  margin: 0.3rem 0 0 0 !important;
+}
+.seating-login-form { width: 100% !important; }
+.seating-login-fields {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 1rem !important;
+  align-items: end !important;
+  width: 100% !important;
+}
+.seating-login-fields .form-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.35rem !important;
+}
+.seating-login-submit {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  height: 50px !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.1em !important;
+  margin-top: 0.5rem !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .seating-info-bar { padding: 0 1.5rem 2rem !important; }
+  .seating-legend--inline { gap: 1rem !important; flex-wrap: wrap !important; }
+  .seating-login-fields { grid-template-columns: 1fr !important; }
+  .seating-login-inner { padding: 2rem 1.5rem !important; }
+  .schematic-visualizer--fullwidth { width: calc(100% - 2rem) !important; padding: 2rem 1rem !important; }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SEATING v4 â€” PREMIUM EDITORIAL TWO-COLUMN LAYOUT
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* Section */
+.seating-section--v4 {
+  width: 100% !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 6rem 2rem 0 2rem !important;
+  border-top: 1px solid var(--border-subtle) !important;
+  box-sizing: border-box !important;
+}
+
+/* â”€â”€ TWO-COLUMN EDITORIAL ROW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.seating-editorial-row {
+  display: grid !important;
+  grid-template-columns: 220px 1fr !important;
+  gap: 3rem !important;
+  align-items: center !important;
+  margin-bottom: 3rem !important;
+}
+
+/* â”€â”€ LEFT ASIDE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.seating-aside {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  padding-right: 2rem !important;
+  border-right: 1px solid var(--border-subtle) !important;
+  align-self: stretch !important;
+  justify-content: center !important;
+}
+.seating-aside-eyebrow {
+  font-family: var(--font-mono) !important;
+  font-size: 0.6rem !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--color-coral) !important;
+}
+.seating-aside-title {
+  font-size: 2.6rem !important;
+  line-height: 1.0 !important;
+  letter-spacing: -0.04em !important;
+  color: var(--text-primary) !important;
+  margin: 0 !important;
+  font-weight: 400 !important;
+}
+.seating-aside-desc {
+  font-size: 0.78rem !important;
+  line-height: 1.7 !important;
+  color: var(--text-muted) !important;
+  margin: 0 !important;
+  font-style: italic !important;
+  font-family: var(--font-display) !important;
+}
+.seating-aside-legend {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.55rem !important;
+  margin-top: 0.5rem !important;
+  padding-top: 1rem !important;
+  border-top: 1px solid var(--border-subtle) !important;
+}
+.seating-aside-legend .legend-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.55rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.6rem !important;
+  letter-spacing: 0.1em !important;
+  color: var(--text-muted) !important;
+  text-transform: uppercase !important;
+}
+
+/* â”€â”€ FLOORPLAN CARD: warm parchment, amber table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.schematic-visualizer--v4 {
+  background: linear-gradient(145deg, #fdfaf3 0%, #f8eedb 55%, #fdf8ef 100%) !important;
+  border: 1px solid rgba(212,175,55,0.2) !important;
+  border-radius: 22px !important;
+  padding: 2.5rem 2rem !important;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.9) inset,
+    0 6px 30px rgba(100,60,20,0.07),
+    0 1px 4px rgba(100,60,20,0.04) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+/* Faint concentric oval decoration */
+.schematic-visualizer--v4::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 12px !important;
+  border: 1px dashed rgba(212,175,55,0.12) !important;
+  border-radius: 16px !important;
+  pointer-events: none !important;
+}
+.schematic-visualizer--v4::after { display: none !important; }
+
+/* Dining table complex fills the card */
+.schematic-visualizer--v4 .dining-table-complex {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.schematic-visualizer--v4 .chair-row-top,
+.schematic-visualizer--v4 .chair-row-bottom {
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(12, 1fr) !important;
+  gap: 0.35rem !important;
+}
+.schematic-visualizer--v4 .table-row-middle {
+  width: 100% !important;
+  margin: 0.5rem auto !important;
+}
+.schematic-visualizer--v4 .table-body {
+  flex: 1 1 auto !important;
+  /* AMBER WALNUT TABLE â€” warm, not dark */
+  background: linear-gradient(130deg, #c9a05a 0%, #a0722a 35%, #8b5e1c 65%, #b08030 100%) !important;
+  border: 1px solid rgba(212,175,55,0.35) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,220,100,0.3),
+    inset 0 -2px 6px rgba(0,0,0,0.18),
+    0 6px 18px rgba(100,60,20,0.2) !important;
+}
+/* Table label readability on amber bg */
+.schematic-visualizer--v4 .table-label {
+  color: rgba(255,240,200,0.8) !important;
+  letter-spacing: 0.28em !important;
+}
+.schematic-visualizer--v4 .table-sub-label {
+  color: rgba(255,230,160,0.55) !important;
+}
+/* Seats: clean white tokens on warm bg */
+.schematic-visualizer--v4 .chair {
+  background: rgba(255,252,245,0.95) !important;
+  border: 1px solid rgba(212,175,55,0.3) !important;
+  box-shadow: 0 2px 6px rgba(100,60,20,0.1) !important;
+}
+.schematic-visualizer--v4 .chair-top { box-shadow: 0 3px 8px rgba(100,60,20,0.1) !important; }
+.schematic-visualizer--v4 .chair-bottom { box-shadow: 0 -3px 8px rgba(100,60,20,0.1) !important; }
+
+/* â”€â”€ INLINE LOGIN BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.seating-login-bar {
+  border-top: 1px solid var(--border-subtle) !important;
+  padding: 2.5rem 0 4rem 0 !important;
+}
+.seating-login-bar-inner {
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  gap: 3rem !important;
+  align-items: center !important;
+  max-width: 100% !important;
+}
+.seating-login-bar-label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.3rem !important;
+  flex-shrink: 0 !important;
+}
+.seating-login-icon {
+  color: var(--color-coral) !important;
+  font-size: 0.9rem !important;
+  line-height: 1 !important;
+}
+.seating-login-bar-heading {
+  font-size: 1.55rem !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--text-primary) !important;
+  white-space: nowrap !important;
+}
+.seating-login-bar-form {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr auto !important;
+  gap: 1rem !important;
+  align-items: end !important;
+}
+.seating-bar-field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.3rem !important;
+}
+.seating-bar-cta {
+  white-space: nowrap !important;
+  height: 46px !important;
+  padding: 0 1.75rem !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.06em !important;
+  align-self: end !important;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .seating-editorial-row {
+    grid-template-columns: 1fr !important;
+  }
+  .seating-aside {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    padding-right: 0 !important;
+    padding-bottom: 2rem !important;
+  }
+  .seating-login-bar-inner {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+  .seating-login-bar-form {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* â”€â”€ Seating v4: align to site max-width (1400px) matching max-width-container â”€ */
+.seating-section--v4 {
+  max-width: 1400px !important;
+  padding: 6rem 3rem 0 3rem !important;
+}
+
+/* â”€â”€ Club card strip: align to site max-width â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.club-selector-strip--hero {
+  max-width: 1400px !important;
+  padding: 0 3rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SEAT MAP â€” BOOKMYSHOW-STYLE UNIFORM SEAT DESIGN
+   Every seat = same 52x40px rounded rectangle. 3 crystal-clear states.
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* RESET all old chair shape overrides */
+.chair,
+.chair-top,
+.chair-bottom,
+.chair.chair-left {
+  /* Base: uniform rounded rectangle â€” the seat token */
+  width: 52px !important;
+  height: 40px !important;
+  min-width: 52px !important;
+  min-height: 40px !important;
+  border-radius: 8px 8px 4px 4px !important;  /* slightly rounded top = backrest */
+  aspect-ratio: unset !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  /* Remove any previous 50% border-radius (circle) overrides */
+}
+
+/* â”€â”€ Seat rows: horizontal flex, equally spaced â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair-row-top,
+.chair-row-bottom,
+.schematic-visualizer--v4 .chair-row-top,
+.schematic-visualizer--v4 .chair-row-bottom {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  grid-template-columns: unset !important;
+  margin-bottom: 8px !important;
+  margin-top: 8px !important;
+}
+
+.table-row-middle,
+.schematic-visualizer--v4 .table-row-middle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin: 4px auto !important;
+}
+
+/* Head seat (host) â€” same token shape */
+.chair.chair-left {
+  border-radius: 4px 8px 8px 4px !important;  /* backrest on the right side */
+  flex-shrink: 0 !important;
+}
+
+/* â”€â”€ STATE 1: AVAILABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair.available {
+  background: #ffffff !important;
+  border: 1.5px dashed var(--color-coral) !important;
+  cursor: pointer !important;
+  animation: seat-pulse-border 2s ease-in-out infinite !important;
+}
+@keyframes seat-pulse-border {
+  0%, 100% { border-color: var(--color-coral); box-shadow: 0 0 0 0 rgba(255,90,46,0); }
+  50%       { border-color: var(--color-coral); box-shadow: 0 0 0 3px rgba(255,90,46,0.12); }
+}
+.chair.available:hover {
+  transform: translateY(-3px) !important;
+  background: #fff8f5 !important;
+  border-color: var(--color-coral) !important;
+  border-style: solid !important;
+  box-shadow: 0 4px 14px rgba(255,90,46,0.25) !important;
+  animation: none !important;
+}
+
+/* Number label on available seats â€” big and clear */
+.chair.available .chair-label-open {
+  font-family: var(--font-mono) !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: var(--color-coral) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.02em !important;
+}
+/* "+ CLAIM" text â€” tiny hint below number */
+.chair.available .chair-icon-claim {
+  display: none !important;  /* hide on seat, show on hover via tooltip */
+}
+/* Green availability dot top-right */
+.chair.available::after {
+  content: "" !important;
+  position: absolute !important;
+  top: -3px !important;
+  right: -3px !important;
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: #22c55e !important;
+  border: 1.5px solid #fff !important;
+  box-shadow: 0 0 4px rgba(34,197,94,0.5) !important;
+}
+.chair.available.available-expired::after {
+  background: var(--text-muted) !important;
+  box-shadow: none !important;
+}
+.chair.available.available-expired {
+  border-style: solid !important;
+  border-color: var(--border-mid) !important;
+  opacity: 0.5 !important;
+  animation: none !important;
+  cursor: not-allowed !important;
+}
+.chair.available.available-expired .chair-label-open {
+  color: var(--text-muted) !important;
+}
+
+/* â”€â”€ STATE 2: OCCUPIED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair.occupied {
+  background: linear-gradient(160deg, #2a1a0a 0%, #1c110600 100%) !important;
+  background: #2d1d0e !important;
+  border: 1px solid rgba(212,175,55,0.2) !important;
+  cursor: not-allowed !important;
+  animation: none !important;
+}
+.chair.occupied::after { display: none !important; }
+.chair.occupied:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Avatar inside occupied seat */
+.chair.occupied .chrono-avatar-ring {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.chair.occupied .avatar-emoji {
+  font-size: 1rem !important;
+  line-height: 1 !important;
+  display: block !important;
+}
+.chair.occupied .avatar-alias {
+  font-family: var(--font-mono) !important;
+  font-size: 0.38rem !important;
+  letter-spacing: 0.05em !important;
+  color: rgba(212,175,55,0.7) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  max-width: 48px !important;
+  text-overflow: ellipsis !important;
+}
+
+/* â”€â”€ STATE 3: SELECTED (yours) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair.selected {
+  background: var(--color-coral) !important;
+  border: 2px solid var(--color-coral) !important;
+  box-shadow: 0 0 0 3px rgba(255,90,46,0.25), 0 4px 16px rgba(255,90,46,0.35) !important;
+  animation: none !important;
+  cursor: pointer !important;
+}
+.chair.selected::after { display: none !important; }
+.chair.selected .chair-label-open {
+  color: #ffffff !important;
+  font-size: 0.9rem !important;
+}
+
+/* â”€â”€ Seat tooltip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair-tooltip {
+  position: absolute !important;
+  bottom: calc(100% + 8px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: #1c1008 !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 0.45rem 0.75rem !important;
+  white-space: nowrap !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.6rem !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.15s ease !important;
+  z-index: 100 !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25) !important;
+}
+.chair:hover .chair-tooltip {
+  opacity: 1 !important;
+}
+.chair-tooltip .tooltip-title {
+  font-weight: 700 !important;
+  color: var(--color-coral) !important;
+  margin: 0 0 2px 0 !important;
+  letter-spacing: 0.06em !important;
+}
+.chair-tooltip .tooltip-time {
+  color: rgba(255,255,255,0.6) !important;
+  margin: 0 !important;
+}
+
+/* Remove old chrono-avatar overrides that made seats circles */
+.crt-glitch-avatar {
+  background: #2d1d0e !important;
+  border-radius: 8px 8px 4px 4px !important;
+}
+.chrono-avatar {
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SEAT MAP â€” FINAL MINIMAL CIRCLE DESIGN
+   Clean poker-chip circles, 3 states, zero clutter
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* â”€â”€ Reset ALL previous chair overrides â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair,
+.chair-top,
+.chair-bottom,
+.chair.chair-left,
+.chair.occupied,
+.chair.available,
+.chair.selected,
+.crt-glitch-avatar,
+.chrono-avatar,
+.chrono-avatar-ring {
+  all: revert !important;
+}
+
+/* â”€â”€ Universal seat token: clean circle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+/* â”€â”€ Seat rows: flex, evenly spaced â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair-row-top,
+.chair-row-bottom {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin: 10px 0 !important;
+}
+.table-row-middle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin: 6px 0 !important;
+}
+.head-chair-slot {
+  flex-shrink: 0 !important;
+}
+
+/* â”€â”€ STATE 1: AVAILABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair.available {
+  background: #ffffff !important;
+  border: 2px solid var(--color-coral) !important;
+  box-shadow: 0 2px 8px rgba(255,90,46,0.12) !important;
+}
+.chair.available:hover {
+  transform: scale(1.15) !important;
+  box-shadow: 0 4px 16px rgba(255,90,46,0.3) !important;
+  background: #fff5f0 !important;
+}
+.chair.available .seat-number {
+  font-family: var(--font-mono) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: var(--color-coral) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.02em !important;
+  display: block !important;
+}
+
+/* â”€â”€ Available: subtle pulse animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair.available.blinking-glitch {
+  animation: chip-breathe 2.5s ease-in-out infinite !important;
+}
+@keyframes chip-breathe {
+  0%, 100% { box-shadow: 0 2px 8px rgba(255,90,46,0.12); }
+  50%       { box-shadow: 0 2px 16px rgba(255,90,46,0.35); }
+}
+.chair.available.blinking-glitch:hover {
+  animation: none !important;
+}
+
+/* â”€â”€ STATE 2: OCCUPIED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair.occupied {
+  background: #1e1209 !important;
+  border: 2px solid rgba(212,175,55,0.25) !important;
+  cursor: default !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+}
+.chair.occupied:hover {
+  transform: none !important;
+}
+.chair.occupied .seat-initial {
+  font-family: var(--font-display) !important;
+  font-size: 1.1rem !important;
+  font-weight: 500 !important;
+  color: rgba(212,175,55,0.8) !important;
+  line-height: 1 !important;
+  display: block !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* â”€â”€ STATE 3: SELECTED (yours) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair.selected {
+  background: var(--color-coral) !important;
+  border: 2px solid var(--color-coral) !important;
+  box-shadow: 0 0 0 4px rgba(255,90,46,0.2), 0 4px 16px rgba(255,90,46,0.4) !important;
+  animation: none !important;
+}
+.chair.selected .seat-number {
+  color: #ffffff !important;
+  font-size: 0.8rem !important;
+}
+
+/* â”€â”€ Expired state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair.available-expired {
+  background: rgba(0,0,0,0.04) !important;
+  border: 2px solid rgba(0,0,0,0.1) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  animation: none !important;
+}
+.chair.available-expired .seat-number {
+  color: rgba(0,0,0,0.25) !important;
+}
+
+/* â”€â”€ Tooltip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair-tooltip {
+  position: absolute !important;
+  bottom: calc(100% + 10px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: #1c1008 !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 0.8rem !important;
+  white-space: nowrap !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.58rem !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.15s ease !important;
+  z-index: 200 !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25) !important;
+}
+.chair:hover .chair-tooltip { opacity: 1 !important; }
+.chair-tooltip .tooltip-title {
+  color: var(--color-coral) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  margin: 0 0 2px 0 !important;
+}
+.chair-tooltip .tooltip-time {
+  color: rgba(255,255,255,0.55) !important;
+  margin: 0 !important;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   OVAL POKER-TABLE SEATING STAGE
+   Virtual: 700 Ã— 500. Center: (350,250). Seat ellipse: rx=295, ry=182.
+   Host (seat 25) at 180Â° (9-o'clock). Seats 1-24 clockwise from 195Â° to 165Â°.
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* â”€â”€ Stage container (responsive, 7:5 aspect ratio) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.seating-oval-stage {
+  position: relative !important;
+  width: 100% !important;
+  padding-bottom: 71.4% !important; /* 500/700 = 71.4% */
+  background: linear-gradient(145deg, #fdfaf3 0%, #f8eedb 55%, #fdf8ef 100%) !important;
+  border: 1px solid rgba(212,175,55,0.18) !important;
+  border-radius: 22px !important;
+  overflow: visible !important;
+  box-shadow: 0 4px 30px rgba(100,60,20,0.08), 0 1px 0 rgba(255,255,255,0.9) inset !important;
+}
+
+/* â”€â”€ Amber oval dining table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.oval-table-body {
+  position: absolute !important;
+  left: 21% !important;
+  top: 21% !important;
+  width: 58% !important;
+  height: 58% !important;
+  border-radius: 50% !important;
+  background: linear-gradient(130deg,#c9a05a 0%,#a0722a 30%,#7a4e12 55%,#b08030 80%,#c9a05a 100%) !important;
+  border: 2px solid rgba(212,175,55,0.45) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,220,100,0.35),
+    inset 0 -4px 12px rgba(0,0,0,0.25),
+    0 8px 28px rgba(100,60,20,0.22) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1 !important;
+}
+.oval-table-inner-ring {
+  position: absolute !important;
+  inset: 12px !important;
+  border: 1px solid rgba(212,175,55,0.3) !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+}
+.oval-table-text {
+  font-family: var(--font-mono) !important;
+  font-size: clamp(0.55rem, 1.2vw, 0.85rem) !important;
+  letter-spacing: 0.3em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,240,200,0.75) !important;
+  text-align: center !important;
+  line-height: 1.7 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+.oval-table-sub {
+  font-size: clamp(0.32rem, 0.7vw, 0.5rem) !important;
+  letter-spacing: 0.2em !important;
+  color: rgba(255,230,160,0.45) !important;
+  display: block !important;
+  margin-top: 2px !important;
+}
+
+/* â”€â”€ Chairs ring: absolute fill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.oval-chairs-ring {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+}
+
+/* â”€â”€ Each chair: absolute, centred on its position point â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.oval-chairs-ring .chair {
+  position: absolute !important;
+  transform: translate(-50%, -50%) !important;
+  pointer-events: auto !important;
+  z-index: 10 !important;
+}
+
+/* â”€â”€ 25 seat positions (% of 700Ã—500 virtual, rx=295, ry=182) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Angles: host(25)=180Â°, seats 1-24 clockwise from 195Â° step 14.35Â°
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chair-pos-01 { left:  9.3%; top: 40.6%; }
+.chair-pos-02 { left: 13.2%; top: 32.3%; }
+.chair-pos-03 { left: 19.7%; top: 24.7%; }
+.chair-pos-04 { left: 27.7%; top: 19.1%; }
+.chair-pos-05 { left: 37.3%; top: 15.3%; }
+.chair-pos-06 { left: 47.5%; top: 13.7%; }
+.chair-pos-07 { left: 58.0%; top: 14.3%; }
+.chair-pos-08 { left: 68.0%; top: 17.1%; }
+.chair-pos-09 { left: 77.0%; top: 22.0%; }
+.chair-pos-10 { left: 84.1%; top: 28.7%; }
+.chair-pos-11 { left: 89.2%; top: 36.6%; }
+.chair-pos-12 { left: 91.9%; top: 45.7%; }
+.chair-pos-13 { left: 91.8%; top: 54.6%; }
+.chair-pos-14 { left: 89.2%; top: 63.4%; }
+.chair-pos-15 { left: 84.1%; top: 71.3%; }
+.chair-pos-16 { left: 76.9%; top: 78.0%; }
+.chair-pos-17 { left: 68.0%; top: 82.9%; }
+.chair-pos-18 { left: 58.1%; top: 85.7%; }
+.chair-pos-19 { left: 47.6%; top: 86.3%; }
+.chair-pos-20 { left: 37.3%; top: 84.7%; }
+.chair-pos-21 { left: 27.7%; top: 80.9%; }
+.chair-pos-22 { left: 19.6%; top: 75.2%; }
+.chair-pos-23 { left: 13.1%; top: 67.7%; }
+.chair-pos-24 { left:  9.3%; top: 59.4%; }
+.chair-pos-25 { left:  7.9%; top: 50.0%; } /* Host */
+
+/* â”€â”€ Override seating-editorial-row to prevent v4 panel from shrinking â”€â”€â”€ */
+.seating-editorial-row {
+  grid-template-columns: 200px 1fr !important;
+}
+.seating-aside {
+  min-height: unset !important;
+}
+
+/* â”€â”€ Mobile: stack vertically â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@media (max-width: 860px) {
+  .seating-editorial-row {
+    grid-template-columns: 1fr !important;
+  }
+  .seating-oval-stage {
+    padding-bottom: 80% !important;
+  }
+  .chair {
+    width: 34px !important;
+    height: 34px !important;
+  }
+  .seat-number, .seat-initial {
+    font-size: 0.6rem !important;
+  }
+}
+
+/* â”€â”€ OVAL STAGE FIX: swap padding-bottom trick for fixed height â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   The padding-bottom approach breaks on wide screens.
+   Fixed height of 420px keeps all 25 seats visible.
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.seating-oval-stage {
+  padding-bottom: 0 !important;
+  height: 420px !important;
+}
+/* Grid: start-align so aside doesn't stretch to match stage height */
+.seating-editorial-row {
+  align-items: start !important;
+}
+/* Table: scale correctly inside fixed-height stage */
+.oval-table-body {
+  left: 18% !important;
+  top: 18% !important;
+  width: 64% !important;
+  height: 64% !important;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   USER SYMMETRIC POKER TABLE
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+:root {
+  --color-beige-dark: #ded6c5;
+  --color-beige-light: #f6f1e5;
+  --color-black: #111111;
+  --color-neon-orange: #ff5e00;
+  --color-neon-glow: rgba(255, 94, 0, 0.4);
+  
+  --card-w: 42px;
+  --card-h: 62px;
+  --center-x: 400px;
+  --center-y: 340px;
+  --radius-x: 325px; 
+  --radius-y: 215px; 
+}
+
+/* Remove old oval styles */
+.seating-oval-stage, .oval-table-body, .oval-chairs-ring {
+  display: none !important;
+}
+
+.schematic-visualizer {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  overflow-x: auto !important; /* Enable scrolling on smaller screens */
+  padding: 20px 0 !important;
+}
+
+.layout-container {
+  width: 800px !important;
+  min-width: 800px !important; /* Force width for the math */
+  height: 680px !important;
+  background-color: var(--color-beige-light) !important;
+  border-radius: 36px !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.poker-table {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 530px !important;
+  height: 310px !important;
+  background: var(--color-black) !important;
+  border-radius: 155px !important;
+  border: 14px solid var(--color-neon-orange) !important;
+  box-shadow: 
+      0 0 30px var(--color-neon-glow),
+      inset 0 0 20px rgba(0, 0, 0, 0.9) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+}
+
+.poker-table::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  border: 2px dashed var(--color-neon-orange) !important;
+  border-radius: 145px !important;
+  opacity: 0.5 !important;
+}
+
+.table-title {
+  color: var(--color-neon-orange) !important;
+  font-size: 30px !important;
+  font-weight: 300 !important;
+  letter-spacing: 5px !important;
+  margin: 0 0 6px 0 !important;
+  text-shadow: 0 0 10px var(--color-neon-glow) !important;
+}
+
+.table-subtitle {
+  color: var(--color-beige-dark) !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  margin: 0 !important;
+}
+
+.seat-ring {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 5 !important;
+}
+
+.seat {
+  position: absolute !important;
+  width: var(--card-w) !important;
+  height: var(--card-h) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s ease, background-color 0.2s, color 0.2s !important;
+  
+  left: calc(var(--center-x) - (var(--card-w) / 2)) !important;
+  top: calc(var(--center-y) - (var(--card-h) / 2)) !important;
+
+  transform: 
+      translate(
+          calc(var(--radius-x) * cos(var(--angle))), 
+          calc(var(--radius-y) * sin(var(--angle)))
+      ) 
+      rotate(calc(var(--angle) + 90deg)) !important;
+}
+
+.seat:hover {
+  z-index: 20 !important;
+  transform: 
+      translate(
+          calc((var(--radius-x) + 8px) * cos(var(--angle))), 
+          calc((var(--radius-y) + 8px) * sin(var(--angle)))
+      ) 
+      rotate(calc(var(--angle) + 90deg)) 
+      scale(1.05) !important;
+}
+
+.seat.black-card {
+  background-color: var(--color-black) !important;
+  color: var(--color-beige-dark) !important;
+  border: 1px solid var(--color-beige-dark) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.seat.white-card {
+  background-color: var(--color-beige-light) !important;
+  color: var(--color-black) !important;
+  border: 2px solid var(--color-black) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+}
+
+.seat.white-card-expired {
+  background-color: var(--color-beige-dark) !important;
+  color: rgba(0,0,0,0.3) !important;
+  border: 2px solid rgba(0,0,0,0.1) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+.seat.white-card-expired:hover {
+  transform: 
+      translate(
+          calc(var(--radius-x) * cos(var(--angle))), 
+          calc(var(--radius-y) * sin(var(--angle)))
+      ) 
+      rotate(calc(var(--angle) + 90deg)) !important;
+}
+
+.status-dot {
+  position: absolute !important;
+  top: 5px !important;
+  right: 5px !important;
+  width: 5px !important;
+  height: 5px !important;
+  background-color: var(--color-neon-orange) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 6px var(--color-neon-orange) !important;
+}
+
+.seat.selected {
+  background-color: var(--color-neon-orange) !important;
+  color: var(--color-black) !important;
+  border: 2px solid var(--color-black) !important;
+  box-shadow: 0 0 15px var(--color-neon-orange) !important;
+}
+
+.p-1  { --angle: -150deg; } .p-2  { --angle: -136deg; } .p-3  { --angle: -122deg; }
+.p-4  { --angle: -108deg; } .p-5  { --angle: -94deg;  } .p-6  { --angle: -80deg;  }
+.p-7  { --angle: -66deg;  } .p-8  { --angle: -52deg;  } .p-9  { --angle: -38deg;  }
+.p-10 { --angle: -24deg;  } .p-11 { --angle: -10deg;  } .p-12 { --angle: 10deg;   }
+.p-13 { --angle: 24deg;   } .p-14 { --angle: 38deg;   } .p-15 { --angle: 52deg;   }
+.p-16 { --angle: 66deg;   } .p-17 { --angle: 80deg;   } .p-18 { --angle: 94deg;   }
+.p-19 { --angle: 108deg;  } .p-20 { --angle: 122deg;  } .p-21 { --angle: 136deg;  }
+.p-22 { --angle: 150deg;  } .p-23 { --angle: 165deg;  } .p-24 { --angle: 180deg;  }
+.p-25 { --angle: -165deg; }
+
+/* Scale down layout container for mobile */
+@media (max-width: 860px) {
+  .schematic-visualizer {
+    transform-origin: top center !important;
+    transform: scale(0.6) !important;
+    height: 420px !important;
+    padding: 0 !important;
+  }
+}
+@media (max-width: 500px) {
+  .schematic-visualizer {
+    transform: scale(0.4) !important;
+    height: 300px !important;
+  }
+}
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   BEYOND THYME SYMMETRIC POKER TABLE
+   Adapted from user's fixed layout to match the premium brand theme.
+   Uses container queries to scale beautifully inside the editorial grid.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --card-w: 42px;
+  --card-h: 62px;
+  --center-x: 400px;
+  --center-y: 340px;
+  --radius-x: 325px; 
+  --radius-y: 215px; 
+}
+
+/* Hide legacy elements */
+.seating-oval-stage, .oval-table-body, .oval-chairs-ring {
+  display: none !important;
+}
+
+/* Override seating-editorial-row to fix squished left column */
+.seating-editorial-row {
+  grid-template-columns: minmax(280px, 1fr) 2.5fr !important;
+}
+
+/* Establish container context for scaling and REMOVE GHOST BOX */
+.schematic-visualizer {
+  display: flex !important;
+  justify-content: flex-start !important; /* Left align to avoid overlapping aside */
+  align-items: center !important;
+  width: 100% !important;
+  container-type: inline-size !important; /* Enable cqw */
+  
+  /* CRITICAL: Remove legacy backgrounds and borders */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.layout-container {
+  width: 800px !important;
+  height: 680px !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  position: relative !important;
+  overflow: visible !important;
+  
+  /* Scale based on container width. If container is <800px, scale down. */
+  transform-origin: left center !important;
+  transform: scale(min(1, calc(100cqw / 800))) !important;
+}
+
+/* Ensure the wrapper doesn't leave huge whitespace when scaled down */
+@container (max-width: 800px) {
+  .layout-container {
+    height: calc(680px * (100cqw / 800)) !important; /* Adjust physical height so parent flex container shrinks */
+  }
+}
+
+.poker-table {
+  position: absolute !important;
+  top: calc(50% - 15px) !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 530px !important;
+  height: 310px !important;
+  
+  /* Premium Theme styling */
+  background: #1c1008 !important;
+  border-radius: 155px !important;
+  border: 4px solid rgba(212,175,55,0.7) !important; /* Elegant gold instead of coral */
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4) !important;
+  
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+}
+
+.poker-table::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 12px !important;
+  border: 1px dashed rgba(212,175,55,0.4) !important; /* Gold inner dashed line */
+  border-radius: 145px !important;
+}
+
+.table-title {
+  color: rgba(212,175,55,1) !important; /* Gold */
+  font-family: var(--font-display) !important;
+  font-size: 34px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.15em !important;
+  margin: 0 0 6px 0 !important;
+  text-shadow: 0 0 15px rgba(212,175,55,0.3) !important; /* Subtle glow */
+}
+
+.table-subtitle {
+  color: rgba(255,255,255,0.4) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.25em !important;
+  margin: 0 !important;
+}
+
+.seat-ring {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: -15px !important;
+  left: 0 !important;
+  z-index: 5 !important;
+}
+
+.seat {
+  position: absolute !important;
+  width: var(--card-w) !important;
+  height: var(--card-h) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s ease, background-color 0.2s, color 0.2s !important;
+  
+  left: calc(var(--center-x) - (var(--card-w) / 2)) !important;
+  top: calc(var(--center-y) - (var(--card-h) / 2)) !important;
+
+  /* Card rotates towards center */
+  transform: 
+      translate(
+          calc(var(--radius-x) * cos(var(--angle))), 
+          calc(var(--radius-y) * sin(var(--angle)))
+      ) 
+      rotate(calc(var(--angle) + 90deg)) !important;
+}
+
+/* ── TEXT COUNTER-ROTATION ── */
+/* This keeps the text upright no matter how the card is rotated */
+.seat-content {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: rotate(calc(-1 * (var(--angle) + 90deg))) !important;
+}
+
+.seat:hover {
+  z-index: 20 !important;
+  transform: 
+      translate(
+          calc((var(--radius-x) + 8px) * cos(var(--angle))), 
+          calc((var(--radius-y) + 8px) * sin(var(--angle)))
+      ) 
+      rotate(calc(var(--angle) + 90deg)) 
+      scale(1.05) !important;
+}
+
+.seat.black-card {
+  background-color: #1c1008 !important;
+  color: rgba(212,175,55,0.9) !important;
+  border: 1px solid rgba(212,175,55,0.3) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  font-family: var(--font-display) !important;
+  font-size: 16px !important;
+}
+
+.seat.white-card {
+  background-color: #ffffff !important;
+  color: var(--color-coral) !important;
+  border: 1px solid var(--color-coral) !important;
+  box-shadow: 0 4px 10px rgba(255, 90, 46, 0.1) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+.seat.white-card-expired {
+  background-color: rgba(0,0,0,0.03) !important;
+  color: rgba(0,0,0,0.3) !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  font-family: var(--font-mono) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+.seat.white-card-expired:hover {
+  transform: 
+      translate(
+          calc(var(--radius-x) * cos(var(--angle))), 
+          calc(var(--radius-y) * sin(var(--angle)))
+      ) 
+      rotate(calc(var(--angle) + 90deg)) !important;
+}
+
+.status-dot {
+  position: absolute !important;
+  top: 5px !important;
+  right: 5px !important;
+  width: 5px !important;
+  height: 5px !important;
+  background-color: var(--color-coral) !important;
+  border-radius: 50% !important;
+}
+
+.seat.selected {
+  background-color: var(--color-coral) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--color-coral) !important;
+  box-shadow: 0 0 15px rgba(255, 90, 46, 0.4) !important;
+}
+
+/* Tooltip fixes for rotated cards */
+.chair-tooltip {
+  position: absolute !important;
+  bottom: calc(100% + 10px) !important;
+  left: 50% !important;
+  /* Double counter-rotation isn't needed if it's placed inside seat-content, but it's inside seat.
+     Let's keep tooltip inside seat and counter-rotate it here. */
+  transform: translateX(-50%) rotate(calc(-1 * (var(--angle) + 90deg))) !important;
+  background: #1c1008 !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 0.8rem !important;
+  white-space: nowrap !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.58rem !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.15s ease !important;
+  z-index: 200 !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25) !important;
+  color: #fff !important;
+  text-align: left !important;
+}
+.seat:hover .chair-tooltip { opacity: 1 !important; }
+.chair-tooltip .tooltip-title {
+  color: var(--color-coral) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  margin: 0 0 2px 0 !important;
+}
+.chair-tooltip .tooltip-time {
+  color: rgba(255,255,255,0.55) !important;
+  margin: 0 !important;
+}
+
+.p-1  { --angle: -150deg; } .p-2  { --angle: -136deg; } .p-3  { --angle: -122deg; }
+.p-4  { --angle: -108deg; } .p-5  { --angle: -94deg;  } .p-6  { --angle: -80deg;  }
+.p-7  { --angle: -66deg;  } .p-8  { --angle: -52deg;  } .p-9  { --angle: -38deg;  }
+.p-10 { --angle: -24deg;  } .p-11 { --angle: -10deg;  } .p-12 { --angle: 10deg;   }
+.p-13 { --angle: 24deg;   } .p-14 { --angle: 38deg;   } .p-15 { --angle: 52deg;   }
+.p-16 { --angle: 66deg;   } .p-17 { --angle: 80deg;   } .p-18 { --angle: 94deg;   }
+.p-19 { --angle: 108deg;  } .p-20 { --angle: 122deg;  } .p-21 { --angle: 136deg;  }
+.p-22 { --angle: 150deg;  } .p-23 { --angle: 165deg;  } .p-24 { --angle: 180deg;  }
+.p-25 { --angle: -165deg; }
+
+/* Scale down layout container for mobile */
+@media (max-width: 860px) {
+  .seating-editorial-row {
+    grid-template-columns: 1fr !important;
+  }
+  .schematic-visualizer {
+    justify-content: center !important;
+  }
+  .layout-container {
+    transform-origin: top center !important;
+  }
+}
+
+/* Ensure legacy grid/stripes pseudo-elements are hidden */
+.schematic-visualizer::before,
+.schematic-visualizer::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
 }

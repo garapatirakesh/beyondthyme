@@ -13,6 +13,8 @@ export const CLUBS_CONFIG = {
     romanNumeral: 'I',
     eventDate: '2026-08-15T20:00:00+05:30', // Active/Future IST
     displayNight: 'Sat Aug 15 · 20:00',
+    image: 'assets/vedic_fire_food.png',
+    description: 'Slow-cooked clay-pot curries with aromatic woodfire smoked spices, celebrating ancient culinary time-loops.',
     occupied: [
       { seat: 1,  alias: 'SOMA_04',  emoji: '⏳' },
       { seat: 2,  alias: 'KALA_19',  emoji: '🪩' },
@@ -40,6 +42,8 @@ export const CLUBS_CONFIG = {
     romanNumeral: 'II',
     eventDate: '2026-08-22T21:00:00+05:30', // Active/Future IST
     displayNight: 'Sat Aug 22 · 21:00',
+    image: 'assets/coastal_monsoon_food.png',
+    description: 'Fresh coastal catch prepared with rich shredded coconut, local kokum, and green monsoon coriander leaves.',
     occupied: [
       { seat: 1,  alias: 'POMF_09',    emoji: '🌀' },
       { seat: 3,  alias: 'COAST_21',   emoji: '🧭' },
@@ -66,6 +70,8 @@ export const CLUBS_CONFIG = {
     romanNumeral: 'III',
     eventDate: '2026-07-25T19:00:00+05:30', // Expired/Past IST
     displayNight: 'Sun Jul 25 · 19:00',
+    image: 'assets/himalayan_mist_food.png',
+    description: 'Hot steaming bamboo momos and thukpa noodle soups served inside a pine wood foggy visual environment.',
     occupied: [
       { seat: 2,  alias: 'MIST_03',   emoji: '❄️' },
       { seat: 4,  alias: 'PINE_18',   emoji: '🏔️' },
@@ -91,6 +97,8 @@ export const CLUBS_CONFIG = {
     romanNumeral: 'IV',
     eventDate: '2026-07-18T20:00:00+05:30', // Expired/Past IST
     displayNight: 'Thu Jul 18 · 20:00',
+    image: 'assets/neo_bengaluru_food.png',
+    description: 'Futuristic molecular gastronomy platted with mango spheres, laboratory vapor foams, and interactive neon gastrique.',
     occupied: [
       { seat: 1,  alias: 'NEO_08',    emoji: '⚙️' },
       { seat: 2,  alias: 'CYBER_10',  emoji: '🧪' },

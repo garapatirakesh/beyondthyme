@@ -1,9 +1,10 @@
 /* modules/seating.js
- * Seating floorplan rendering and seat interaction logic.
- * renderSeatingLayout() is called on init and whenever activeClub changes.
+ * Seating floorplan rendering — oval poker-table layout.
+ * All 25 chairs are rendered into #chairsRing, positioned absolutely
+ * around the oval by CSS class chair-pos-01 through chair-pos-25.
  */
 
-import { TOP_ROW_SEATS, BOTTOM_ROW_SEATS, HEAD_SEAT } from '../config/app.config.js';
+import { HEAD_SEAT } from '../config/app.config.js';
 
 /**
  * Render the full seating layout for the given club config.
@@ -11,18 +12,15 @@ import { TOP_ROW_SEATS, BOTTOM_ROW_SEATS, HEAD_SEAT } from '../config/app.config
  * @param {object} callbacks    — { onSeatClick, onSeatHoverEnter, onSeatHoverLeave, onOccupiedHover }
  */
 export function renderSeatingLayout(clubConfig, callbacks = {}) {
-  const rowTop       = document.getElementById('chairRowTop');
-  const rowBottom    = document.getElementById('chairRowBottom');
-  const headContainer = document.getElementById('headChairContainer');
+  const chairsRing   = document.getElementById('chairsRing');
   const nameTitle    = document.getElementById('activeClubNameTitle');
   const locationTag  = document.getElementById('activeClubLocationTag');
+  const tableSubLabel = document.getElementById('tableSubLabel');
   const schematicEl  = document.querySelector('.schematic-visualizer');
 
-  if (!rowTop || !rowBottom || !headContainer) return;
+  if (!chairsRing) return;
 
-  rowTop.innerHTML       = '';
-  rowBottom.innerHTML    = '';
-  headContainer.innerHTML = '';
+  chairsRing.innerHTML = '';
 
   const isExpired = new Date(clubConfig.eventDate) <= new Date();
 
@@ -35,44 +33,44 @@ export function renderSeatingLayout(clubConfig, callbacks = {}) {
     }
   }
 
-  for (let i = TOP_ROW_SEATS.start; i <= TOP_ROW_SEATS.end; i++) {
-    rowTop.appendChild(_createChairElement(i, 'chair-top', clubConfig, callbacks, isExpired));
+  // Render all seats 1 – HEAD_SEAT (25) into the oval ring
+  for (let i = 1; i <= HEAD_SEAT; i++) {
+    chairsRing.appendChild(_createChairElement(i, clubConfig, callbacks, isExpired));
   }
-  for (let i = BOTTOM_ROW_SEATS.start; i <= BOTTOM_ROW_SEATS.end; i++) {
-    rowBottom.appendChild(_createChairElement(i, 'chair-bottom', clubConfig, callbacks, isExpired));
-  }
-  headContainer.appendChild(_createChairElement(HEAD_SEAT, 'chair-left', clubConfig, callbacks, isExpired));
 
   if (nameTitle) {
-    nameTitle.innerText = isExpired 
-      ? `${clubConfig.name} Seating [ARCHIVED]` 
+    nameTitle.innerText = isExpired
+      ? `${clubConfig.name} Seating [ARCHIVED]`
       : `${clubConfig.name} Seating`;
   }
   if (locationTag) locationTag.innerText = clubConfig.location.toUpperCase();
+  if (tableSubLabel) {
+    tableSubLabel.innerText = isExpired
+      ? `${clubConfig.location.toUpperCase()} · ARCHIVED`
+      : `GRAND VILLA BANQUET · 25 POSITIONS`;
+  }
 }
 
 /**
  * Build a single chair DOM element.
  * @private
  */
-function _createChairElement(seatNum, placementClass, config, callbacks, isExpired) {
+function _createChairElement(seatNum, config, callbacks, isExpired) {
   const div = document.createElement('div');
   div.id = `chair${seatNum}`;
   div.setAttribute('data-seat', `Seat_${String(seatNum).padStart(2, '0')}`);
 
+  const posClass = `p-${seatNum}`;
   const occ = config.occupied.find(o => o.seat === seatNum);
 
   if (occ) {
-    // Occupied/Claimed seat gets crt-glitch-avatar styling
-    div.className = `chair ${placementClass} occupied crt-glitch-avatar`;
+    // Occupied: black-card, member's first initial
+    div.className = `seat ${posClass} black-card`;
     div.innerHTML = `
-      <div class="chrono-avatar-ring">
-        <span class="avatar-emoji">${occ.emoji}</span>
-        <span class="avatar-alias">${occ.alias}</span>
-      </div>
+      <span class="seat-content">${occ.alias.charAt(0).toUpperCase()}</span>
       <div class="chair-tooltip">
-        <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')} [Reserved]</p>
-        <p class="tooltip-time">${isExpired ? 'Archived Session Record' : `Avatar: ${occ.alias}`}</p>
+        <p class="tooltip-title">Seat ${String(seatNum).padStart(2, '0')} — Reserved</p>
+        <p class="tooltip-time">${isExpired ? 'Archived' : occ.alias}</p>
       </div>
     `;
     div.addEventListener('mouseenter', () => {
@@ -81,33 +79,29 @@ function _createChairElement(seatNum, placementClass, config, callbacks, isExpir
     div.addEventListener('mouseleave', () => {
       if (!isExpired) callbacks.onSeatHoverLeave?.();
     });
+  } else if (isExpired) {
+    // Expired open seat
+    div.className = `seat ${posClass} white-card-expired`;
+    div.innerHTML = `
+      <span class="seat-content">${seatNum}</span>
+      <div class="chair-tooltip">
+        <p class="tooltip-title">Seat ${String(seatNum).padStart(2, '0')} — Closed</p>
+        <p class="tooltip-time">Registration expired</p>
+      </div>
+    `;
   } else {
-    if (isExpired) {
-      // Greyed-out unavailable open seat (expired event)
-      div.className = `chair ${placementClass} available available-expired`;
-      div.innerHTML = `
-        <span class="chair-icon-claim">CLOSED</span>
-        <span class="chair-label-open">${String(seatNum).padStart(2, '0')}</span>
-        <div class="chair-tooltip">
-          <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')} [CLOSED]</p>
-          <p class="tooltip-time">Registration Has Expired</p>
-        </div>
-      `;
-    } else {
-      // Blinking/glitching active open seat
-      div.className = `chair ${placementClass} available blinking-glitch nav-interactive`;
-      div.innerHTML = `
-        <span class="chair-icon-claim">+ CLAIM SEAT</span>
-        <span class="chair-label-open">${String(seatNum).padStart(2, '0')}</span>
-        <div class="chair-tooltip">
-          <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')} [OPEN SEAT]</p>
-          <p class="tooltip-time">Tap to Claim Position</p>
-        </div>
-      `;
-      div.addEventListener('mouseenter', () => callbacks.onSeatHoverEnter?.(div));
-      div.addEventListener('mouseleave', () => callbacks.onSeatHoverLeave?.());
-      div.addEventListener('click',      () => callbacks.onSeatClick?.(div));
-    }
+    // Open seat: white-card with status dot
+    div.className = `seat ${posClass} white-card nav-interactive`;
+    div.innerHTML = `
+      <span class="seat-content">${seatNum}<span class="status-dot"></span></span>
+      <div class="chair-tooltip">
+        <p class="tooltip-title">Seat ${String(seatNum).padStart(2, '0')} — Open</p>
+        <p class="tooltip-time">Click to claim</p>
+      </div>
+    `;
+    div.addEventListener('mouseenter', () => callbacks.onSeatHoverEnter?.(div));
+    div.addEventListener('mouseleave', () => callbacks.onSeatHoverLeave?.());
+    div.addEventListener('click',      () => callbacks.onSeatClick?.(div));
   }
 
   return div;
@@ -118,29 +112,26 @@ function _createChairElement(seatNum, placementClass, config, callbacks, isExpir
  * @param {HTMLElement} chairEl
  */
 export function selectSeat(chairEl) {
-  const prev = document.querySelector('.chair.selected');
+  const prev = document.querySelector('.seat.selected');
   if (prev) prev.classList.remove('selected');
   chairEl.classList.add('selected');
 }
 
 /**
- * Convert a reserved seat element to an occupied avatar state (post-vetting).
+ * Convert a reserved seat element to occupied state (post-vetting).
  * @param {HTMLElement} chairEl
  * @param {{ emoji: string, alias: string, diet: string }} vettingData
  * @param {string} seatNum  — e.g. "03"
  */
 export function convertSeatToOccupied(chairEl, vettingData, seatNum) {
-  const { emoji, alias, diet } = vettingData;
-  chairEl.classList.remove('available', 'selected', 'blinking-glitch');
-  chairEl.classList.add('occupied', 'crt-glitch-avatar');
+  const { alias, diet } = vettingData;
+  chairEl.classList.remove('white-card', 'selected');
+  chairEl.classList.add('black-card');
   chairEl.innerHTML = `
-    <div class="chrono-avatar-ring">
-      <span class="avatar-emoji">${emoji}</span>
-      <span class="avatar-alias">${alias.toUpperCase()}</span>
-    </div>
+    <span class="seat-content">${alias.charAt(0).toUpperCase()}</span>
     <div class="chair-tooltip">
-      <p class="tooltip-title">Position ${seatNum} [Reserved]</p>
-      <p class="tooltip-time">Avatar: ${alias} (${diet})</p>
+      <p class="tooltip-title">Seat ${seatNum} — Reserved</p>
+      <p class="tooltip-time">${alias} (${diet})</p>
     </div>
   `;
 }

@@ -15,6 +15,7 @@ import {
   startAmbientAudio, stopAmbientAudio, isAudioPlaying,
   updateAudioCalibration, playBeaconChime, playResonanceChime,
   playSuccessArpeggio, playErrorBuzzer, playThermalPrinterTear,
+  playStaticTapeClick,
 } from './modules/audio.js';
 import { printToTerminal, resetTerminal, runDiagnosticSequence } from './modules/terminal.js';
 import { startCountdown }    from './modules/countdown.js';
@@ -26,7 +27,7 @@ import {
 } from './modules/vault.js';
 import { initVetting }       from './modules/vetting.js';
 import {
-  renderClubCards, renderArchivedDrawer, renderMenu, renderGuestbook, appendGuestbookEntry,
+  renderClubCards, renderMenu, renderGuestbook, appendGuestbookEntry,
 } from './modules/renderer.js';
 import { createRotaryDial }  from './modules/dials.js';
 
@@ -43,19 +44,31 @@ document.addEventListener('DOMContentLoaded', () => {
   renderMenu(MENU_ERAS);
   renderGuestbook(SEED_GUESTBOOK_ENTRIES);
   renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
-  renderArchivedDrawer(CLUBS_CONFIG, activeClubId, onClubSelect);
 
-  // Left slide-out archives drawer binders
-  const archivesDrawer = document.getElementById('archivesDrawer');
-  const btnToggleArchives = document.getElementById('btnToggleArchives');
-  const btnCloseArchives = document.getElementById('btnCloseArchives');
+  // Horizontal themes slider navigation controls
+  const sliderViewport = document.querySelector('.slider-viewport');
+  const clubCardsRow = document.getElementById('clubCardsRow');
+  const sLeftBtn  = document.getElementById('sliderLeftBtn');
+  const sRightBtn = document.getElementById('sliderRightBtn');
 
-  btnToggleArchives?.addEventListener('click', () => {
-    archivesDrawer?.classList.add('open');
+  sLeftBtn?.addEventListener('click', () => {
+    sliderViewport?.scrollBy({ left: -240, behavior: 'smooth' });
+    playStaticTapeClick();
   });
+  sLeftBtn?.addEventListener('mouseenter', () => playStaticTapeClick());
 
-  btnCloseArchives?.addEventListener('click', () => {
-    archivesDrawer?.classList.remove('open');
+  sRightBtn?.addEventListener('click', () => {
+    sliderViewport?.scrollBy({ left: 240, behavior: 'smooth' });
+    playStaticTapeClick();
+  });
+  sRightBtn?.addEventListener('mouseenter', () => playStaticTapeClick());
+
+  // Play static click on hover of any theme card
+  clubCardsRow?.addEventListener('mouseover', (e) => {
+    const card = e.target.closest('.club-card');
+    if (card && card !== e.relatedTarget?.closest('.club-card')) {
+      playStaticTapeClick();
+    }
   });
 
   // ── 3. Seating state & Rotary Dials ────────────────────────────────────────
@@ -89,6 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
     minutesBox:       document.getElementById('minutesBox'),
     secondsBox:       document.getElementById('secondsBox'),
     clockTargetLabel: document.getElementById('clockTargetLabel'),
+    targetDayName:    document.getElementById('targetDayName'),
+    targetDateNum:    document.getElementById('targetDateNum'),
+    targetMonthName:  document.getElementById('targetMonthName'),
+    targetTimeHour:   document.getElementById('targetTimeHour'),
   };
 
   let countdownInstance = startCountdown(CLUBS_CONFIG[activeClubId], countdownEls);
@@ -182,10 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Refresh layout selections
     renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
-    renderArchivedDrawer(CLUBS_CONFIG, activeClubId, onClubSelect);
-
-    // Auto-close left drawer on switch
-    archivesDrawer?.classList.remove('open');
 
     // Handle expired event constraints
     if (isExpired) {
