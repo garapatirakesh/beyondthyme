@@ -18,20 +18,7 @@ export function startCountdown(clubConfig, elements) {
 
   function update() {
     const now    = new Date();
-    const target = new Date();
-    target.setHours(clubConfig.targetHour, 0, 0, 0);
-
-    const currentDay  = now.getDay();
-    const daysUntil   = (clubConfig.targetDay - currentDay + 7) % 7;
-
-    if (daysUntil === 0) {
-      if (now.getHours() > clubConfig.targetHour ||
-         (now.getHours() === clubConfig.targetHour && now.getMinutes() >= 0)) {
-        target.setDate(now.getDate() + 7);
-      }
-    } else {
-      target.setDate(now.getDate() + daysUntil);
-    }
+    const target = new Date(clubConfig.eventDate);
 
     const diff = target - now;
 
@@ -40,6 +27,9 @@ export function startCountdown(clubConfig, elements) {
       if (hoursBox)   hoursBox.innerText   = '00';
       if (minutesBox) minutesBox.innerText = '00';
       if (secondsBox) secondsBox.innerText = '00';
+      if (clockTargetLabel) {
+        clockTargetLabel.innerText = `${clubConfig.name.toUpperCase()} [ CLOSED / ARCHIVED ]`;
+      }
       return;
     }
 

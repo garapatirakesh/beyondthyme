@@ -26,7 +26,7 @@ import {
 } from './modules/vault.js';
 import { initVetting }       from './modules/vetting.js';
 import {
-  renderClubCards, renderMenu, renderGuestbook, appendGuestbookEntry,
+  renderClubCards, renderArchivedDrawer, renderMenu, renderGuestbook, appendGuestbookEntry,
 } from './modules/renderer.js';
 import { createRotaryDial }  from './modules/dials.js';
 
@@ -43,6 +43,20 @@ document.addEventListener('DOMContentLoaded', () => {
   renderMenu(MENU_ERAS);
   renderGuestbook(SEED_GUESTBOOK_ENTRIES);
   renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
+  renderArchivedDrawer(CLUBS_CONFIG, activeClubId, onClubSelect);
+
+  // Left slide-out archives drawer binders
+  const archivesDrawer = document.getElementById('archivesDrawer');
+  const btnToggleArchives = document.getElementById('btnToggleArchives');
+  const btnCloseArchives = document.getElementById('btnCloseArchives');
+
+  btnToggleArchives?.addEventListener('click', () => {
+    archivesDrawer?.classList.add('open');
+  });
+
+  btnCloseArchives?.addEventListener('click', () => {
+    archivesDrawer?.classList.remove('open');
+  });
 
   // ── 3. Seating state & Rotary Dials ────────────────────────────────────────
   let selectedSeat   = null;   // 'Seat_03' etc.
@@ -115,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     getSelectedSeat: () => selectedSeat
       ? { seatId: selectedSeat, seatEl: selectedSeatEl }
       : null,
+    getDialValues: () => ({ o: dialValues.openness, d: dialValues.depth, e: dialValues.energy }),
     setSelectedSeat: (id) => { selectedSeat = id; },
     callbacks: {
       onVettingComplete({ pseudo, email, avatar, diet, seatId, seatEl }) {
@@ -161,16 +176,45 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedSeatEl = null;
 
     _updateTerminalSeatLine(null);
-    if (document.getElementById('submitBtn')) {
-      document.getElementById('submitBtn').disabled = true;
+
+    const config = CLUBS_CONFIG[clubId];
+    const isExpired = new Date(config.eventDate) <= new Date();
+
+    // Refresh layout selections
+    renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
+    renderArchivedDrawer(CLUBS_CONFIG, activeClubId, onClubSelect);
+
+    // Auto-close left drawer on switch
+    archivesDrawer?.classList.remove('open');
+
+    // Handle expired event constraints
+    if (isExpired) {
+      if (pseudonymInput) {
+        pseudonymInput.value = '';
+        pseudonymInput.setAttribute('disabled', 'true');
+      }
+      if (emailInput) {
+        emailInput.value = '';
+        emailInput.setAttribute('disabled', 'true');
+      }
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
+      document.getElementById('calibrationDialsRow')?.classList.add('disabled');
+      printToTerminal(`> ACCESS PROTOCOL LOCK: ${config.name.toUpperCase()} EVENT CONCLUDED. SESSION ARCHIVED.`);
+    } else {
+      if (pseudonymInput) pseudonymInput.removeAttribute('disabled');
+      if (emailInput)     emailInput.removeAttribute('disabled');
+      document.getElementById('calibrationDialsRow')?.classList.remove('disabled');
+      printToTerminal(`> SWITCHING SYSTEM CHANNEL TO ${config.name.toUpperCase()}...`);
     }
 
-    printToTerminal(`> SWITCHING SYSTEM CHANNEL TO ${CLUBS_CONFIG[clubId].name.toUpperCase()}...`);
     if (isAudioPlaying()) playBeaconChime();
 
     countdownInstance.stop();
-    countdownInstance = startCountdown(CLUBS_CONFIG[clubId], countdownEls);
+    countdownInstance = startCountdown(config, countdownEls);
     buildSeating();
+    validateForm();
   }
 
   // ── 7. Radar canvas visualiser ─────────────────────────────────────────────
@@ -279,6 +323,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (emailInput)     emailInput.addEventListener('input', validateForm);
 
   function validateForm() {
+    const isExpired = new Date(CLUBS_CONFIG[activeClubId].eventDate) <= new Date();
+    if (isExpired) {
+      if (submitBtn) submitBtn.disabled = true;
+      return;
+    }
+
     const valid = pseudonymInput?.value.trim().length > 0
                && EMAIL_REGEX.test(emailInput?.value.trim())
                && selectedSeat !== null;

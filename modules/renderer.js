@@ -21,7 +21,12 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
 
   row.innerHTML = '';
 
-  Object.values(clubsConfig).forEach((club, idx) => {
+  const now = new Date();
+
+  Object.values(clubsConfig).forEach((club) => {
+    const isExpired = new Date(club.eventDate) <= now;
+    if (isExpired) return; // Only show active/future clubs in the main strip
+
     const available = getAvailableSeats(club);
     const isActive  = club.id === activeClubId;
 
@@ -49,7 +54,7 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
     btn.addEventListener('click', () => {
       if (btn.getAttribute('data-club') === activeClubId) return;
 
-      row.querySelectorAll('.club-card').forEach(b => {
+      document.querySelectorAll('.club-card, .archive-card').forEach(b => {
         b.classList.remove('active');
         b.setAttribute('aria-pressed', 'false');
       });
@@ -60,6 +65,56 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
     });
 
     row.appendChild(btn);
+  });
+}
+
+/**
+ * Render expired/past events into the slide-out archives drawer.
+ * @param {object} clubsConfig
+ * @param {string} activeClubId
+ * @param {Function} onClubSelect
+ */
+export function renderArchivedDrawer(clubsConfig, activeClubId, onClubSelect) {
+  const container = document.getElementById('archivedDrawerCards');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  const now = new Date();
+
+  Object.values(clubsConfig).forEach((club) => {
+    const isExpired = new Date(club.eventDate) <= now;
+    if (!isExpired) return; // Only show expired/past events here
+
+    const isActive = club.id === activeClubId;
+
+    const btn = document.createElement('button');
+    btn.className  = `archive-card nav-interactive${isActive ? ' active' : ''}`;
+    btn.setAttribute('data-club', club.id);
+
+    btn.innerHTML = `
+      <div class="archive-card-inner">
+        <div class="archive-card-header">
+          <span class="archive-card-numeral">${club.romanNumeral}</span>
+          <span class="archive-card-lock">🔒 CLOSED</span>
+        </div>
+        <h4 class="archive-card-name">${club.name}</h4>
+        <p class="archive-card-meta">${club.location}</p>
+        <p class="archive-card-date">${club.displayNight}</p>
+      </div>
+    `;
+
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.club-card, .archive-card').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+
+      onClubSelect?.(club.id);
+    });
+
+    container.appendChild(btn);
   });
 }
 

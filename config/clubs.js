@@ -1,7 +1,6 @@
-/* config/clubs.js
+﻿/* config/clubs.js
  * SINGLE SOURCE OF TRUTH for all supper club data.
- * To add/edit a club: update ONLY this file.
- * No club data should exist anywhere else in the codebase.
+ * Contains concrete eventDate calendar strings to track active vs past events.
  */
 
 export const CLUBS_CONFIG = {
@@ -10,11 +9,10 @@ export const CLUBS_CONFIG = {
     name: 'Vedic Fire',
     location: 'South Delhi Villa',
     emblem: '🔥',
-    glowColor: '180,80,40',
+    glowColor: '255,90,46',
     romanNumeral: 'I',
-    targetDay: 6,    // Saturday
-    targetHour: 20,  // 8:00 PM IST
-    displayNight: 'Saturday · 20:00',
+    eventDate: '2026-08-15T20:00:00+05:30', // Active/Future IST
+    displayNight: 'Sat Aug 15 · 20:00',
     occupied: [
       { seat: 1,  alias: 'SOMA_04',  emoji: '⏳' },
       { seat: 2,  alias: 'KALA_19',  emoji: '🪩' },
@@ -40,9 +38,8 @@ export const CLUBS_CONFIG = {
     emblem: '🌊',
     glowColor: '40,120,180',
     romanNumeral: 'II',
-    targetDay: 5,    // Friday
-    targetHour: 21,  // 9:00 PM IST
-    displayNight: 'Friday · 21:00',
+    eventDate: '2026-08-22T21:00:00+05:30', // Active/Future IST
+    displayNight: 'Sat Aug 22 · 21:00',
     occupied: [
       { seat: 1,  alias: 'POMF_09',    emoji: '🌀' },
       { seat: 3,  alias: 'COAST_21',   emoji: '🧭' },
@@ -67,9 +64,8 @@ export const CLUBS_CONFIG = {
     emblem: '🏔️',
     glowColor: '100,140,200',
     romanNumeral: 'III',
-    targetDay: 0,    // Sunday
-    targetHour: 19,  // 7:00 PM IST
-    displayNight: 'Sunday · 19:00',
+    eventDate: '2026-07-25T19:00:00+05:30', // Expired/Past IST
+    displayNight: 'Sun Jul 25 · 19:00',
     occupied: [
       { seat: 2,  alias: 'MIST_03',   emoji: '❄️' },
       { seat: 4,  alias: 'PINE_18',   emoji: '🏔️' },
@@ -93,9 +89,8 @@ export const CLUBS_CONFIG = {
     emblem: '⚗️',
     glowColor: '80,200,130',
     romanNumeral: 'IV',
-    targetDay: 4,    // Thursday
-    targetHour: 20,  // 8:00 PM IST
-    displayNight: 'Thursday · 20:00',
+    eventDate: '2026-07-18T20:00:00+05:30', // Expired/Past IST
+    displayNight: 'Thu Jul 18 · 20:00',
     occupied: [
       { seat: 1,  alias: 'NEO_08',    emoji: '⚙️' },
       { seat: 2,  alias: 'CYBER_10',  emoji: '🧪' },

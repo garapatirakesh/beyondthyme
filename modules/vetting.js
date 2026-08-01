@@ -19,6 +19,7 @@ export function initVetting(deps) {
   const {
     callbacks,
     getSelectedSeat,   // () => { seatId, seatEl } | null
+    getDialValues,     // () => { o, d, e }
     setSelectedSeat,   // (seatId) => void
   } = deps;
 
@@ -79,6 +80,12 @@ export function initVetting(deps) {
     if (previewAvatar) {
       const activeAvatar = document.querySelector('input[name="tempAvatar"]:checked');
       previewAvatar.innerText = activeAvatar ? activeAvatar.value : '⏳';
+    }
+
+    const previewVector = document.getElementById('previewVector');
+    if (previewVector && getDialValues) {
+      const dv = getDialValues();
+      previewVector.innerText = `[${Math.round(dv.o)}%, ${Math.round(dv.d)}%, ${Math.round(dv.e)}%]`;
     }
   }
 
