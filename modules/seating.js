@@ -1,22 +1,21 @@
 /* modules/seating.js
- * Seating floorplan rendering and seat interaction logic.
- * renderSeatingLayout() is called on init and whenever activeClub changes.
+ * Seating floorplan rendering matching Image 1 design.
+ * 25 Seats: Top row 01-12, Bottom row 24-14, Left seat 25.
+ * Circular glassmorphism seats with gold borders, avatar profiles for booked seats,
+ * 105% hover lift, selection gold glow rings, and click ripple animations.
  */
 
-import { TOP_ROW_SEATS, BOTTOM_ROW_SEATS, HEAD_SEAT } from '../config/app.config.js';
+import { SEAT_ORDER_IMAGE1 } from '../config/app.config.js';
 
 /**
- * Render the full seating layout for the given club config.
- * @param {object} clubConfig   — e.g. CLUBS_CONFIG.vedic
- * @param {object} callbacks    — { onSeatClick, onSeatHoverEnter, onSeatHoverLeave, onOccupiedHover }
+ * Render the seating layout for given club config.
+ * @param {object} clubConfig
+ * @param {object} callbacks
  */
 export function renderSeatingLayout(clubConfig, callbacks = {}) {
   const rowTop       = document.getElementById('chairRowTop');
   const rowBottom    = document.getElementById('chairRowBottom');
   const headContainer = document.getElementById('headChairContainer');
-  const nameTitle    = document.getElementById('activeClubNameTitle');
-  const locationTag  = document.getElementById('activeClubLocationTag');
-  const schematicEl  = document.querySelector('.schematic-visualizer');
 
   if (!rowTop || !rowBottom || !headContainer) return;
 
@@ -26,36 +25,25 @@ export function renderSeatingLayout(clubConfig, callbacks = {}) {
 
   const isExpired = new Date(clubConfig.eventDate) <= new Date();
 
-  // Add expired styling to the visualizer container
-  if (schematicEl) {
-    if (isExpired) {
-      schematicEl.classList.add('floorplan-expired');
-    } else {
-      schematicEl.classList.remove('floorplan-expired');
-    }
-  }
+  // Render Top Row (01 to 12)
+  SEAT_ORDER_IMAGE1.topRow.forEach(seatNum => {
+    rowTop.appendChild(_createLuxurySeatElement(seatNum, 'chair-top', clubConfig, callbacks, isExpired));
+  });
 
-  for (let i = TOP_ROW_SEATS.start; i <= TOP_ROW_SEATS.end; i++) {
-    rowTop.appendChild(_createChairElement(i, 'chair-top', clubConfig, callbacks, isExpired));
-  }
-  for (let i = BOTTOM_ROW_SEATS.start; i <= BOTTOM_ROW_SEATS.end; i++) {
-    rowBottom.appendChild(_createChairElement(i, 'chair-bottom', clubConfig, callbacks, isExpired));
-  }
-  headContainer.appendChild(_createChairElement(HEAD_SEAT, 'chair-left', clubConfig, callbacks, isExpired));
+  // Render Bottom Row (24 down to 14)
+  SEAT_ORDER_IMAGE1.bottomRow.forEach(seatNum => {
+    rowBottom.appendChild(_createLuxurySeatElement(seatNum, 'chair-bottom', clubConfig, callbacks, isExpired));
+  });
 
-  if (nameTitle) {
-    nameTitle.innerText = isExpired 
-      ? `${clubConfig.name} Seating [ARCHIVED]` 
-      : `${clubConfig.name} Seating`;
-  }
-  if (locationTag) locationTag.innerText = clubConfig.location.toUpperCase();
+  // Render Head Seat (25)
+  headContainer.appendChild(_createLuxurySeatElement(SEAT_ORDER_IMAGE1.headSeat, 'chair-left', clubConfig, callbacks, isExpired));
 }
 
 /**
- * Build a single chair DOM element.
+ * Build a single luxury circular seat element.
  * @private
  */
-function _createChairElement(seatNum, placementClass, config, callbacks, isExpired) {
+function _createLuxurySeatElement(seatNum, placementClass, config, callbacks, isExpired) {
   const div = document.createElement('div');
   div.id = `chair${seatNum}`;
   div.setAttribute('data-seat', `Seat_${String(seatNum).padStart(2, '0')}`);
@@ -63,50 +51,53 @@ function _createChairElement(seatNum, placementClass, config, callbacks, isExpir
   const occ = config.occupied.find(o => o.seat === seatNum);
 
   if (occ) {
-    // Occupied/Claimed seat gets crt-glitch-avatar styling
-    div.className = `chair ${placementClass} occupied crt-glitch-avatar`;
+    // Booked seat: Displays ONLY circular avatar profile (no name)
+    div.className = `chair ${placementClass} occupied luxury-booked-seat nav-interactive`;
     div.innerHTML = `
-      <div class="chrono-avatar-ring">
-        <span class="avatar-emoji">${occ.emoji}</span>
-        <span class="avatar-alias">${occ.alias}</span>
+      <div class="luxury-avatar-ring">
+        <span class="avatar-emoji">${occ.emoji || '👤'}</span>
       </div>
       <div class="chair-tooltip">
-        <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')} [Reserved]</p>
-        <p class="tooltip-time">${isExpired ? 'Archived Session Record' : `Avatar: ${occ.alias}`}</p>
+        <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')}</p>
+        <p class="tooltip-time">[RESERVED MEMBER]</p>
       </div>
     `;
-    div.addEventListener('mouseenter', () => {
-      if (!isExpired) callbacks.onOccupiedHover?.();
-    });
-    div.addEventListener('mouseleave', () => {
-      if (!isExpired) callbacks.onSeatHoverLeave?.();
-    });
+    div.addEventListener('mouseenter', () => { if (!isExpired) callbacks.onOccupiedHover?.(); });
+    div.addEventListener('mouseleave', () => { if (!isExpired) callbacks.onSeatHoverLeave?.(); });
   } else {
     if (isExpired) {
-      // Greyed-out unavailable open seat (expired event)
       div.className = `chair ${placementClass} available available-expired`;
       div.innerHTML = `
-        <span class="chair-icon-claim">CLOSED</span>
         <span class="chair-label-open">${String(seatNum).padStart(2, '0')}</span>
         <div class="chair-tooltip">
-          <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')} [CLOSED]</p>
-          <p class="tooltip-time">Registration Has Expired</p>
+          <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')}</p>
+          <p class="tooltip-time">[REGISTRATION CLOSED]</p>
         </div>
       `;
     } else {
-      // Blinking/glitching active open seat
-      div.className = `chair ${placementClass} available blinking-glitch nav-interactive`;
+      // Open Available seat: Black glass circle with gold border ring
+      div.className = `chair ${placementClass} available luxury-open-seat nav-interactive`;
       div.innerHTML = `
-        <span class="chair-icon-claim">+ CLAIM SEAT</span>
-        <span class="chair-label-open">${String(seatNum).padStart(2, '0')}</span>
+        <span class="chair-label-num font-mono">${String(seatNum).padStart(2, '0')}</span>
+        <div class="gold-ripple-ring"></div>
         <div class="chair-tooltip">
-          <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')} [OPEN SEAT]</p>
-          <p class="tooltip-time">Tap to Claim Position</p>
+          <p class="tooltip-title">Position ${String(seatNum).padStart(2, '0')}</p>
+          <p class="tooltip-time">[AVAILABLE SEAT]</p>
         </div>
       `;
+
       div.addEventListener('mouseenter', () => callbacks.onSeatHoverEnter?.(div));
       div.addEventListener('mouseleave', () => callbacks.onSeatHoverLeave?.());
-      div.addEventListener('click',      () => callbacks.onSeatClick?.(div));
+      div.addEventListener('click', (e) => {
+        // Click animation: golden ripple
+        const ripple = div.querySelector('.gold-ripple-ring');
+        if (ripple) {
+          ripple.classList.remove('active');
+          void ripple.offsetWidth; // Force reflow
+          ripple.classList.add('active');
+        }
+        callbacks.onSeatClick?.(div);
+      });
     }
   }
 
@@ -114,7 +105,7 @@ function _createChairElement(seatNum, placementClass, config, callbacks, isExpir
 }
 
 /**
- * Mark a seat element as selected, deselecting any previous selection.
+ * Mark a seat element as selected.
  * @param {HTMLElement} chairEl
  */
 export function selectSeat(chairEl) {
@@ -124,23 +115,22 @@ export function selectSeat(chairEl) {
 }
 
 /**
- * Convert a reserved seat element to an occupied avatar state (post-vetting).
+ * Convert seat to occupied booked avatar.
  * @param {HTMLElement} chairEl
- * @param {{ emoji: string, alias: string, diet: string }} vettingData
- * @param {string} seatNum  — e.g. "03"
+ * @param {{ emoji: string, alias: string }} vettingData
+ * @param {string} seatNum
  */
 export function convertSeatToOccupied(chairEl, vettingData, seatNum) {
-  const { emoji, alias, diet } = vettingData;
-  chairEl.classList.remove('available', 'selected', 'blinking-glitch');
-  chairEl.classList.add('occupied', 'crt-glitch-avatar');
+  const { emoji } = vettingData;
+  chairEl.classList.remove('available', 'selected', 'blinking-glitch', 'luxury-open-seat');
+  chairEl.classList.add('occupied', 'luxury-booked-seat');
   chairEl.innerHTML = `
-    <div class="chrono-avatar-ring">
-      <span class="avatar-emoji">${emoji}</span>
-      <span class="avatar-alias">${alias.toUpperCase()}</span>
+    <div class="luxury-avatar-ring">
+      <span class="avatar-emoji">${emoji || '👤'}</span>
     </div>
     <div class="chair-tooltip">
-      <p class="tooltip-title">Position ${seatNum} [Reserved]</p>
-      <p class="tooltip-time">Avatar: ${alias} (${diet})</p>
+      <p class="tooltip-title">Position ${seatNum}</p>
+      <p class="tooltip-time">[RESERVED MEMBER]</p>
     </div>
   `;
 }

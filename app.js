@@ -24,7 +24,12 @@ import {
 import {
   generateDailyCoords, hideCoordY, initTimeCapsule, initVaultBreaker,
 } from './modules/vault.js';
-import { initVetting }       from './modules/vetting.js';
+import { initWatch3D, pulseWatch3D } from './modules/watch3d.js';
+import { initGoldParticles } from './modules/particles.js';
+import { listenToLiveSeatBookings } from './modules/firebase.js';
+import { initAuth, promptGoogleLogin, getCurrentUser } from './modules/auth.js';
+import { initAdminDashboard, openAdminDashboard } from './modules/admin.js';
+import { initVetting, openVettingModal } from './modules/vetting.js';
 import {
   renderClubCards, renderArchivedDrawer, renderMenu, renderGuestbook, appendGuestbookEntry,
 } from './modules/renderer.js';
@@ -32,6 +37,33 @@ import { createRotaryDial }  from './modules/dials.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  // Initialize 3D Watch Visualizer & Dark Gold Particle Canvas
+  setTimeout(() => {
+    initWatch3D('watch3DContainer');
+    initGoldParticles('goldParticleCanvas');
+  }, 300);
+
+  // Initialize Google Auth
+  initAuth({
+    onAuthSuccess(user) {
+      if (selectedSeat) {
+        openVettingModal(selectedSeat);
+      } else {
+        alert(`Welcome back, ${user.name}! Please select an open seat on the table.`);
+      }
+    },
+    onAdminAccess(user) {
+      openAdminDashboard();
+    }
+  });
+
+  // Initialize Admin Dashboard
+  initAdminDashboard({
+    onSeatReset() {
+      buildSeating();
+    }
+  });
 
   // ── 1. Cursor ──────────────────────────────────────────────────────────────
   const cursor = initCursor();
@@ -98,75 +130,83 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSeatingLayout(CLUBS_CONFIG[activeClubId], {
       onSeatClick(chairEl) {
         if (chairEl.classList.contains('selected')) {
-          // Deselect
           chairEl.classList.remove('selected');
           selectedSeat   = null;
           selectedSeatEl = null;
-          printToTerminal('> SEAT COORDINATES DISENGAGED. POSITION: UNASSIGNED.');
-          _updateTerminalSeatLine(null);
-          validateForm();
         } else {
           selectSeat(chairEl);
           selectedSeat   = chairEl.getAttribute('data-seat');
           selectedSeatEl = chairEl;
-          vetting.openForSeat(chairEl);
+
+          // Pulse 3D watch mechanism
+          pulseWatch3D();
+
           if (isAudioPlaying()) playBeaconChime();
+
+          const user = getCurrentUser();
+          if (!user) {
+            promptGoogleLogin();
+          } else if (user.role === 'admin') {
+            openAdminDashboard();
+          } else {
+            openVettingModal(selectedSeat);
+          }
         }
       },
-      onSeatHoverEnter() { if (isAudioPlaying()) playBeaconChime(); },
+      onSeatHoverEnter() { 
+        pulseWatch3D();
+        if (isAudioPlaying()) playBeaconChime(); 
+      },
       onSeatHoverLeave() {},
       onOccupiedHover()  { if (isAudioPlaying()) playResonanceChime(); },
     });
 
-    // Re-bind cursor hover on dynamically created chairs
     bindCursorHover(cursor, document.querySelectorAll('.chair.available, .chair.occupied'));
   }
 
   buildSeating();
 
-  // ── 5. Vetting overlay ─────────────────────────────────────────────────────
-  const vetting = initVetting({
-    getSelectedSeat: () => selectedSeat
-      ? { seatId: selectedSeat, seatEl: selectedSeatEl }
-      : null,
-    getDialValues: () => ({ o: dialValues.openness, d: dialValues.depth, e: dialValues.energy }),
-    setSelectedSeat: (id) => { selectedSeat = id; },
+  // Listen in real time to Firebase Firestore live bookings across all devices
+  listenToLiveSeatBookings((submissions) => {
+    const config = CLUBS_CONFIG[activeClubId];
+    if (!config || !submissions) return;
+
+    submissions.forEach(sub => {
+      const seatNumStr = (sub.seatId || 'Seat_03').replace('SEAT_', '').replace('Seat_', '');
+      const seatNum = parseInt(seatNumStr, 10);
+      const alias = (sub.fullName || 'Member').split(' ')[0].toUpperCase();
+      const emoji = '⏳';
+
+      if (!isNaN(seatNum) && !config.occupied.some(o => o.seat === seatNum)) {
+        config.occupied.push({ seat: seatNum, alias: alias, emoji: emoji });
+      }
+    });
+
+    buildSeating();
+  });
+
+  // ── 5. Vetting & Timeline Booking Overlay ──────────────────────────────────
+  initVetting({
+    getSelectedSeat: () => selectedSeat ? { seatId: selectedSeat, seatEl: selectedSeatEl } : null,
     callbacks: {
-      onVettingComplete({ pseudo, email, avatar, diet, seatId, seatEl }) {
-        // Sync terminal form fields
-        const pseudoInput = document.getElementById('pseudonymInput');
-        const emailInput  = document.getElementById('emailInput');
-        if (pseudoInput) pseudoInput.value = pseudo;
-        if (emailInput)  emailInput.value  = email;
+      onVettingComplete(timelineData) {
+        const seatNumStr = (timelineData.seatId || 'Seat_03').replace('SEAT_', '').replace('Seat_', '');
+        const seatNum    = parseInt(seatNumStr, 10);
+        const alias      = (timelineData.fullName || 'Member').split(' ')[0];
+        const emoji      = '⏳';
 
-        selectedSeat   = seatId;
-        selectedSeatEl = seatEl;
-
-        // Update the occupied list in active config so it persists on re-render
-        const seatNum = parseInt(seatId.replace('SEAT_', '').replace('Seat_', ''), 10);
-        const config  = CLUBS_CONFIG[activeClubId];
+        const config = CLUBS_CONFIG[activeClubId];
         if (!config.occupied.some(o => o.seat === seatNum)) {
-          config.occupied.push({ seat: seatNum, alias: pseudo.toUpperCase(), emoji: avatar });
+          config.occupied.push({ seat: seatNum, alias: alias.toUpperCase(), emoji: emoji });
         }
 
-        // Convert chair visually
-        convertSeatToOccupied(seatEl, { emoji: avatar, alias: pseudo, diet }, String(seatNum).padStart(2, '0'));
+        if (selectedSeatEl) {
+          convertSeatToOccupied(selectedSeatEl, { emoji, alias, diet: timelineData.era }, String(seatNum).padStart(2, '0'));
+        }
 
-        printToTerminal(`> SEAT POSITION ENGAGED: ${seatId.toUpperCase()} CALIBRATED.`);
-        _updateTerminalSeatLine(seatId);
-        validateForm();
-
-        // Scroll to vault terminal
-        document.getElementById('vault')?.scrollIntoView({ behavior: 'smooth' });
-        if (isAudioPlaying()) playBeaconChime();
-      },
-      onVettingCancel() {
-        if (selectedSeatEl) selectedSeatEl.classList.remove('selected');
-        selectedSeat   = null;
-        selectedSeatEl = null;
-        validateForm();
-      },
-    },
+        if (isAudioPlaying()) playSuccessArpeggio();
+      }
+    }
   });
 
   // ── 6. Club switcher ───────────────────────────────────────────────────────
