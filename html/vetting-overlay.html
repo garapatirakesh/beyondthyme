@@ -1,0 +1,145 @@
+<div id="vettingOverlay" class="overlay-backdrop overlay-backdrop--hidden">
+    <div class="timeline-booking-panel border-grid">
+      <button class="overlay-close-btn nav-interactive" id="closeVettingBtn">&times;</button>
+
+      <!-- STEP 1: EVENT DETAILS SUMMARY -->
+      <div id="vettingStepSummary" class="timeline-step">
+        <div class="timeline-badge label-mono">BOOK YOUR SEAT</div>
+        <h2 class="timeline-main-title font-display">CHRONO POSITION <span id="summarySelectedSeatLabel">SEAT 03</span></h2>
+        
+        <div class="event-summary-card border-grid">
+          <div class="summary-row">
+            <span class="summary-label text-ash">CURRENT THEME</span>
+            <span class="summary-val text-coral font-display" id="bookingEventTheme">✨ Midnight Memories</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label text-ash">DATE</span>
+            <span class="summary-val text-bone" id="bookingEventDate">October 24, 2026</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label text-ash">TIME</span>
+            <span class="summary-val text-bone" id="bookingEventTime">20:00 IST</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label text-ash">VENUE</span>
+            <span class="summary-val text-bone" id="bookingEventVenue">Secret Villa, South Delhi</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label text-ash">RESERVATION PRICE</span>
+            <span class="summary-val text-candle font-display">₹2,000 INR</span>
+          </div>
+        </div>
+
+        <button id="toTimelineFormBtn" type="button" class="btn-pill btn-coral btn-full nav-interactive">
+          Proceed to Your Timeline &rarr;
+        </button>
+      </div>
+
+      <!-- STEP 2: YOUR TIMELINE 11-QUESTION FORM -->
+      <div id="vettingStepForm" class="timeline-step hidden">
+        <div class="timeline-badge label-mono">STEP 2 OF 3: CALIBRATION</div>
+        <h2 class="timeline-main-title font-display">YOUR TIMELINE</h2>
+        <p class="timeline-lead text-ash">Answer these temporal alignment questions to complete your seat calibration.</p>
+
+        <form id="yourTimelineForm" class="timeline-questions-grid" onsubmit="return false;">
+          <div class="form-question-card border-grid">
+            <label class="q-label">1. Who should we welcome?</label>
+            <input type="text" id="tlFullName" class="editorial-input" placeholder="Full Name" required>
+          </div>
+
+          <div class="form-question-card border-grid">
+            <label class="q-label">2. Which year did your journey begin?</label>
+            <input type="date" id="tlDOB" class="editorial-input" required>
+          </div>
+
+          <div class="form-question-card border-grid">
+            <label class="q-label">3. How shall we contact your future self?</label>
+            <input type="tel" id="tlPhone" class="editorial-input" placeholder="Phone Number" required>
+          </div>
+
+          <div class="form-question-card border-grid">
+            <label class="q-label">4. What's your favorite destination in this timeline?</label>
+            <input type="text" id="tlFavPlace" class="editorial-input" placeholder="Favorite Place">
+          </div>
+
+          <div class="form-question-card border-grid">
+            <label class="q-label">5. What meal always makes time stop?</label>
+            <input type="text" id="tlFavFood" class="editorial-input" placeholder="Favorite Food">
+          </div>
+
+          <div class="form-question-card border-grid">
+            <label class="q-label">6. Any ingredients that don't belong in your timeline?</label>
+            <input type="text" id="tlAllergies" class="editorial-input" placeholder="Food Allergies / Dietary Restrictions">
+          </div>
+
+          <div class="form-question-card border-grid full-width">
+            <label class="q-label">7. Which era matches your personality?</label>
+            <div class="era-selector-grid">
+              <div class="era-card-option nav-interactive" data-era="80s"><span>80s</span></div>
+              <div class="era-card-option nav-interactive" data-era="90s"><span>90s</span></div>
+              <div class="era-card-option nav-interactive active" data-era="2000s"><span>2000s</span></div>
+              <div class="era-card-option nav-interactive" data-era="Future"><span>Future</span></div>
+            </div>
+          </div>
+
+          <div class="form-question-card border-grid">
+            <label class="q-label">8. Morning or Midnight?</label>
+            <div class="pref-group-toggle" id="prefTimeOfDay">
+              <button class="pref-group-btn nav-interactive" data-value="Morning">Morning</button>
+              <button class="pref-group-btn active nav-interactive" data-value="Midnight">Midnight</button>
+            </div>
+          </div>
+
+          <div class="form-question-card border-grid">
+            <label class="q-label">9. Coffee or Tea?</label>
+            <div class="pref-group-toggle" id="prefBeverage">
+              <button class="pref-group-btn active nav-interactive" data-value="Coffee">Coffee</button>
+              <button class="pref-group-btn nav-interactive" data-value="Tea">Tea</button>
+            </div>
+          </div>
+
+          <div class="form-question-card border-grid">
+            <label class="q-label">10. Introvert or Extrovert?</label>
+            <div class="pref-group-toggle" id="prefPersonality">
+              <button class="pref-group-btn active nav-interactive" data-value="Introvert">Introvert</button>
+              <button class="pref-group-btn nav-interactive" data-value="Extrovert">Extrovert</button>
+            </div>
+          </div>
+
+          <div class="form-question-card border-grid full-width">
+            <label class="q-label">11. If you could relive one moment forever, which would it be?</label>
+            <textarea id="tlReliveMoment" class="editorial-textarea" rows="2" placeholder="Describe your eternal moment..."></textarea>
+          </div>
+        </form>
+
+        <button id="btnReserveSeatRazorpay" class="btn-pill btn-coral btn-full nav-interactive margin-top-1">
+          ✅ Reserve My Seat (₹2,000)
+        </button>
+      </div>
+
+      <!-- STEP 3: TICKET CONFIRMATION -->
+      <div id="vettingStepConfirm" class="timeline-step hidden">
+        <div class="confirmation-head text-center">
+          <div class="confirmation-badge label-mono text-coral">CONGRATULATIONS!</div>
+          <h2 class="confirmation-title font-display">YOUR TIMELINE HAS BEEN RESERVED</h2>
+          <p class="confirmation-lead text-ash">Your coordinates are locked. Present your QR code ticket at the villa entrance.</p>
+        </div>
+
+        <div class="ticket-qr-pass-card border-grid">
+          <div class="ticket-qr-graphic" id="confirmTicketQR"></div>
+          <div class="ticket-meta-info font-mono">
+            <div class="t-row"><span class="t-lbl">THEME:</span><span class="t-val text-coral" id="confirmTicketTheme">✨ Midnight Memories</span></div>
+            <div class="t-row"><span class="t-lbl">POSITION:</span><span class="t-val text-bone" id="confirmTicketSeat">SEAT 03</span></div>
+            <div class="t-row"><span class="t-lbl">STATUS:</span><span class="t-val text-candle">CONFIRMED (₹2,000 PAID)</span></div>
+          </div>
+        </div>
+
+        <div class="clue-box border-grid text-center">
+          <span class="clue-icon">🗝️</span>
+          <p class="clue-text font-display">"Your next clue will arrive soon..."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════ ADMIN DASHBOARD OVERLAY ════════════════════════ -->

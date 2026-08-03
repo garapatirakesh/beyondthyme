@@ -1,0 +1,21 @@
+.menu-section{padding:8rem 0;position:relative;z-index:5;border-top:1px solid var(--border-subtle);}
+.section-header{margin-bottom:4.5rem;}
+.section-tag{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--color-coral);margin-bottom:1.25rem;display:inline-block;}
+.section-title{font-size:clamp(2.25rem,5vw,4rem);line-height:1;text-transform:uppercase;letter-spacing:-0.02em;color:var(--text-primary);}
+.menu-grid{display:grid;grid-template-columns:1fr;gap:2rem;border:none;}
+@media (min-width:1024px){.menu-grid{grid-template-columns:repeat(3,1fr);}}
+.menu-column{background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:24px;padding:3rem 2.25rem;display:flex;flex-direction:column;position:relative;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);box-shadow:var(--shadow-md);}
+.menu-column-highlighted{background:linear-gradient(160deg,#fffcf7 0%,#fff8ef 100%);border-color:rgba(255,90,46,0.18);box-shadow:var(--shadow-lg),0 0 0 1px rgba(255,90,46,0.08);}
+.menu-column:hover{transform:translateY(-8px);border-color:rgba(255,90,46,0.25);box-shadow:var(--shadow-xl),0 0 0 1px rgba(255,90,46,0.1);}
+.menu-col-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;border-bottom:1px solid var(--border-subtle);padding-bottom:1.25rem;}
+.menu-col-num{font-family:var(--font-display);font-style:italic;font-size:2.5rem;color:var(--color-coral);line-height:1;}
+.menu-col-title{font-family:var(--font-body);font-size:1.25rem;font-weight:500;color:var(--text-primary);text-transform:uppercase;letter-spacing:0.05em;}
+.menu-col-status{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.35rem 0.65rem;border-radius:99px;background-color:var(--bg-recessed);border:1px solid var(--border-mid);}
+.status-archived{color:var(--text-muted);}.status-active{color:var(--color-gold);border-color:rgba(196,120,0,0.3);background-color:var(--color-gold-bg);}.status-speculative{color:var(--text-faint);border-style:dashed;}
+.course-list{list-style:none;display:flex;flex-direction:column;gap:2rem;}
+.course-item{position:relative;transition:transform 0.3s ease;}.course-item:hover{transform:translateX(4px);}
+.course-name{font-family:var(--font-display);font-style:italic;font-size:1.5rem;color:var(--text-primary);line-height:1.2;margin-bottom:0.35rem;transition:color 0.25s ease;}
+.course-item:hover .course-name{color:var(--color-coral);}
+.course-details{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);line-height:1.4;margin-bottom:0.25rem;}
+.course-meta{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);}
+.course-meta-active{color:var(--color-gold);}

@@ -1,0 +1,8 @@
+.font-display{font-family:var(--font-display);}.font-mono{font-family:var(--font-mono);}.font-body{font-family:var(--font-body);}
+.text-coral{color:var(--color-coral);}.text-ash{color:var(--text-muted);}.text-bone{color:var(--text-primary);}.text-candle{color:var(--color-gold);}.italic{font-style:italic;}
+.h-display{font-family:var(--font-display);font-weight:400;letter-spacing:-0.04em;line-height:0.9;}
+.h-display-italic{font-family:var(--font-display);font-style:italic;font-weight:400;letter-spacing:-0.035em;line-height:0.95;}
+.label-mono{font-family:var(--font-mono);font-size:0.6875rem;letter-spacing:0.25em;text-transform:uppercase;font-weight:500;color:var(--text-muted);}
+.border-grid{border:1px solid var(--border-subtle);}.border-b-grid{border-bottom:1px solid var(--border-subtle);}.border-r-grid{border-right:1px solid var(--border-subtle);}.border-l-grid{border-left:1px solid var(--border-subtle);}.border-t-grid{border-top:1px solid var(--border-subtle);}
+.max-width-container{max-width:1400px;margin:0 auto;padding:0 1.5rem;}
+@media (min-width:768px){.max-width-container{padding:0 3rem;}}

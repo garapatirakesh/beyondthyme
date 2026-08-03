@@ -1,0 +1,108 @@
+<section class="max-width-container vault-section" id="vault">
+    <div class="centered-console-card border-grid" id="calibrationConsoleCard">
+      <div class="console-card-header font-display">
+        <span class="console-logo-dot"></span>
+        <span>CHRONO-CALIBRATION &amp; ACCESS CONSOLE</span>
+      </div>
+
+      <div class="console-card-body">
+        <!-- Left Panel: Identity Form & Dial Calibration -->
+        <div class="console-body-left">
+          <form class="terminal-form" id="chronoForm" autocomplete="off" onsubmit="return false;">
+            <div class="form-row-grid">
+              <div class="form-group">
+                <label for="pseudonymInput" class="editorial-label">User Pseudonym / Alias</label>
+                <input type="text" id="pseudonymInput" class="editorial-input nav-interactive" placeholder="e.g. Chrono_Explorer" required>
+              </div>
+              <div class="form-group">
+                <label for="emailInput" class="editorial-label">Member Access ID (Email)</label>
+                <input type="email" id="emailInput" class="editorial-input nav-interactive" placeholder="e.g. member@beyondthyme.com" required>
+              </div>
+            </div>
+
+            <!-- Concentric Circular Dials & Radar Canvas -->
+            <div class="calibration-container">
+              <div class="calibration-radar-col">
+                <div class="calibration-title">Vibe Vector</div>
+                <canvas id="radarCanvas" width="120" height="120" class="radar-canvas"></canvas>
+              </div>
+              <div class="calibration-dials-col" id="calibrationDialsRow">
+                <div class="dial-container-slot" id="dialOpennessSlot"></div>
+                <div class="dial-container-slot" id="dialDepthSlot"></div>
+                <div class="dial-container-slot" id="dialEnergySlot"></div>
+              </div>
+            </div>
+
+            <div class="terminal-actions">
+              <button type="submit" class="btn-terminal-submit nav-interactive" id="submitBtn" disabled>
+                Verify &amp; Transmit Vibe Calibration Pass
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right Panel: Terminal Screen & Vault Breaker -->
+        <div class="console-body-right">
+          <div class="terminal-box" id="terminalBox">
+            <div class="terminal-header">
+              <div class="terminal-status-badge">
+                <span class="status-pulse-active"></span>
+                <span class="terminal-title">VAULT CALIBRATION LOG</span>
+              </div>
+              <div class="terminal-indicator-nodes">
+                <span class="indicator-node active"></span>
+                <span class="indicator-node" id="dotProgress2"></span>
+                <span class="indicator-node" id="dotProgress3"></span>
+              </div>
+            </div>
+            <div class="terminal-screen">
+              <div class="terminal-output" id="terminalOutput"></div>
+            </div>
+          </div>
+
+          <!-- Vault Dial Gear Lock & Breaker Panel nested below log screen -->
+          <div class="vault-breaker-row">
+            <div class="breaker-dial-lock" id="chronoVaultContainer">
+              <!-- Locked Dial state -->
+              <div id="vaultStateLocked" class="vault-state">
+                <div id="vaultDialWheel" class="vault-dial">
+                  <div class="vault-dial-ring"></div>
+                  <div id="vaultInnerGear" class="vault-inner-gear">
+                    <span class="vault-lock-icon">🔒</span>
+                  </div>
+                </div>
+                <div class="vault-dial-status-text font-mono">STATUS: <span class="text-coral" id="vaultTextStatusLabel">LOCKED</span></div>
+              </div>
+              <!-- Unlocked Dial state -->
+              <div id="vaultStateUnlocked" class="vault-state vault-state--hidden">
+                <div class="vault-unlocked-icon">🔓</div>
+                <button id="btnOpenVIPPass" class="btn-pill btn-vip nav-interactive">Golden Pass</button>
+              </div>
+            </div>
+
+            <!-- Breaker form -->
+            <div class="vault-breaker-panel vault-breaker-panel--side">
+              <div class="vault-breaker-header font-mono text-coral">
+                <span class="status-pulse-active status-pulse-active--sm"></span>
+                AMRIT VAULT BREAKER
+              </div>
+              <div class="vault-breaker-inputs">
+                <div class="vault-breaker-field">
+                  <label class="editorial-label vault-key-label">KEY X</label>
+                  <input type="text" id="chronoKeyX" class="editorial-input editorial-input--compact nav-interactive" placeholder="HH:MM">
+                </div>
+                <div class="vault-breaker-field">
+                  <label class="editorial-label vault-key-label">KEY Y</label>
+                  <input type="text" id="chronoKeyY" class="editorial-input editorial-input--compact nav-interactive" placeholder="HH:MM">
+                </div>
+                <button id="btnDecryptVault" class="btn-pill btn-coral btn-breach nav-interactive">BREACH</button>
+              </div>
+              <div id="vaultBreakerStatus" class="vault-breaker-status font-mono text-ash">
+                > Enter coordinates to unlock the celestial Amrit Yuga menu &amp; VIP pass.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

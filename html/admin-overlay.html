@@ -1,0 +1,41 @@
+<div id="adminDashboardOverlay" class="overlay-backdrop overlay-backdrop--hidden">
+    <div class="admin-dashboard-panel border-grid">
+      <div class="admin-header">
+        <div>
+          <span class="label-mono text-coral">ADMINISTRATION CONSOLE</span>
+          <h2 class="admin-title font-display">BEYOND THYME TIMELINE LOGS</h2>
+        </div>
+        <button class="overlay-close-btn nav-interactive" id="closeAdminDashboardBtn">&times;</button>
+      </div>
+
+      <div class="admin-stats-row">
+        <div class="stat-box border-grid">
+          <span class="stat-lbl label-mono">RESERVED SEATS</span>
+          <span class="stat-num text-coral font-display" id="adminBookedCount">0 / 25 Reserved</span>
+        </div>
+        <button id="btnClearAdminBookings" class="btn-pill btn-ghost nav-interactive">Reset Timeline Bookings</button>
+      </div>
+
+      <div class="admin-section-heading label-mono">25 SEAT STATUS OVERVIEW</div>
+      <div class="admin-seat-grid" id="adminSeatGridOverview"></div>
+
+      <div class="admin-section-heading label-mono">GUEST TIMELINE SUBMISSIONS</div>
+      <div class="admin-table-wrap border-grid">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>SEAT</th>
+              <th>MEMBER</th>
+              <th>DOB</th>
+              <th>PHONE</th>
+              <th>FAV PLACE</th>
+              <th>FAV FOOD &amp; ALLERGIES</th>
+              <th>ERA</th>
+              <th>RELIVE MOMENT</th>
+            </tr>
+          </thead>
+          <tbody id="adminSubmissionsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>

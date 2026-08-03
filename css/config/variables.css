@@ -1,0 +1,37 @@
+:root {
+  --bg-base:     #f7f2ea;
+  --bg-surface:  #fdfaf5;
+  --bg-raised:   #fffdf9;
+  --bg-recessed: #ede8de;
+  --bg-footer:   #ede5d8;
+  --text-primary:   #1a1410;
+  --text-secondary: #4a4038;
+  --text-muted:     #8c7d6e;
+  --text-faint:     #b8a898;
+  --color-coral:     #ff5a2e;
+  --color-coral-dim: #e04a22;
+  --color-coral-bg:  rgba(255,90,46,0.08);
+  --color-gold:     #c47800;
+  --color-gold-dim: #a06200;
+  --color-gold-bg:  rgba(196,120,0,0.08);
+  --border-subtle: rgba(26,20,16,0.08);
+  --border-mid:    rgba(26,20,16,0.14);
+  --border-strong: rgba(26,20,16,0.22);
+  --shadow-xs: 0 1px 3px rgba(100,60,20,0.08);
+  --shadow-sm: 0 4px 12px rgba(100,60,20,0.10), 0 1px 3px rgba(100,60,20,0.06);
+  --shadow-md: 0 8px 24px rgba(100,60,20,0.12), 0 2px 8px rgba(100,60,20,0.08);
+  --shadow-lg: 0 20px 50px rgba(100,60,20,0.14), 0 6px 18px rgba(100,60,20,0.09);
+  --shadow-xl: 0 32px 80px rgba(100,60,20,0.16), 0 10px 30px rgba(100,60,20,0.10);
+  --font-display: "Instrument Serif","Fraunces",ui-serif,Georgia,serif;
+  --font-body:    "Geist",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-mono:    "Geist Mono",ui-monospace,SFMono-Regular,monospace;
+  --color-night:  var(--bg-base);
+  --color-smoke:  var(--bg-surface);
+  --color-ink:    var(--bg-raised);
+  --color-bone:   var(--text-primary);
+  --color-ash:    var(--text-muted);
+  --color-line:   var(--border-subtle);
+  --color-candle: var(--color-gold);
+  --color-oxblood:#6b2c14;
+  --color-paper:  var(--bg-recessed);
+}

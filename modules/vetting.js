@@ -139,8 +139,8 @@ export function initVetting(deps) {
       const rzp = new window.Razorpay(options);
       rzp.open();
     } else {
-      // Fallback for offline/test environments without internet Razorpay script load
-      _handlePaymentSuccess(timelineData, { payment_id: `pay_test_${Date.now()}` }, deps);
+      alert("Payment gateway not loaded. Please check your internet connection or disable adblockers.");
+      return;
     }
   });
 }

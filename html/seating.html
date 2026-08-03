@@ -1,0 +1,55 @@
+<section class="max-width-container seating-section" id="schematic">
+
+    <!-- Dark Timepiece Configurator Card (Image 1 Style) -->
+    <div class="dark-timepiece-card border-grid">
+      <canvas id="goldParticleCanvas" class="gold-particle-canvas"></canvas>
+
+      <div class="dark-timepiece-header text-center">
+        <div class="table-capacity-pill label-mono">TABLE 01 · CAPACITY: 25 SEATS</div>
+      </div>
+
+      <div class="schematic-visualizer dark-schematic-bg">
+        <div class="dining-table-complex">
+
+          <!-- Top row: seats 01–12 -->
+          <div class="chair-row-top" id="chairRowTop"></div>
+
+          <!-- Middle row: head seat 25 + timepiece table body -->
+          <div class="table-row-middle">
+            <div id="headChairContainer" class="head-chair-slot"></div>
+            <div class="table-body luxury-dark-table">
+              <div class="table-wing-left"><span>PAST</span></div>
+              <div id="watch3DContainer" class="watch-3d-canvas-box">
+                <div class="watch-orbit-ring"></div>
+              </div>
+              <div class="table-centerpiece"></div>
+              <div class="table-wing-right"><span>FUTURE</span></div>
+            </div>
+          </div>
+
+          <!-- Bottom row: seats 24 down to 14 -->
+          <div class="chair-row-bottom" id="chairRowBottom"></div>
+        </div>
+      </div>
+
+      <!-- Seat Status Legend Matching Image 1 -->
+      <div class="dark-legend-strip border-grid">
+        <div class="dark-legend-item">
+          <span class="dark-legend-icon dark-legend-icon--open"></span>
+          <span class="label-mono">AVAILABLE</span>
+        </div>
+        <div class="dark-legend-item">
+          <span class="dark-legend-icon dark-legend-icon--booked">👤</span>
+          <span class="label-mono">BOOKED</span>
+        </div>
+        <div class="dark-legend-item">
+          <span class="dark-legend-icon dark-legend-icon--unavailable"></span>
+          <span class="label-mono">UNAVAILABLE</span>
+        </div>
+      </div>
+
+      <div class="dark-timepiece-footer label-mono text-center">
+        <span>⤞ &nbsp; SELECT A SEAT TO CONTINUE YOUR TIME JOURNEY &nbsp; ⤝</span>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,6 @@
+.ticker-banner{border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);background-color:rgba(255,255,255,0.5);padding:0.625rem 0;overflow:hidden;position:relative;z-index:5;}
+.ticker-content{display:flex;justify-content:space-between;align-items:center;}
+.ticker-marquee{display:flex;overflow:hidden;white-space:nowrap;width:100%;}
+.marquee-inner{display:flex;gap:3rem;animation:marquee 30s linear infinite;}
+.marquee-item{display:flex;align-items:center;gap:0.75rem;font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);}
+.marquee-item .dot{width:4px;height:4px;border-radius:50%;background-color:var(--color-coral);opacity:0.7;}

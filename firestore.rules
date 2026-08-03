@@ -19,57 +19,56 @@ service cloud.firestore {
       );
     }
 
-    // USERS
+    // USERS: Anyone can read, only owner or admin can update, only admin can delete.
     match /users/{userId} {
-      allow create, update: if true;
+      allow create: if signedIn() && request.auth.uid == userId;
+      allow update: if isOwner(userId) || isAdmin();
       allow read: if true;
       allow delete: if isAdmin();
     }
 
-    // EVENTS
+    // EVENTS: Read-only for public, admin-only for writes.
     match /events/{eventId} {
       allow read: if true;
-      allow create, update, delete: if true;
+      allow create, update, delete: if isAdmin();
     }
 
-    // THEMES
+    // THEMES: Read-only for public, admin-only for writes.
     match /themes/{themeId} {
       allow read: if true;
-      allow create, update, delete: if true;
+      allow create, update, delete: if isAdmin();
     }
 
-    // SEAT BOOKINGS (Public Read & Reservation)
+    // SEAT BOOKINGS: Public read, authenticated creation, admin delete.
     match /seatBookings/{bookingId} {
       allow read: if true;
-      allow create, update: if true;
+      allow create: if signedIn();
+      allow update: if signedIn() || isAdmin();
       allow delete: if isAdmin();
     }
 
-    // TREASURE HUNTS
+    // TREASURE HUNTS: Read-only for public, admin-only writes.
     match /treasureHunts/{huntId} {
       allow read: if true;
-      allow create, update, delete: if true;
+      allow create, update, delete: if isAdmin();
     }
 
     // TIME CAPSULES
     match /timeCapsules/{capsuleId} {
       allow read: if true;
-      allow create, update, delete: if true;
+      allow create, update, delete: if isAdmin();
     }
 
     // NOTIFICATIONS
     match /notifications/{notificationId} {
       allow read: if true;
-      allow create, update, delete: if true;
+      allow create, update, delete: if isAdmin();
     }
 
     // ADMINS
     match /admins/{adminId} {
-      allow read, write: if true;
-    }
-
-    match /{document=**} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isAdmin();
     }
   }
 }

@@ -112,7 +112,6 @@ export const COORD = {
 export const Y_HIDING_SPOTS = [
   { type: 'menu-course', menuColIndex: 0, courseIndex: 2 },
   { type: 'occupied-tooltip', selector: '.chair.occupied' },
-  { type: 'logo' },
   { type: 'footer-link', footerColIndex: 0 },
 ];
 

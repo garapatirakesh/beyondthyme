@@ -25,41 +25,61 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
 
   Object.values(clubsConfig).forEach((club) => {
     const isExpired = new Date(club.eventDate) <= now;
-    if (isExpired) return; // Only show active/future clubs in the main strip
-
-    const available = getAvailableSeats(club);
     const isActive  = club.id === activeClubId;
+    const available = getAvailableSeats(club);
 
     const btn = document.createElement('button');
-    btn.className  = `club-card nav-interactive${isActive ? ' active' : ''}`;
-    btn.setAttribute('data-club', club.id);
-    btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-
-    btn.innerHTML = `
-      <div class="club-card-inner">
-        <div class="club-card-glow" style="--glow-color: ${club.glowColor};"></div>
-        <div class="club-card-emblem">${club.emblem}</div>
-        <div class="club-card-numeral">${club.romanNumeral}</div>
-        <h3 class="club-card-name">${club.name}</h3>
-        <p class="club-card-location">${club.location}</p>
-        <div class="club-card-night">${club.displayNight}</div>
-        <div class="club-card-availability">
-          <span class="club-avail-dot"></span>
-          <span class="club-avail-text">${available} SEATS OPEN</span>
+    
+    if (isExpired) {
+      btn.className  = `archive-card nav-interactive${isActive ? ' active' : ''}`;
+      btn.setAttribute('data-club', club.id);
+      
+      btn.innerHTML = `
+        <div class="archive-card-inner">
+          <div class="archive-card-header">
+            <span class="archive-card-numeral">${club.romanNumeral}</span>
+            <span class="archive-card-lock">🔒 CLOSED</span>
+          </div>
+          <h3 class="archive-card-name">${club.name}</h3>
+          <p class="archive-card-location">${club.location}</p>
+          <div class="archive-card-night">${club.displayNight}</div>
         </div>
-        <div class="club-card-accent-line"></div>
-      </div>
-    `;
+      `;
+    } else {
+      btn.className  = `club-card nav-interactive${isActive ? ' active' : ''}`;
+      btn.setAttribute('data-club', club.id);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+
+      btn.innerHTML = `
+        <div class="club-card-inner">
+          <div class="club-card-glow" style="--glow-color: ${club.glowColor};"></div>
+          <div class="club-card-emblem">${club.emblem}</div>
+          <div class="club-card-numeral">${club.romanNumeral}</div>
+          <h3 class="club-card-name">${club.name}</h3>
+          <p class="club-card-location">${club.location}</p>
+          <div class="club-card-night">${club.displayNight}</div>
+          <div class="club-card-availability">
+            <span class="club-avail-dot"></span>
+            <span class="club-avail-text">${available} SEATS OPEN</span>
+          </div>
+          <div class="club-card-accent-line"></div>
+        </div>
+      `;
+    }
 
     btn.addEventListener('click', () => {
       if (btn.getAttribute('data-club') === activeClubId) return;
 
       document.querySelectorAll('.club-card, .archive-card').forEach(b => {
         b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
+        if (b.classList.contains('club-card')) {
+          b.setAttribute('aria-pressed', 'false');
+        }
       });
       btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
+      if (btn.classList.contains('club-card')) {
+        btn.setAttribute('aria-pressed', 'true');
+      }
 
       onClubSelect?.(club.id);
     });
