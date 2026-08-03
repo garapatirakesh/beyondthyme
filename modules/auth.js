@@ -4,7 +4,7 @@
  */
 
 import { ADMIN_EMAIL } from '../config/app.config.js';
-import { loginWithGoogle } from './firebase.js';
+import { loginWithGoogle, subscribeAuthChange } from './firebase.js';
 
 let currentUser = null; // { name, email, avatar, role: 'admin' | 'member', uid }
 
@@ -18,6 +18,13 @@ export function initAuth(options = {}) {
   const authEmailInput = document.getElementById('simulatedGoogleEmail');
   const confirmGoogleBtn = document.getElementById('confirmGoogleSignInBtn');
 
+  // Firebase auth state subscription
+  subscribeAuthChange((user) => {
+    if (user) {
+      currentUser = user;
+    }
+  });
+
   if (googleBtn) {
     googleBtn.addEventListener('click', () => {
       _showModal();
@@ -30,36 +37,52 @@ export function initAuth(options = {}) {
     });
   }
 
-  if (confirmGoogleBtn) {
-    confirmGoogleBtn.addEventListener('click', async () => {
+  const handleAuthSubmit = async (isPopup = true) => {
+    if (isPopup) {
       try {
-        // Authentic Firebase Google Sign-In popup
         const fbUser = await loginWithGoogle();
         currentUser = fbUser;
       } catch (err) {
-        console.warn('Firebase login notice, falling back to input:', err?.message);
-        const email = (authEmailInput?.value || '').trim().toLowerCase() || 'member@gmail.com';
-        const name = email.split('@')[0].replace('.', ' ').toUpperCase();
-        const role = (email === ADMIN_EMAIL.toLowerCase()) ? 'admin' : 'member';
-
-        currentUser = {
-          name: name,
-          email: email,
-          avatar: role === 'admin' ? '👑' : '⏳',
-          role: role,
-          uid: `local_${Date.now()}`,
-        };
+        console.warn('Firebase popup notice, falling back to input:', err?.message);
+        _setSimulatedUser();
       }
+    } else {
+      _setSimulatedUser();
+    }
 
-      _hideModal();
+    _hideModal();
 
-      if (currentUser?.role === 'admin') {
-        options.onAdminAccess?.(currentUser);
-      } else {
-        options.onAuthSuccess?.(currentUser);
-      }
-    });
+    const role = (currentUser?.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase() ? 'admin' : 'member';
+    if (role === 'admin') {
+      options.onAdminAccess?.(currentUser);
+    } else {
+      options.onAuthSuccess?.(currentUser);
+    }
+  };
+
+  if (confirmGoogleBtn) {
+    confirmGoogleBtn.addEventListener('click', () => handleAuthSubmit(true));
   }
+
+  const simulatedSubmitBtn = document.getElementById('btnConfirmSimulatedAuth');
+  if (simulatedSubmitBtn) {
+    simulatedSubmitBtn.addEventListener('click', () => handleAuthSubmit(false));
+  }
+}
+
+function _setSimulatedUser() {
+  const authEmailInput = document.getElementById('simulatedGoogleEmail');
+  const email = (authEmailInput?.value || '').trim().toLowerCase() || 'member@gmail.com';
+  const name = email.split('@')[0].replace('.', ' ').toUpperCase();
+  const role = (email === ADMIN_EMAIL.toLowerCase()) ? 'admin' : 'member';
+
+  currentUser = {
+    name: name,
+    email: email,
+    avatar: role === 'admin' ? '👑' : '⏳',
+    role: role,
+    uid: `local_${Date.now()}`,
+  };
 }
 
 /**

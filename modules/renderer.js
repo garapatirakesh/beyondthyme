@@ -25,53 +25,10 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
 
   Object.values(clubsConfig).forEach((club) => {
     const isExpired = new Date(club.eventDate) <= now;
-<<<<<<< HEAD
-=======
     const available = getAvailableSeats(club);
->>>>>>> 9774274b466480bc800f0799078c8f25f36b31f5
     const isActive  = club.id === activeClubId;
-    const available = getAvailableSeats(club);
 
     const btn = document.createElement('button');
-<<<<<<< HEAD
-    
-    if (isExpired) {
-      btn.className  = `archive-card nav-interactive${isActive ? ' active' : ''}`;
-      btn.setAttribute('data-club', club.id);
-      
-      btn.innerHTML = `
-        <div class="archive-card-inner">
-          <div class="archive-card-header">
-            <span class="archive-card-numeral">${club.romanNumeral}</span>
-            <span class="archive-card-lock">🔒 CLOSED</span>
-          </div>
-          <h3 class="archive-card-name">${club.name}</h3>
-          <p class="archive-card-location">${club.location}</p>
-          <div class="archive-card-night">${club.displayNight}</div>
-        </div>
-      `;
-    } else {
-      btn.className  = `club-card nav-interactive${isActive ? ' active' : ''}`;
-      btn.setAttribute('data-club', club.id);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-
-      btn.innerHTML = `
-        <div class="club-card-inner">
-          <div class="club-card-glow" style="--glow-color: ${club.glowColor};"></div>
-          <div class="club-card-emblem">${club.emblem}</div>
-          <div class="club-card-numeral">${club.romanNumeral}</div>
-          <h3 class="club-card-name">${club.name}</h3>
-          <p class="club-card-location">${club.location}</p>
-          <div class="club-card-night">${club.displayNight}</div>
-          <div class="club-card-availability">
-            <span class="club-avail-dot"></span>
-            <span class="club-avail-text">${available} SEATS OPEN</span>
-          </div>
-          <div class="club-card-accent-line"></div>
-        </div>
-      `;
-    }
-=======
     btn.className  = `club-card nav-interactive${isActive ? ' active' : ''}${isExpired ? ' expired' : ''}`;
     btn.setAttribute('data-club', club.id);
     btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
@@ -82,17 +39,20 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
         <div class="club-card-numeral">${club.romanNumeral}</div>
       </div>
       <div class="club-card-content">
-        <div class="club-card-emblem">${club.emblem}</div>
+        <div class="club-card-header-row">
+          <span class="club-card-emblem">${club.emblem}</span>
+          <div class="club-card-availability ${isExpired ? 'is-expired' : ''}">
+            <span class="club-avail-dot"></span>
+            <span class="club-avail-text">${isExpired ? 'CLOSED' : `${available} SEATS OPEN`}</span>
+          </div>
+        </div>
         <h3 class="club-card-name">${club.name}</h3>
         <p class="club-card-location">${club.location}</p>
-        <div class="club-card-night">${club.displayNight}</div>
-        <div class="club-card-availability">
-          <span class="club-avail-dot"></span>
-          <span class="club-avail-text">${isExpired ? 'CLOSED' : `${available} SEATS OPEN`}</span>
+        <div class="club-card-night">
+          <span>${club.displayNight}</span>
         </div>
       </div>
     `;
->>>>>>> 9774274b466480bc800f0799078c8f25f36b31f5
 
     btn.addEventListener('click', () => {
       if (btn.getAttribute('data-club') === activeClubId) return;

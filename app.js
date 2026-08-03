@@ -59,12 +59,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Initialize Admin Dashboard
-  initAdminDashboard({
-    onSeatReset() {
-      buildSeating();
+  // Initialize Admin Portal Engine
+  initAdminDashboard();
+
+  // Hash Router for #admin or /admin
+  function handleAdminHashRoute() {
+    if (window.location.hash.includes('admin')) {
+      openAdminDashboard();
     }
+  }
+
+  window.addEventListener('hashchange', handleAdminHashRoute);
+  handleAdminHashRoute();
+
+  document.getElementById('footerAdminLink')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openAdminDashboard();
   });
+
 
   // ── 1. Cursor ──────────────────────────────────────────────────────────────
   const cursor = initCursor();
@@ -146,28 +158,23 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildSeating() {
     renderSeatingLayout(CLUBS_CONFIG[activeClubId], {
       onSeatClick(chairEl) {
-        if (chairEl.classList.contains('selected')) {
-          chairEl.classList.remove('selected');
-          selectedSeat   = null;
-          selectedSeatEl = null;
+        selectSeat(chairEl);
+        const rawNum = chairEl.getAttribute('data-seat-num');
+        selectedSeat   = rawNum ? `Seat_${String(rawNum).padStart(2, '0')}` : chairEl.getAttribute('data-seat') || 'Seat_01';
+        selectedSeatEl = chairEl;
+
+        // Pulse 3D watch mechanism
+        pulseWatch3D();
+
+        if (isAudioPlaying()) playBeaconChime();
+
+        const user = getCurrentUser();
+        if (!user) {
+          promptGoogleLogin();
+        } else if (user.role === 'admin') {
+          openAdminDashboard();
         } else {
-          selectSeat(chairEl);
-          selectedSeat   = chairEl.getAttribute('data-seat');
-          selectedSeatEl = chairEl;
-
-          // Pulse 3D watch mechanism
-          pulseWatch3D();
-
-          if (isAudioPlaying()) playBeaconChime();
-
-          const user = getCurrentUser();
-          if (!user) {
-            promptGoogleLogin();
-          } else if (user.role === 'admin') {
-            openAdminDashboard();
-          } else {
-            openVettingModal(selectedSeat);
-          }
+          openVettingModal(selectedSeat);
         }
       },
       onSeatHoverEnter() { 
@@ -178,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
       onOccupiedHover()  { if (isAudioPlaying()) playResonanceChime(); },
     });
 
-    bindCursorHover(cursor, document.querySelectorAll('.chair.available, .chair.occupied'));
+    bindCursorHover(cursor, document.querySelectorAll('.orbital-seat-node'));
   }
 
   buildSeating();

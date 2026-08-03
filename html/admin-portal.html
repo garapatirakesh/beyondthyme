@@ -1,0 +1,477 @@
+<!-- html/admin-portal.html -->
+<!-- Full-screen Rolex-inspired dark Admin Portal overlay -->
+<div id="adminPortalOverlay" class="admin-portal-overlay">
+
+  <!-- ─── 1. Auth Lock View (Shown when unauthorized) ──────────────────────── -->
+  <div id="adminAuthLock" class="admin-auth-lock">
+    <div class="admin-auth-card">
+      <div class="admin-auth-crown">👑</div>
+      <h2 class="admin-auth-title">BEYOND THYME</h2>
+      <p class="admin-auth-subtitle">Restricted Executive Command Suite.<br>Authorized Google authentication required.</p>
+      
+      <div class="admin-form-group">
+        <button id="btnAdminGoogleLogin" class="admin-btn admin-btn-gold" style="width: 100%; justify-content: center; padding: 0.85rem;">
+          <span>🔑</span> Sign in with Google (beyondthyme.in@gmail.com)
+        </button>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button id="btnAdminCloseLock" class="admin-btn admin-btn-outline admin-btn-sm">
+          ← Return to Supper Club
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 2. Admin Shell (Shown when authenticated) ────────────────────────── -->
+  <div id="adminShell" class="admin-shell" style="display: none;">
+
+    <!-- ─── Sidebar ────────────────────────────────────────────────────────── -->
+    <aside id="adminSidebar" class="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <div class="admin-brand">
+          <span class="admin-brand-logo">👑</span>
+          <span class="admin-brand-text">BEYOND THYME</span>
+        </div>
+        <button id="btnToggleAdminSidebar" class="admin-btn admin-btn-outline admin-btn-sm" style="padding: 0.2rem 0.5rem;" title="Toggle Sidebar">
+          ☰
+        </button>
+      </div>
+
+      <nav class="admin-sidebar-nav" id="adminSidebarNav">
+        <!-- Sidebar items injected by modules/admin/adminAuth.js from config/admin.config.js -->
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user-chip">
+          <div class="admin-avatar">👑</div>
+          <div class="admin-user-info">
+            <span class="admin-user-name" id="adminUserName">Admin</span>
+            <span class="admin-user-role">beyondthyme.in@gmail.com</span>
+          </div>
+        </div>
+        <button id="btnAdminLogout" class="admin-btn admin-btn-outline admin-btn-sm" title="Logout">
+          🚪
+        </button>
+      </div>
+    </aside>
+
+    <!-- ─── Main Content Viewport ─────────────────────────────────────────── -->
+    <main class="admin-main">
+
+      <!-- Topbar Header -->
+      <header class="admin-topbar">
+        <div class="admin-topbar-search">
+          <span class="admin-search-icon">🔍</span>
+          <input type="text" id="adminGlobalSearch" class="admin-search-input" placeholder="Global Search (Users, Bookings, Events, Coordinates...)" />
+        </div>
+
+        <div class="admin-topbar-actions">
+          <div class="admin-status-chip">
+            <span class="admin-pulse-dot"></span>
+            <span>Firestore Realtime Sync</span>
+          </div>
+
+          <button id="btnAdminClosePortal" class="admin-btn admin-btn-outline admin-btn-sm">
+            ✕ Close Portal
+          </button>
+        </div>
+      </header>
+
+      <!-- Viewport with 12 Tab Views -->
+      <div class="admin-content-viewport">
+
+        <!-- 1. Dashboard Tab View -->
+        <section id="adminView_dashboard" class="admin-tab-view active">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">Executive Dashboard</h1>
+              <p class="admin-section-desc">Real-time metrics, live passenger bookings, and current operational telemetry.</p>
+            </div>
+            <button id="btnRefreshDashboard" class="admin-btn admin-btn-outline admin-btn-sm">
+              🔄 Refresh Data
+            </button>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="admin-kpi-grid" id="adminKpiGrid">
+            <!-- Dynamic KPIs injected via adminDashboard.js -->
+          </div>
+
+          <!-- Grid 2-Column Main Stats -->
+          <div class="admin-grid-2col">
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">⚡ Live Booking Stream</h3>
+                <span class="admin-badge admin-badge-success">Realtime</span>
+              </div>
+              <div id="adminLiveBookingStream" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <!-- Live items -->
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">📍 Today's Check-ins</h3>
+                <span class="admin-badge admin-badge-warning" id="adminCheckinRatio">0 / 25</span>
+              </div>
+              <div id="adminTodayCheckinsList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <!-- Checkin items -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Events Tab View -->
+        <section id="adminView_events" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">Event Management</h1>
+              <p class="admin-section-desc">Create, schedule, edit, archive, and manage supper club events.</p>
+            </div>
+            <button id="btnCreateEventModal" class="admin-btn admin-btn-gold">
+              ➕ Create New Event
+            </button>
+          </div>
+
+          <div id="adminEventsGrid" class="admin-kpi-grid">
+            <!-- Event cards injected via adminEvents.js -->
+          </div>
+        </section>
+
+        <!-- 3. Themes Tab View -->
+        <section id="adminView_themes" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">Theme Engine (Saturday Dinners)</h1>
+              <p class="admin-section-desc">Manage 4 monthly chronological themes, intro videos, and culinary artwork.</p>
+            </div>
+            <button id="btnCreateThemeModal" class="admin-btn admin-btn-gold">
+              🍷 Add New Theme
+            </button>
+          </div>
+
+          <div id="adminThemesGrid" class="admin-kpi-grid">
+            <!-- Themes cards injected via adminThemes.js -->
+          </div>
+        </section>
+
+        <!-- 4. Seat Management Tab View -->
+        <section id="adminView_seating" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">25-Seat Floorplan Controls</h1>
+              <p class="admin-section-desc">Lock, reserve, assign, or reassign seats in real-time on the digital floorplan.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="btnResetAllSeats" class="admin-btn admin-btn-danger admin-btn-sm">
+                ⚠️ Reset Floorplan
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Banquet Table Schematic (25 Seats)</h3>
+              <div style="display: flex; gap: 1rem; font-size: 0.8rem;">
+                <span style="color: var(--admin-accent-green);">● Available</span>
+                <span style="color: var(--admin-accent-red);">● Booked</span>
+                <span style="color: var(--admin-gold);">● Locked / Reserved</span>
+              </div>
+            </div>
+            <div class="admin-seat-grid" id="adminInteractiveSeatGrid">
+              <!-- Interactive seats injected via adminSeating.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Bookings Tab View -->
+        <section id="adminView_bookings" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">Booking Management</h1>
+              <p class="admin-section-desc">Search, filter, edit, move seats, process refunds, and export passenger rosters.</p>
+            </div>
+            <button id="btnExportBookingsCsv" class="admin-btn admin-btn-gold admin-btn-sm">
+              📥 Export CSV
+            </button>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-table-container">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Seat</th>
+                    <th>Guest</th>
+                    <th>Contact</th>
+                    <th>Time</th>
+                    <th>Payment</th>
+                    <th>Attendance</th>
+                    <th>Dietary / Allergies</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminBookingsTableBody">
+                  <!-- Bookings injected via adminBookings.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. Users Tab View -->
+        <section id="adminView_users" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">User Directory & Membership</h1>
+              <p class="admin-section-desc">View member profiles, attendance history, time coin balances, and status controls.</p>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-table-container">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Member</th>
+                    <th>Email</th>
+                    <th>Membership</th>
+                    <th>Time Coins</th>
+                    <th>Dinners Attended</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersTableBody">
+                  <!-- Users injected via adminUsers.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. Check-in Tab View -->
+        <section id="adminView_checkin" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">QR Door Check-in Station</h1>
+              <p class="admin-section-desc">Scan guest QR code tickets or enter ticket code to record arrival telemetry.</p>
+            </div>
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">📷 Ticket Reader / Manual Lookup</h3>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Ticket Pass Code / QR Value</label>
+                <input type="text" id="adminCheckinInput" class="admin-input" placeholder="e.g. TKT_PASS_9921" />
+              </div>
+              <button id="btnProcessCheckin" class="admin-btn admin-btn-gold" style="width: 100%;">
+                ✓ Validate & Check-In
+              </button>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">📋 Door Telemetry Log</h3>
+              </div>
+              <div id="adminCheckinLog" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 300px; overflow-y: auto;">
+                <!-- Recent door logs -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. Treasure Hunt Tab View -->
+        <section id="adminView_treasure" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">Treasure Hunt Coordinates</h1>
+              <p class="admin-section-desc">Configure daily secret X/Y coordinates, hints, rewards, and view guess attempts.</p>
+            </div>
+            <button id="btnSaveTreasureConfig" class="admin-btn admin-btn-gold">
+              💾 Save Hunt Coordinates
+            </button>
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-card">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Hunt Title</label>
+                <input type="text" id="thTitle" class="admin-input" value="Vault of Amrit Yuga" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">X Coordinate (Hour Dial Value)</label>
+                <input type="number" id="thCoordX" class="admin-input" value="42" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Y Coordinate (Minute Dial Value)</label>
+                <input type="number" id="thCoordY" class="admin-input" value="65" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Instagram Hint Text</label>
+                <input type="text" id="thHint" class="admin-input" value="Look closely at the third course of the 90s era..." />
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">🏆 Solver Leaderboard</h3>
+              </div>
+              <div id="adminTreasureLeaderboard" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <!-- Leaderboard items -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. Time Capsules Tab View -->
+        <section id="adminView_capsules" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">Time Capsule Vault</h1>
+              <p class="admin-section-desc">Manage chronologically sealed guest messages and set unlock schedules.</p>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-table-container">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Capsule ID</th>
+                    <th>Author</th>
+                    <th>Creation Date</th>
+                    <th>Scheduled Unlock</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminCapsulesTableBody">
+                  <!-- Time capsules injected via adminCapsules.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. Notifications Tab View -->
+        <section id="adminView_notifications" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">Notification Broadcasting Center</h1>
+              <p class="admin-section-desc">Send targeted push, in-app, or email announcements to members.</p>
+            </div>
+          </div>
+
+          <div class="admin-card" style="max-width: 650px;">
+            <div class="admin-form-group">
+              <label class="admin-form-label">Target Audience</label>
+              <select id="notifAudience" class="admin-select">
+                <option value="Everyone">Everyone</option>
+                <option value="Current Event Guests">Current Event Guests</option>
+                <option value="Past Participants">Past Participants</option>
+              </select>
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Notification Title</label>
+              <input type="text" id="notifTitle" class="admin-input" placeholder="e.g. ✨ New Saturday Era Released!" />
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Message Content</label>
+              <textarea id="notifMessage" class="admin-textarea" rows="4" placeholder="Enter notification copy..."></textarea>
+            </div>
+            <button id="btnSendNotification" class="admin-btn admin-btn-gold">
+              🚀 Dispatch Notification
+            </button>
+          </div>
+        </section>
+
+        <!-- 11. Reports & Analytics Tab View -->
+        <section id="adminView_reports" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">Financial & Operational Analytics</h1>
+              <p class="admin-section-desc">Interactive visual reports, seat occupancy rates, and revenue telemetry.</p>
+            </div>
+            <button id="btnExportPdfReport" class="admin-btn admin-btn-gold admin-btn-sm">
+              📄 Generate Report PDF
+            </button>
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">📈 Revenue Analytics</h3>
+              </div>
+              <div id="chartRevenueContainer" style="height: 220px; display: flex; align-items: center; justify-content: center;">
+                <!-- SVG chart injected via adminReports.js -->
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">🪑 Occupancy Rate</h3>
+              </div>
+              <div id="chartOccupancyContainer" style="height: 220px; display: flex; align-items: center; justify-content: center;">
+                <!-- SVG chart injected via adminReports.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 12. Settings Tab View -->
+        <section id="adminView_settings" class="admin-tab-view">
+          <div class="admin-section-header">
+            <div>
+              <h1 class="admin-section-title">System Parameters & Settings</h1>
+              <p class="admin-section-desc">Manage admin credentials, venue defaults, booking rules, and gateway keys.</p>
+            </div>
+            <button id="btnSaveSystemSettings" class="admin-btn admin-btn-gold">
+              💾 Save All Settings
+            </button>
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">⚙️ Venue & Capacity Defaults</h3>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Default Venue Name</label>
+                <input type="text" id="settingVenue" class="admin-input" value="Secret Villa, South Delhi" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Total Seat Count</label>
+                <input type="number" id="settingMaxSeats" class="admin-input" value="25" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Ticket Price (INR)</label>
+                <input type="number" id="settingTicketPrice" class="admin-input" value="2000" />
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3 class="admin-card-title">🔑 Gateway Keys</h3>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Razorpay Key ID</label>
+                <input type="text" id="settingRazorpayKey" class="admin-input" value="rzp_test_TKyTi4VEv9WTsk" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Support Email</label>
+                <input type="email" id="settingSupportEmail" class="admin-input" value="beyondthyme.in@gmail.com" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+</div>

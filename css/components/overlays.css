@@ -5,7 +5,7 @@
   background-color: rgba(10, 8, 6, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  z-index: 9999;
+  z-index: 99999 !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,6 +105,14 @@
   margin: auto;
   position: relative;
   box-shadow: var(--shadow-xl);
+}
+.timeline-step {
+  display: block;
+  width: 100%;
+}
+.timeline-step.hidden,
+.timeline-step[hidden] {
+  display: none !important;
 }
 .timeline-main-title {
   font-size: 2.4rem;
@@ -395,12 +403,12 @@
 
 .dark-timepiece-card {
   position: relative;
-  background: linear-gradient(160deg, var(--bg-surface) 0%, var(--bg-recessed) 100%);
-  border: 1px solid var(--border-subtle);
+  background: radial-gradient(circle at 50% 50%, #0e1017 0%, #050507 70%, #020203 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   border-radius: 28px;
   padding: 1.75rem 1.5rem;
-  overflow: visible;
-  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .gold-particle-canvas {
@@ -453,13 +461,15 @@
 .dark-schematic-bg {
   background: transparent !important;
   box-shadow: none !important;
-  padding: 1rem 0.5rem !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .luxury-dark-table {
-  background: linear-gradient(145deg, #fffdfa 0%, #f6ebd9 50%, #eee0ca 100%) !important;
-  border: 2px solid var(--color-gold) !important;
-  box-shadow: 0 12px 36px rgba(100, 60, 20, 0.16), inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 0 24px rgba(196, 120, 0, 0.18) !important;
+  background: linear-gradient(145deg, rgba(20, 20, 28, 0.96) 0%, rgba(5, 5, 7, 0.98) 100%) !important;
+  border: 2px solid rgba(255, 85, 0, 0.5) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.9), inset 0 1px 2px rgba(255, 255, 255, 0.12), 0 0 40px rgba(255, 85, 0, 0.3) !important;
 }
 
 /* Luxury Circular Seat Nodes */
@@ -566,18 +576,22 @@
 }
 
 .dark-legend-icon--open {
-  background: var(--bg-surface);
-  border: 1.5px solid var(--color-gold);
-  box-shadow: 0 0 8px rgba(196, 120, 0, 0.3);
+  background: #ffffff !important;
+  border: 1.5px solid var(--color-gold) !important;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4) !important;
 }
 
 .dark-legend-icon--booked {
-  background: var(--bg-recessed);
-  border: 1.5px solid var(--color-gold);
+  background: #e63946 !important;
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 0 0 8px rgba(230, 57, 70, 0.5) !important;
+  font-size: 0.65rem !important;
 }
 
-.dark-legend-icon--unavailable {
-  border: 1.5px dashed var(--border-mid);
+.dark-legend-icon--selected {
+  background: #ff5a2e !important;
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 0 0 10px rgba(255, 90, 46, 0.8) !important;
 }
 
 .dark-timepiece-footer {

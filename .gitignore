@@ -22,3 +22,5 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+*.timestamp-*.mjs
+

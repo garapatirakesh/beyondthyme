@@ -127,7 +127,7 @@ export const TERMINAL_INITIAL_LINES = [
 // ─── Booking & Auth Config ───────────────────────────────────────────────────
 export const SEAT_PRICE_INR = 2000;
 export const RAZORPAY_KEY_ID = 'rzp_test_TKyTi4VEv9WTsk';
-export const ADMIN_EMAIL = 'admin@gmail.com';
+export const ADMIN_EMAIL = 'beyondthyme.in@gmail.com';
 export const BOOKING_THEME = '✨ Midnight Memories';
 
 export const EVENT_DETAILS = {
@@ -147,19 +147,73 @@ export const PREFERENCES = {
 
 // ─── 3D Watch & Dark Gold Particle Config ────────────────────────────────────
 export const LUXURY_WATCH_CONFIG = {
-  COLOR_GOLD_PRIMARY: '#D4AF37',
-  COLOR_GOLD_LIGHT:   '#F5E6B3',
-  COLOR_GOLD_DARK:    '#8A6220',
-  COLOR_BG_DARK:      '#050505',
-  MAX_TILT_DEG:       6,
+  COLOR_CASE:             '#2a2d38',
+  COLOR_BEZEL_OUTER:      '#404554',
+  COLOR_BEZEL_INNER:      '#1f222a',
+  COLOR_CROWN_STEEL:      '#343946',
+  COLOR_GOLD_GEAR:        '#d4af37',
+  COLOR_ROSE_GOLD_GEAR:   '#b8707a',
+  COLOR_COPPER_GEAR:      '#b87333',
+  COLOR_STEEL_GEAR:       '#8a909d',
+  COLOR_DARK_PLATE:       '#0d0e12',
+  COLOR_NEON_ORANGE:      '#ff5500',
+  COLOR_NEON_EMISSIVE:    '#ff4400',
+  COLOR_NEON_HALO:        '#ff6600',
+  COLOR_RUBY_JEWEL:       '#e6004c',
+  COLOR_SCREW_HEAD:       '#c5c9d4',
+  COLOR_HAND_FACET:       '#f0f3fa',
+  COLOR_SECOND_HAND:      '#ff4400',
+  COLOR_MARKER_BLOCK:     '#1a1c23',
+  COLOR_MARKER_HIGHLIGHT: '#6e7587',
+
+  MAX_TILT_DEG:       35,
   TILT_DAMPING:       0.08,
-  PARTICLE_COUNT:     75,
+  DRAG_SENSITIVITY:   0.008,
+
+  // Watch Model Dimensions (Ported from C:\Users\arrab\watch)
+  TORUS_CASE_RADIUS:       3.15,
+  TORUS_CASE_TUBE:         0.22,
+  TORUS_BEZEL_OUTER_R:     2.96,
+  TORUS_BEZEL_OUTER_T:     0.14,
+  TORUS_BEZEL_INNER_R:     2.78,
+  TORUS_BEZEL_INNER_T:     0.10,
+  NEON_TUBE_RADIUS:        2.62,
+  NEON_TUBE_THICKNESS:     0.055,
+  CROWN_X_OFFSET:          3.35,
+
+  // Gears Configuration
+  GEAR_CENTER: { teeth: 34, outerR: 1.4, innerR: 0.4, speedRatio: 1.0, dir: 1, pos: [0, -0.3, -0.05] },
+  GEAR_UPPER_LEFT: { teeth: 24, outerR: 0.95, innerR: 0.25, speedRatio: 1.3, dir: -1, pos: [-1.1, 0.7, -0.02] },
+  GEAR_UPPER_RIGHT: { teeth: 22, outerR: 0.85, innerR: 0.22, speedRatio: 1.5, dir: -1, pos: [1.15, 0.75, -0.01] },
+  GEAR_LOWER_LEFT: { teeth: 18, outerR: 0.7, innerR: 0.18, speedRatio: 1.7, dir: -1, pos: [-1.05, -0.85, -0.04] },
+  BALANCE_WHEEL_POS: [-0.5, 0.85, 0.0],
+
+  // Camera framing Z distance (8.2 frames 6.3u complete watch at 90-95% container height)
+  CAMERA_Z: 8.2,
+  CAMERA_FOV: 42,
 };
 
 export const SEAT_ORDER_IMAGE1 = {
   topRow:    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   bottomRow: [24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 13, 14],
   headSeat:  25,
+};
+
+export const ORBITAL_SEATING_CONFIG = {
+  TOTAL_SEATS: 25,
+  RADIUS_X: 430,
+  RADIUS_Y: 175,
+  TILT_ANGLE_DEG: -20,
+  FRONT_SCALE_MAX: 1.12,
+  BACK_SCALE_MIN: 0.76,
+  FRONT_OPACITY: 1.0,
+  BACK_OPACITY: 0.55,
+  ROTATION_DAMPING: 0.08,
+  DRAG_SENSITIVITY: 0.004,
+  AUTO_ROTATE_SPEED_MS: 600,
+  COLOR_SEAT_AVAILABLE: '#ffffff',
+  COLOR_SEAT_BOOKED: '#d62828',
+  COLOR_SEAT_SELECTED: '#ff5a2e',
 };
 
 

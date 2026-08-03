@@ -7,10 +7,10 @@
  */
 
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { 
   getFirestore, doc, setDoc, getDoc, runTransaction, 
-  collection, onSnapshot 
+  collection, onSnapshot, deleteDoc, updateDoc
 } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported } from 'firebase/analytics';
@@ -183,6 +183,29 @@ export async function loginWithGoogle() {
   }
 }
 
+/**
+ * Listen to Firebase Auth state changes.
+ */
+export function subscribeAuthChange(callback) {
+  if (!auth) return () => {};
+  return onAuthStateChanged(auth, (fbUser) => {
+    if (fbUser) {
+      const email = (fbUser.email || '').toLowerCase();
+      const role = (email === ADMIN_EMAIL.toLowerCase()) ? 'admin' : 'member';
+      const userProfile = {
+        uid: fbUser.uid,
+        name: fbUser.displayName || email.split('@')[0],
+        email: email,
+        avatar: fbUser.photoURL || (role === 'admin' ? '👑' : '⏳'),
+        role: role,
+      };
+      callback(userProfile);
+    } else {
+      callback(null);
+    }
+  });
+}
+
 // ── 5. Atomic Seat Booking with Firestore Transactions ──────────────────────
 /**
  * Reserve a seat using Firestore ACID Transaction to guarantee ZERO duplicate bookings.
@@ -298,3 +321,54 @@ export async function logoutFirebaseUser() {
 export const signInWithGoogleFirebase = loginWithGoogle;
 export const listenToLiveBookings = listenToLiveSeatBookings;
 export const saveBookingToFirestore = bookSeatTransaction;
+
+/**
+ * Generic Real-time Listener for any Firestore collection.
+ * @param {string} collName
+ * @param {function} callback
+ * @returns {function} Unsubscribe function
+ */
+export function listenToCollection(collName, callback) {
+  if (!collections[collName]) return () => {};
+  try {
+    return onSnapshot(collections[collName], (snapshot) => {
+      const docs = [];
+      snapshot.forEach(d => docs.push({ id: d.id, ...d.data() }));
+      callback(docs);
+    }, (err) => {
+      console.warn(`Firestore snapshot notice for ${collName}:`, err);
+    });
+  } catch (err) {
+    console.warn(`Unable to listen to collection ${collName}:`, err);
+    return () => {};
+  }
+}
+
+/**
+ * Write or update a document in a Firestore collection.
+ */
+export async function writeFirestoreDoc(collName, docId, data) {
+  try {
+    const docRef = doc(db, collName, docId);
+    await setDoc(docRef, { ...data, updatedAt: new Date().toISOString() }, { merge: true });
+    return true;
+  } catch (err) {
+    console.warn(`Error writing document ${docId} in ${collName}:`, err);
+    throw err;
+  }
+}
+
+/**
+ * Delete a document from a Firestore collection.
+ */
+export async function removeFirestoreDoc(collName, docId) {
+  try {
+    const docRef = doc(db, collName, docId);
+    await deleteDoc(docRef);
+    return true;
+  } catch (err) {
+    console.warn(`Error deleting document ${docId} in ${collName}:`, err);
+    throw err;
+  }
+}
+
