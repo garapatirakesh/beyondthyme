@@ -1,0 +1,75 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.token.email == "admin@gmail.com" ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin")
+      );
+    }
+
+    // USERS
+    match /users/{userId} {
+      allow create, update: if true;
+      allow read: if true;
+      allow delete: if isAdmin();
+    }
+
+    // EVENTS
+    match /events/{eventId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // THEMES
+    match /themes/{themeId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // SEAT BOOKINGS (Public Read & Reservation)
+    match /seatBookings/{bookingId} {
+      allow read: if true;
+      allow create, update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // TREASURE HUNTS
+    match /treasureHunts/{huntId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // TIME CAPSULES
+    match /timeCapsules/{capsuleId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // NOTIFICATIONS
+    match /notifications/{notificationId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // ADMINS
+    match /admins/{adminId} {
+      allow read, write: if true;
+    }
+
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

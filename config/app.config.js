@@ -124,3 +124,43 @@ export const TERMINAL_INITIAL_LINES = [
   { text: '> INITIATING SECURE CALIBRATION CHANNEL...', cls: '' },
   { text: '> SEAT_COORDINATES: UNASSIGNED. PLEASE SELECT A PULSING SEAT ON THE FLOORPLAN.', cls: 'accent', id: 'terminalSelectedSeatLine' },
 ];
+
+// ─── Booking & Auth Config ───────────────────────────────────────────────────
+export const SEAT_PRICE_INR = 2000;
+export const RAZORPAY_KEY_ID = 'rzp_test_TKyTi4VEv9WTsk';
+export const ADMIN_EMAIL = 'admin@gmail.com';
+export const BOOKING_THEME = '✨ Midnight Memories';
+
+export const EVENT_DETAILS = {
+  theme: '✨ Midnight Memories',
+  date: 'October 24, 2026',
+  time: '20:00 IST',
+  venue: 'Secret Villa, South Delhi',
+  totalSeats: 25,
+};
+
+export const ERAS_OPTIONS = ['80s', '90s', '2000s', 'Future'];
+export const PREFERENCES = {
+  timeOfDay: ['Morning', 'Midnight'],
+  beverage: ['Coffee', 'Tea'],
+  personality: ['Introvert', 'Extrovert'],
+};
+
+// ─── 3D Watch & Dark Gold Particle Config ────────────────────────────────────
+export const LUXURY_WATCH_CONFIG = {
+  COLOR_GOLD_PRIMARY: '#D4AF37',
+  COLOR_GOLD_LIGHT:   '#F5E6B3',
+  COLOR_GOLD_DARK:    '#8A6220',
+  COLOR_BG_DARK:      '#050505',
+  MAX_TILT_DEG:       6,
+  TILT_DAMPING:       0.08,
+  PARTICLE_COUNT:     75,
+};
+
+export const SEAT_ORDER_IMAGE1 = {
+  topRow:    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  bottomRow: [24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 13, 14],
+  headSeat:  25,
+};
+
+
