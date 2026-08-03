@@ -233,6 +233,58 @@ function _createWhiteNoiseBuffer() {
   return buffer;
 }
 
+/** Play a premium mechanical click feedback sound effect (cassette tape/latch) */
+export function playStaticTapeClick() {
+  if (!audioCtx || audioCtx.state === 'suspended') {
+    try {
+      const tempCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const clickBuffer = tempCtx.createBuffer(1, tempCtx.sampleRate * 0.015, tempCtx.sampleRate);
+      const data = clickBuffer.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      
+      const noise = tempCtx.createBufferSource();
+      noise.buffer = clickBuffer;
+      
+      const filter = tempCtx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.setValueAtTime(2500, tempCtx.currentTime);
+
+      const gainNode = tempCtx.createGain();
+      gainNode.gain.setValueAtTime(0.06, tempCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, tempCtx.currentTime + 0.015);
+
+      noise.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(tempCtx.destination);
+      noise.start();
+      setTimeout(() => tempCtx.close(), 100);
+    } catch(e) {}
+    return;
+  }
+
+  try {
+    const clickBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.015, audioCtx.sampleRate);
+    const data = clickBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = clickBuffer;
+    
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(2500, audioCtx.currentTime);
+
+    const gainNode = audioCtx.createGain();
+    gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.015);
+
+    noise.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    noise.start();
+  } catch(e){}
+}
+
 
 // ─── Private helpers ──────────────────────────────────────────────────────────
 
