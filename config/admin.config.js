@@ -47,17 +47,19 @@ export const ADMIN_DEFAULTS = {
   DEFAULT_INSTAGRAM: 'https://instagram.com/beyondthyme',
 };
 
-/** Rolex-inspired luxury theme tokens */
-export const ROLEX_THEME_TOKENS = {
-  COLOR_BG: '#0b0c10',
-  COLOR_PANEL: '#151821',
-  COLOR_CARD: 'rgba(21, 24, 33, 0.85)',
-  COLOR_GOLD: '#d4af37',
-  COLOR_GOLD_GLOW: 'rgba(212, 175, 55, 0.25)',
-  COLOR_TEXT: '#e6e8ec',
-  COLOR_MUTED: '#8a909d',
+/** Warm Parchment luxury theme tokens */
+export const PARCHMENT_ADMIN_TOKENS = {
+  COLOR_BG: '#f7f2ea',
+  COLOR_PANEL: '#fdfaf5',
+  COLOR_CARD: '#fffdf9',
+  COLOR_CORAL: '#ff5a2e',
+  COLOR_GOLD: '#c47800',
+  COLOR_TEXT: '#1a1410',
+  COLOR_MUTED: '#4a4038',
   COLOR_ACCENT: '#ff5a2e',
-  COLOR_SUCCESS: '#2ec4b6',
-  COLOR_DANGER: '#e71d36',
-  COLOR_BORDER: 'rgba(212, 175, 55, 0.2)',
+  COLOR_SUCCESS: '#2e7d32',
+  COLOR_DANGER: '#c62828',
+  COLOR_BORDER: 'rgba(26, 20, 16, 0.14)',
 };
+
+export const ROLEX_THEME_TOKENS = PARCHMENT_ADMIN_TOKENS;

@@ -35,18 +35,19 @@
   --color-oxblood:#6b2c14;
   --color-paper:  var(--bg-recessed);
 
-  /* Rolex Admin Dark Theme Variables */
-  --admin-bg: #0b0c10;
-  --admin-panel-bg: #13161f;
-  --admin-card-bg: rgba(21, 24, 33, 0.85);
-  --admin-card-border: rgba(212, 175, 55, 0.22);
-  --admin-gold: #d4af37;
-  --admin-gold-hover: #f3cf65;
-  --admin-gold-glow: rgba(212, 175, 55, 0.25);
-  --admin-text-primary: #f0f2f5;
-  --admin-text-secondary: #9aa1b1;
-  --admin-accent-red: #e71d36;
-  --admin-accent-green: #2ec4b6;
-  --admin-accent-blue: #3a86ff;
-  --admin-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  /* Parchment Executive Admin Theme Variables */
+  --admin-bg: var(--bg-base);
+  --admin-panel-bg: var(--bg-surface);
+  --admin-card-bg: var(--bg-raised);
+  --admin-card-border: var(--border-mid);
+  --admin-gold: var(--color-coral);
+  --admin-gold-hover: var(--color-coral-dim);
+  --admin-gold-glow: var(--color-coral-bg);
+  --admin-candle: var(--color-gold);
+  --admin-text-primary: var(--text-primary);
+  --admin-text-secondary: var(--text-secondary);
+  --admin-accent-red: #c62828;
+  --admin-accent-green: #2e7d32;
+  --admin-accent-blue: #1565c0;
+  --admin-shadow: var(--shadow-md);
 }

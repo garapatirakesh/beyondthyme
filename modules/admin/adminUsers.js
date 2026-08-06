@@ -16,7 +16,7 @@ export function renderAdminUsersView(users = []) {
   if (users.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align: center; color: var(--admin-text-secondary); padding: 2rem;">
+        <td colspan="7" class="admin-text-center admin-p-2rem">
           No registered users in directory yet.
         </td>
       </tr>
@@ -28,7 +28,7 @@ export function renderAdminUsersView(users = []) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>
-        <strong style="color: var(--admin-gold);">${u.displayName || 'Member'}</strong>
+        <strong class="admin-text-coral-accent">${u.displayName || 'Member'}</strong>
       </td>
       <td>${u.email || '-'}</td>
       <td><span class="admin-badge admin-badge-warning">${u.membership || 'Vedic Society Member'}</span></td>
@@ -36,7 +36,7 @@ export function renderAdminUsersView(users = []) {
       <td>${u.attendanceCount || 1} Dinners</td>
       <td><span class="admin-badge ${u.blocked ? 'admin-badge-danger' : 'admin-badge-success'}">${u.blocked ? 'Blocked' : 'Active'}</span></td>
       <td>
-        <div style="display: flex; gap: 0.35rem;">
+        <div class="admin-flex-gap-sm">
           <button class="admin-btn admin-btn-outline admin-btn-sm btn-toggle-block" data-id="${u.id}">${u.blocked ? 'Unblock' : 'Block'}</button>
           <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-user" data-id="${u.id}">Delete</button>
         </div>

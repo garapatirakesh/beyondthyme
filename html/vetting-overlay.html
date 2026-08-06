@@ -25,8 +25,20 @@
             <span class="summary-val text-bone" id="bookingEventVenue">Secret Villa, South Delhi</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label text-ash">RESERVATION PRICE</span>
-            <span class="summary-val text-candle font-display">₹2,000 INR</span>
+            <span class="summary-label text-ash">PRICE PER SEAT</span>
+            <span class="summary-val text-candle font-display" id="bookingPricePerSeat">₹3,500 INR</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label text-ash">NUMBER OF SEATS</span>
+            <div class="seat-qty-control border-grid">
+              <button type="button" id="btnQtyMinus" class="btn-qty-step nav-interactive" aria-label="Decrease seat quantity">-</button>
+              <span id="seatQtyDisplay" class="qty-display-val text-gold font-mono">1</span>
+              <button type="button" id="btnQtyPlus" class="btn-qty-step nav-interactive" aria-label="Increase seat quantity">+</button>
+            </div>
+          </div>
+          <div class="summary-row summary-row-highlight">
+            <span class="summary-label text-ash">TOTAL RESERVATION</span>
+            <span class="summary-val text-coral font-display" id="summaryTotalReservationPrice">₹3,500 INR</span>
           </div>
         </div>
 
@@ -113,7 +125,7 @@
         </form>
 
         <button id="btnReserveSeatRazorpay" class="btn-pill btn-coral btn-full nav-interactive margin-top-1">
-          ✅ Reserve My Seat (₹2,000)
+          ✅ Complete Payment (<span id="btnReservePriceLabel">₹3,500</span>)
         </button>
       </div>
 

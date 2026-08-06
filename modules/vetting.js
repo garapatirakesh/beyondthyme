@@ -2,11 +2,16 @@
  * Multi-step "Your Timeline" Luxury Booking Modal & Razorpay Checkout integration.
  */
 
-import { SEAT_PRICE_INR, RAZORPAY_KEY_ID, EVENT_DETAILS, EMAIL_REGEX } from '../config/app.config.js';
+import { SEAT_PRICE_INR, MIN_SEATS_PER_BOOKING, MAX_SEATS_PER_BOOKING, RAZORPAY_KEY_ID, EVENT_DETAILS, EMAIL_REGEX } from '../config/app.config.js';
 import { addTimelineSubmission } from './admin.js';
 import { generateTicketQRCode } from './qrcode.js';
 import { bookSeatTransaction } from './firebase.js';
 import { getCurrentUser } from './auth.js';
+import { buildTicketData, persistTicket } from './ticket.js';
+import { cacheTicketLocally, openTicketVerificationModal } from './myTickets.js';
+import { dispatchTicketEmail } from './ticketExporter.js';
+
+let selectedSeatQuantity = 1;
 
 /**
  * Initialize Timeline Booking overlay.
@@ -22,6 +27,39 @@ export function initVetting(deps) {
   const stepConfirm  = document.getElementById('vettingStepConfirm');
   const toFormBtn    = document.getElementById('toTimelineFormBtn');
   const reserveBtn   = document.getElementById('btnReserveSeatRazorpay');
+
+  // Quantity Stepper controls
+  const btnQtyMinus = document.getElementById('btnQtyMinus');
+  const btnQtyPlus  = document.getElementById('btnQtyPlus');
+  const qtyDisplay  = document.getElementById('seatQtyDisplay');
+  const summaryTotalPriceEl = document.getElementById('summaryTotalReservationPrice');
+  const btnPriceLabelEl = document.getElementById('btnReservePriceLabel');
+
+  selectedSeatQuantity = 1;
+  _updatePriceDisplays();
+
+  btnQtyMinus?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (selectedSeatQuantity > MIN_SEATS_PER_BOOKING) {
+      selectedSeatQuantity--;
+      _updatePriceDisplays();
+    }
+  });
+
+  btnQtyPlus?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (selectedSeatQuantity < MAX_SEATS_PER_BOOKING) {
+      selectedSeatQuantity++;
+      _updatePriceDisplays();
+    }
+  });
+
+  function _updatePriceDisplays() {
+    const totalINR = selectedSeatQuantity * SEAT_PRICE_INR;
+    if (qtyDisplay) qtyDisplay.innerText = String(selectedSeatQuantity);
+    if (summaryTotalPriceEl) summaryTotalPriceEl.innerText = `₹${totalINR.toLocaleString('en-IN')} INR`;
+    if (btnPriceLabelEl) btnPriceLabelEl.innerText = `₹${totalINR.toLocaleString('en-IN')}`;
+  }
 
   // Interactive Era selection cards
   const eraCards = document.querySelectorAll('.era-card-option');
@@ -91,8 +129,12 @@ export function initVetting(deps) {
 
     const activeEra = document.querySelector('.era-card-option.active')?.getAttribute('data-era') || '2000s';
 
-    const selectedSeatObj = getSelectedSeat?.() || { seatId: 'Seat_03' };
-    const seatLabel = selectedSeatObj.seatId || 'Seat_03';
+    const selectedSeatObj = getSelectedSeat?.() || 'Seat_11';
+    const seatLabel = typeof selectedSeatObj === 'string' 
+      ? selectedSeatObj 
+      : (selectedSeatObj?.seatId || selectedSeatObj?.label || 'Seat_11');
+
+    const totalAmountINR = selectedSeatQuantity * SEAT_PRICE_INR;
 
     const timelineData = {
       fullName,
@@ -107,7 +149,9 @@ export function initVetting(deps) {
       personality: _getSelectedPref('prefPersonality', 'Introvert'),
       reliveMoment: reliveMoment || 'Every moment at the table',
       seatId: seatLabel,
-      amount: SEAT_PRICE_INR,
+      quantity: selectedSeatQuantity,
+      unitPrice: SEAT_PRICE_INR,
+      amount: totalAmountINR,
     };
 
     // Razorpay Integration
@@ -115,10 +159,10 @@ export function initVetting(deps) {
       try {
         const options = {
           key: RAZORPAY_KEY_ID,
-          amount: SEAT_PRICE_INR * 100, // in paise = ₹2000
+          amount: totalAmountINR * 100, // Multiplied in paise: e.g. 2 seats = 700000 paise = ₹7,000 INR
           currency: 'INR',
           name: 'Beyond Thyme Supper Club',
-          description: `Seat Reservation — ${EVENT_DETAILS.theme}`,
+          description: `${selectedSeatQuantity} Seat(s) Reservation — ${EVENT_DETAILS.theme}`,
           image: '/logo.jpg',
           prefill: {
             name: fullName,
@@ -158,9 +202,10 @@ async function _handlePaymentSuccess(timelineData, paymentResponse, deps) {
   // Save to Admin Submissions (Local)
   addTimelineSubmission(timelineData);
 
+  const currentUser = getCurrentUser();
+
   // Reserve seat atomically using Firestore ACID Transaction
   try {
-    const currentUser = getCurrentUser();
     await bookSeatTransaction(timelineData.seatId, timelineData, currentUser);
   } catch (err) {
     if (err?.code === 'DUPLICATE_BOOKING') {
@@ -169,39 +214,44 @@ async function _handlePaymentSuccess(timelineData, paymentResponse, deps) {
     }
   }
 
+  // Generate Unique Ticket Object & Persist to Firestore
+  const ticketData = buildTicketData(timelineData, currentUser);
+  await persistTicket(ticketData);
+  cacheTicketLocally(ticketData);
+
   // Trigger seat claim callback
   deps.callbacks?.onVettingComplete?.(timelineData);
 
-  // Render Confirmation Screen
-  const confirmSeat  = document.getElementById('confirmTicketSeat');
-  const confirmTheme = document.getElementById('confirmTicketTheme');
-  const qrContainer  = document.getElementById('confirmTicketQR');
-
-  if (confirmSeat)  confirmSeat.innerText  = timelineData.seatId.replace('_', ' ').toUpperCase();
-  if (confirmTheme) confirmTheme.innerText = EVENT_DETAILS.theme;
-  if (qrContainer) {
-    const qrPayload = `BEYOND_THYME|${timelineData.seatId}|${timelineData.fullName}|${timelineData.paymentId}`;
-    qrContainer.innerHTML = generateTicketQRCode(qrPayload, 180);
+  // Dispatch Email Notification Simulation
+  try {
+    dispatchTicketEmail(ticketData);
+  } catch (e) {
+    console.warn('Email notification notice:', e);
   }
 
-  const stepForm    = document.getElementById('vettingStepForm');
-  const stepConfirm = document.getElementById('vettingStepConfirm');
-  _hide(stepForm);
-  _show(stepConfirm);
+  // Close Vetting Overlay & Open Luxury Digital Ticket Verification Modal
+  _hideOverlay();
+  setTimeout(() => {
+    openTicketVerificationModal(ticketData);
+  }, 300);
 }
 
 /**
  * Open Vetting / Timeline modal for a selected seat.
  * @param {string} seatId
  */
-export function openVettingModal(seatId) {
+export function openVettingModal(seatParam) {
   const overlay     = document.getElementById('vettingOverlay');
   const stepSummary = document.getElementById('vettingStepSummary');
   const stepForm    = document.getElementById('vettingStepForm');
   const stepConfirm = document.getElementById('vettingStepConfirm');
   const seatTarget  = document.getElementById('summarySelectedSeatLabel');
 
-  if (seatTarget) seatTarget.innerText = seatId.replace('_', ' ').toUpperCase();
+  const rawSeat = typeof seatParam === 'string' 
+    ? seatParam 
+    : (seatParam?.seatId || seatParam?.label || `Seat_${String(seatParam?.id || 11).padStart(2, '0')}`);
+
+  if (seatTarget) seatTarget.innerText = rawSeat.replace('_', ' ').toUpperCase();
 
   _show(stepSummary);
   _hide(stepForm);

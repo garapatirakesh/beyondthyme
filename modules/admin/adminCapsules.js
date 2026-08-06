@@ -12,7 +12,7 @@ export function renderAdminCapsulesView(capsules = []) {
   if (capsules.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="6" style="text-align: center; color: var(--admin-text-secondary); padding: 2rem;">
+        <td colspan="6" class="admin-text-center admin-p-2rem">
           No sealed time capsules in vault.
         </td>
       </tr>
@@ -25,11 +25,11 @@ export function renderAdminCapsulesView(capsules = []) {
     tr.innerHTML = `
       <td><span class="admin-badge admin-badge-warning">${c.id || 'CAPSULE'}</span></td>
       <td><strong>${c.sealedBy || 'Member'}</strong></td>
-      <td><small style="color: var(--admin-text-secondary);">${c.sealedAt ? new Date(c.sealedAt).toLocaleDateString() : '-'}</small></td>
-      <td><small style="color: var(--admin-gold);">${c.unlockDate || 'October 24, 2026'}</small></td>
+      <td><small class="admin-section-desc">${c.sealedAt ? new Date(c.sealedAt).toLocaleDateString() : '-'}</small></td>
+      <td><small class="admin-text-coral-accent">${c.unlockDate || 'October 24, 2026'}</small></td>
       <td><span class="admin-badge ${c.unlocked ? 'admin-badge-success' : 'admin-badge-info'}">${c.unlocked ? 'Unlocked' : 'Sealed'}</span></td>
       <td>
-        <div style="display: flex; gap: 0.35rem;">
+        <div class="admin-flex-gap-sm">
           <button class="admin-btn admin-btn-outline admin-btn-sm btn-unlock-capsule" data-id="${c.id}">${c.unlocked ? 'Reseal' : 'Unlock Now'}</button>
           <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-capsule" data-id="${c.id}">Delete</button>
         </div>

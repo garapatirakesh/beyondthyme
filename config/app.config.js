@@ -118,24 +118,66 @@ export const Y_HIDING_SPOTS = [
 // ─── Guestbook ───────────────────────────────────────────────────────────────
 export const GUESTBOOK_EMOJIS = ['⏳', '⌛', '🪩', '☸️', '🕉️', '🕯️', '🧭', '🌀'];
 
-// ─── Terminal ────────────────────────────────────────────────────────────────
+// ─── Terminal & Futurstic Calibration Console ────────────────────────────────
 export const TERMINAL_INITIAL_LINES = [
-  { text: '> INITIATING SECURE CALIBRATION CHANNEL...', cls: '' },
-  { text: '> SEAT_COORDINATES: UNASSIGNED. PLEASE SELECT A PULSING SEAT ON THE FLOORPLAN.', cls: 'accent', id: 'terminalSelectedSeatLine' },
+  { text: '> INITIATING SECURE QUANTUM CALIBRATION MATRIX v2026...', cls: 'accent' },
+  { text: '> SEAT_COORDINATES: UNASSIGNED. SELECT A PULSING SEAT ON THE FLOORPLAN.', cls: '', id: 'terminalSelectedSeatLine' },
 ];
 
+export const CALIBRATION_HUD_CONFIG = {
+  TITLE: 'CHRONO-CALIBRATION & VIBE MATRIX',
+  SUBTITLE: 'INTERSTELLAR QUANTUM LOCK • BEYOND THYME v2026',
+  BASE_SYNC_SCORE: 50,
+  DIAL_SCORE_WEIGHT: 0.5,
+  DIAGNOSTIC_STEPS: [
+    '> VERIFYING CHRONO IDENTITY VECTOR...',
+    '> ESTABLISHING QUANTUM LINK WITH VILLA FLOORPLAN...',
+    '> COMPUTING VIBE RESONANCE MATRIX...',
+    '> CALIBRATION COMPLETE: CLEARANCE GRANTED.',
+  ],
+};
+
 // ─── Booking & Auth Config ───────────────────────────────────────────────────
-export const SEAT_PRICE_INR = 2000;
+export const SEAT_PRICE_INR = 3500;
+export const MIN_SEATS_PER_BOOKING = 1;
+export const MAX_SEATS_PER_BOOKING = 6;
 export const RAZORPAY_KEY_ID = 'rzp_test_TKyTi4VEv9WTsk';
 export const ADMIN_EMAIL = 'beyondthyme.in@gmail.com';
 export const BOOKING_THEME = '✨ Midnight Memories';
 
 export const EVENT_DETAILS = {
   theme: '✨ Midnight Memories',
-  date: 'October 24, 2026',
-  time: '20:00 IST',
-  venue: 'Secret Villa, South Delhi',
+  date: 'SAT, 17 MAY 2025',
+  time: '7:30 PM ONWARDS',
+  venue: 'HYDERABAD',
   totalSeats: 25,
+};
+
+export const EXPERIENCE_CONFIG = {
+  BADGE: "THIS WEEK'S EXPERIENCE",
+  TITLE: "MIDNIGHT MEMORIES",
+  DESCRIPTION: "A mysterious dining experience where time keeps the secrets and strangers become stories.",
+  DATE: "SAT, 17 MAY 2025",
+  TIME: "7:30 PM ONWARDS",
+  LOCATION: "HYDERABAD",
+  DRESS_CODE: "DRESS CODE: ELEGANT",
+  SEATS_REMAINING: 11,
+  TOTAL_SEATS: 25,
+  COUNTDOWN_SECONDS: 300,
+  CTA_TEXT: "BOOK YOUR SEAT",
+  EXPIRED_TEXT: "Reservation Expired — Click to extend",
+  TRUST_LABEL: "Secure booking. Your experience is our priority.",
+  FEATURES: [
+    { title: "LIVE COUNTDOWN", desc: "Your seat is reserved for 5 minutes" },
+    { title: "REAL TIME UPDATES", desc: "Seat availability updates instantly" },
+    { title: "EXCLUSIVE EXPERIENCE", desc: "Limited seats. Unlimited memories." },
+  ],
+  BOTTOM_CARDS: [
+    { title: "MEET STRANGERS", desc: "Connect over great conversations" },
+    { title: "EXQUISITE DINING", desc: "Curated meals for a memorable night" },
+    { title: "TIME TRAVEL THEME", desc: "Every detail is time-inspired" },
+    { title: "MYSTERY & SURPRISES", desc: "Exciting games and hidden rewards" },
+  ]
 };
 
 export const ERAS_OPTIONS = ['80s', '90s', '2000s', 'Future'];

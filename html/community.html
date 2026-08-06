@@ -1,55 +1,65 @@
+<!-- html/community.html
+     Community & Timeline Guestbook Showcase Section (Vault Waitlist & Time Capsule Removed)
+-->
 <section class="max-width-container community-section" id="community">
-    <div class="community-grid">
+  <div class="community-grid">
 
-      <!-- Waitlist card -->
-      <div class="community-card">
-        <span class="section-tag text-coral">The Secret Drop</span>
-        <h2 class="community-card-title font-display text-bone">The Vault Waitlist</h2>
-        <p class="community-card-desc text-ash font-body">
-          Due to strictly limited seating of 25 members per session at the private villa, dinners are claimed immediately. Register your coordinate channel below to receive tiered, private WhatsApp/email drop notifications when the next Yuga table opens.
-        </p>
-        <form class="waitlist-form" id="waitlistForm">
-          <input type="email" id="waitlistEmail" class="editorial-input nav-interactive" placeholder="Enter member email channel..." required>
-          <button type="submit" class="btn-pill btn-coral nav-interactive">Sync Coordinates <span class="arrow">→</span></button>
-        </form>
-      </div>
-
-      <!-- Time Capsule archives -->
-      <div class="community-card">
-        <div class="community-capsule-layout">
-          <div class="community-capsule-top">
-            <span class="section-tag text-candle">Historical Archives</span>
-            <h2 class="community-card-title font-display text-bone">The Time Capsule</h2>
-            <p class="community-card-desc text-ash font-body">
-              Post-event archives of past dinners. Click the glowing capsule core below to synchronize and reveal the daily <strong>Temporal Coordinate X</strong> needed to breach the VIP Vault.
-            </p>
-
-            <!-- Capsule core -->
-            <div class="capsule-core-row">
-              <button id="timeCapsuleCoreBtn" class="capsule-core-btn nav-interactive">
-                <span class="capsule-core-icon">⏳</span>
-              </button>
-              <div>
-                <div class="font-mono text-coral capsule-status-label" id="timeCapsuleLabel">CAPSULE STATUS: DORMANT</div>
-                <div class="font-mono text-bone capsule-status-text" id="timeCapsuleStatusText">Click to breach temporal locks...</div>
-              </div>
-            </div>
+    <!-- Member Ethos & Philosophy Showcase Card -->
+    <div class="community-card border-grid">
+      <span class="section-tag text-coral font-mono">THE SOCIETY ETHOS</span>
+      <h2 class="community-card-title font-display text-bone">Time Stops at the Table</h2>
+      <p class="community-card-desc text-ash font-body">
+        Beyond Thyme is an exclusive private supper club. Six strangers gathered around a single banquet table in a secret villa, matched by vibe calibration vectors where continuous conversation flows without distraction.
+      </p>
+      
+      <div class="ethos-features-list font-mono">
+        <div class="ethos-feature-item">
+          <span class="ethos-icon">🍷</span>
+          <div class="ethos-item-content">
+            <div class="ethos-item-title text-gold">CURATED STRANGER MATCHING</div>
+            <div class="ethos-item-desc text-ash">Vibe vectors matched for maximum dinner alignment.</div>
           </div>
-
-          <!-- Guestbook -->
-          <div class="guestbook-container">
-            <h3 class="guestbook-title font-mono text-bone">Timeline Guestbook Logs</h3>
-            <!-- Populated by renderer.js → renderGuestbook(SEED_GUESTBOOK_ENTRIES) -->
-            <div id="guestbookOutput" class="guestbook-output"></div>
-
-            <form id="guestbookForm" class="guestbook-form">
-              <input type="text"  id="guestbookName" placeholder="Your Alias (e.g. SOMA_25)" required class="editorial-input nav-interactive">
-              <input type="text"  id="guestbookMsg"  placeholder="Leave your message in time..." required class="editorial-input nav-interactive">
-              <button type="submit" class="btn-pill btn-ghost nav-interactive">Log Message</button>
-            </form>
+        </div>
+        <div class="ethos-feature-item">
+          <span class="ethos-icon">🕯️</span>
+          <div class="ethos-item-content">
+            <div class="ethos-item-title text-coral">PRIVATE VILLA SANCTUARY</div>
+            <div class="ethos-item-desc text-ash">Secret location revealed 2 hours before the gathering.</div>
+          </div>
+        </div>
+        <div class="ethos-feature-item">
+          <span class="ethos-icon">⏳</span>
+          <div class="ethos-item-content">
+            <div class="ethos-item-title text-gold">UNLIMITED MEMORIES</div>
+            <div class="ethos-item-desc text-ash">A multi-course feast where time stands still.</div>
           </div>
         </div>
       </div>
-
     </div>
-  </section>
+
+    <!-- Timeline Guestbook & Historical Logs Card -->
+    <div class="community-card border-grid">
+      <div class="community-capsule-layout">
+        <div class="community-capsule-top">
+          <span class="section-tag text-candle font-mono">HISTORICAL LOGS</span>
+          <h2 class="community-card-title font-display text-bone">Timeline Guestbook</h2>
+          <p class="community-card-desc text-ash font-body">
+            Post-event archives and reflections left by past supper club guests across completed dinner sessions.
+          </p>
+        </div>
+
+        <!-- Guestbook -->
+        <div class="guestbook-container">
+          <div id="guestbookOutput" class="guestbook-output"></div>
+
+          <form id="guestbookForm" class="guestbook-form">
+            <input type="text" id="guestbookName" placeholder="Your Alias (e.g. SOMA_25)" required class="editorial-input nav-interactive">
+            <input type="text" id="guestbookMsg" placeholder="Leave your message in time..." required class="editorial-input nav-interactive">
+            <button type="submit" class="btn-pill btn-coral nav-interactive">Log Message &rarr;</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

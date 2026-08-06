@@ -1,0 +1,36 @@
+<!-- html/ticket-overlay.html
+     Apple Wallet & Rolex Inspired Digital Ticket Overlay & Verification Modal
+-->
+<div id="ticketOverlay" class="overlay-backdrop overlay-backdrop--hidden">
+  <div class="luxury-ticket-modal-panel max-width-container">
+    <header class="luxury-ticket-top-nav border-grid">
+      <div class="ticket-nav-title">
+        <span class="label-mono text-gold font-mono">BEYOND THYME VERIFICATION PASSPORT</span>
+      </div>
+      <button class="btn-icon nav-interactive" id="closeTicketOverlayBtn" aria-label="Close Ticket Overlay">
+        ✕
+      </button>
+    </header>
+
+    <!-- Main Render Container for Digital Ticket -->
+    <main class="luxury-ticket-render-wrapper" id="ticketOverlayContainer">
+      <!-- Injected via modules/ticket.js -->
+    </main>
+
+    <!-- Action Button Controls Bar -->
+    <footer class="luxury-ticket-actions-bar border-grid">
+      <button class="btn-pill btn-solid nav-interactive" id="btnDownloadTicketPDF">
+        📄 Download PDF
+      </button>
+      <button class="btn-pill btn-ghost nav-interactive" id="btnDownloadTicketPNG">
+        🖼️ Download PNG
+      </button>
+      <button class="btn-pill btn-ghost nav-interactive" id="btnShareTicketWhatsApp">
+        💬 Share WhatsApp
+      </button>
+      <button class="btn-pill btn-ghost nav-interactive" id="btnMailTicketEmail">
+        ✉️ Dispatch Email
+      </button>
+    </footer>
+  </div>
+</div>

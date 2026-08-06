@@ -19,7 +19,7 @@ export function renderAdminBookingsView(bookings = []) {
   if (bookings.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" style="text-align: center; color: var(--admin-text-secondary); padding: 2rem;">
+        <td colspan="8" class="admin-text-center admin-p-2rem">
           No bookings recorded yet. Select a seat on the frontend floorplan to create test bookings.
         </td>
       </tr>
@@ -34,19 +34,19 @@ export function renderAdminBookingsView(bookings = []) {
     tr.innerHTML = `
       <td><span class="admin-badge admin-badge-warning">${b.seatId || 'Seat'}</span></td>
       <td>
-        <strong style="color: var(--admin-gold);">${b.userName || 'Member'}</strong><br>
-        <small style="color: var(--admin-text-secondary);">${b.userEmail || '-'}</small>
+        <strong class="admin-text-coral-accent">${b.userName || 'Member'}</strong><br>
+        <small class="admin-section-desc">${b.userEmail || '-'}</small>
       </td>
       <td>${vetting.phone || b.phone || '-'}</td>
-      <td><small style="color: var(--admin-text-secondary);">${b.bookedAt ? new Date(b.bookedAt).toLocaleTimeString() : '-'}</small></td>
+      <td><small class="admin-section-desc">${b.bookedAt ? new Date(b.bookedAt).toLocaleTimeString() : '-'}</small></td>
       <td><span class="admin-badge admin-badge-success">${b.paymentStatus || 'Paid'}</span></td>
       <td><span class="admin-badge ${b.attendance === 'Checked In' ? 'admin-badge-success' : 'admin-badge-info'}">${b.attendance || 'Unchecked'}</span></td>
       <td>
         <small>${vetting.favFood || 'Standard'}</small><br>
-        <small style="color: var(--admin-accent-red);">Allergies: ${vetting.allergies || 'None'}</small>
+        <small class="admin-badge admin-badge-danger">Allergies: ${vetting.allergies || 'None'}</small>
       </td>
       <td>
-        <div style="display: flex; gap: 0.35rem;">
+        <div class="admin-flex-gap-sm">
           <button class="admin-btn admin-btn-outline admin-btn-sm btn-move-seat" data-id="${b.seatId}">Move</button>
           <button class="admin-btn admin-btn-danger admin-btn-sm btn-cancel-booking" data-id="${b.seatId}">Cancel</button>
         </div>

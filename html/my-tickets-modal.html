@@ -1,0 +1,33 @@
+<!-- html/my-tickets-modal.html
+     User Profile "My Tickets" Hub
+-->
+<div id="myTicketsModal" class="overlay-backdrop overlay-backdrop--hidden">
+  <div class="my-tickets-panel max-width-container">
+    <header class="my-tickets-header border-grid">
+      <div class="my-tickets-title-box">
+        <span class="label-mono text-gold font-mono">MEMBER PROFILE PASSPORT HUB</span>
+        <h3 class="font-display">MY DIGITAL TICKETS</h3>
+      </div>
+      <button class="btn-icon nav-interactive" id="closeMyTicketsBtn" aria-label="Close My Tickets">
+        ✕
+      </button>
+    </header>
+
+    <!-- Filter & Search Controls -->
+    <nav class="my-tickets-controls border-grid">
+      <div class="my-tickets-tabs">
+        <button class="my-tickets-tab-btn active" data-tab="upcoming">Upcoming</button>
+        <button class="my-tickets-tab-btn" data-tab="past">Past Dinners</button>
+        <button class="my-tickets-tab-btn" data-tab="cancelled">Cancelled</button>
+      </div>
+      <div class="my-tickets-search-box">
+        <input type="search" id="myTicketsSearchInput" placeholder="Search by Booking ID, Theme, Date..." class="my-tickets-input font-mono" />
+      </div>
+    </nav>
+
+    <!-- Tickets Scrollable List -->
+    <main class="my-tickets-list-wrapper" id="myTicketsListContainer">
+      <!-- Injected via modules/myTickets.js -->
+    </main>
+  </div>
+</div>

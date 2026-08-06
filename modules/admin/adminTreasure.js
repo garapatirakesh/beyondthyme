@@ -23,17 +23,17 @@ export function renderAdminTreasureView(hunts = []) {
   }
 
   leaderboardEl.innerHTML = `
-    <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: rgba(11, 12, 16, 0.6); border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.2);">
+    <div class="admin-recessed-box">
       <div>
-        <span style="color: var(--admin-gold); font-weight: 600;">1. ChronoMaster</span>
-        <div style="font-size: 0.75rem; color: var(--admin-text-secondary);">Solved in 42s • 3 Attempts</div>
+        <span class="admin-text-coral-accent">1. ChronoMaster</span>
+        <div class="admin-seat-status">Solved in 42s • 3 Attempts</div>
       </div>
       <span class="admin-badge admin-badge-success">VIP Unlocked</span>
     </div>
-    <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: rgba(11, 12, 16, 0.6); border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.1);">
+    <div class="admin-recessed-box-subtle">
       <div>
-        <span style="color: var(--admin-gold); font-weight: 600;">2. Kala_Seeker</span>
-        <div style="font-size: 0.75rem; color: var(--admin-text-secondary);">Solved in 1m 12s • 5 Attempts</div>
+        <span class="admin-text-coral-accent">2. Kala_Seeker</span>
+        <div class="admin-seat-status">Solved in 1m 12s • 5 Attempts</div>
       </div>
       <span class="admin-badge admin-badge-info">VIP Unlocked</span>
     </div>

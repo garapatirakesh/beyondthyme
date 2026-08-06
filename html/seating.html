@@ -1,38 +1,247 @@
-<section class="max-width-container seating-section" id="schematic">
+<section class="max-width-container experience-section" id="schematic">
 
-    <!-- Dark Timepiece Configurator Card -->
-    <div class="dark-timepiece-card border-grid">
-      <div class="dark-timepiece-header">
-        <div class="table-capacity-pill">TABLE 01 · CAPACITY: 25 SEATS · 360° ORBITAL CHRONO</div>
+  <!-- Main Experience Card Wrapper -->
+  <div class="experience-card border-grid">
+    
+    <!-- Atmospheric Background Decorative Gear Overlay -->
+    <div class="exp-bg-decorations" aria-hidden="true">
+      <div class="exp-ambient-glow"></div>
+      <svg class="exp-clock-gear-svg" viewBox="0 0 800 800" fill="none">
+        <circle cx="650" cy="400" r="320" stroke="rgba(196,120,0,0.18)" stroke-width="2" stroke-dasharray="6 6" />
+        <circle cx="650" cy="400" r="240" stroke="rgba(196,120,0,0.22)" stroke-width="1.5" />
+        <!-- Roman Numerals Clock Ring -->
+        <text x="640" y="110" fill="rgba(196,120,0,0.35)" font-family="Cinzel, serif" font-size="28" font-weight="700">XII</text>
+        <text x="780" y="150" fill="rgba(196,120,0,0.3)" font-family="Cinzel, serif" font-size="24">I</text>
+        <text x="880" y="250" fill="rgba(196,120,0,0.3)" font-family="Cinzel, serif" font-size="24">II</text>
+        <text x="910" y="410" fill="rgba(196,120,0,0.35)" font-family="Cinzel, serif" font-size="28" font-weight="700">III</text>
+        <text x="500" y="150" fill="rgba(196,120,0,0.3)" font-family="Cinzel, serif" font-size="24">XI</text>
+        <text x="400" y="250" fill="rgba(196,120,0,0.3)" font-family="Cinzel, serif" font-size="24">X</text>
+        <text x="360" y="410" fill="rgba(196,120,0,0.35)" font-family="Cinzel, serif" font-size="28" font-weight="700">IX</text>
+        <!-- Gear spokes -->
+        <g stroke="rgba(196,120,0,0.22)" stroke-width="2">
+          <line x1="650" y1="180" x2="650" y2="620" />
+          <line x1="430" y1="400" x2="870" y2="400" />
+          <line x1="494" y1="244" x2="805" y2="555" />
+          <line x1="494" y1="555" x2="805" y2="244" />
+        </g>
+        <circle cx="650" cy="400" r="45" fill="none" stroke="rgba(196,120,0,0.3)" stroke-width="4" />
+      </svg>
+    </div>
+
+    <!-- Main Experience Content Grid -->
+    <div class="exp-main-grid">
+
+      <!-- Left Column: Details & Overview -->
+      <div class="exp-meta-col">
+        <div class="exp-pill-badge">
+          <span>THIS WEEK'S EXPERIENCE</span>
+        </div>
+
+        <h2 class="exp-main-title">MIDNIGHT MEMORIES</h2>
+
+        <p class="exp-desc">
+          A mysterious dining experience where time keeps the secrets and strangers become stories.
+        </p>
+
+        <div class="exp-details-list">
+          <div class="exp-detail-item">
+            <svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="4" width="18" height="18" rx="3" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span>SAT, 17 MAY 2025</span>
+          </div>
+
+          <div class="exp-detail-item">
+            <svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="9" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>7:30 PM ONWARDS</span>
+          </div>
+
+          <div class="exp-detail-item">
+            <svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>HYDERABAD</span>
+          </div>
+
+          <div class="exp-detail-item">
+            <svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 3L4 9v12h16V9L12 3z" />
+              <path d="M9 21V12h6v9" />
+            </svg>
+            <span>DRESS CODE: ELEGANT</span>
+          </div>
+        </div>
       </div>
 
-      <div class="schematic-visualizer dark-schematic-bg" id="schematicVisualizer">
-        <!-- SVG Glowing Orbital Track Ellipse -->
-        <svg class="orbital-track-svg" viewBox="0 0 1000 500" preserveAspectRatio="none">
-          <ellipse cx="500" cy="250" rx="430" ry="175" class="orbital-ellipse-path" />
-        </svg>
+      <!-- Center Column: Seats Counter & Primary Action -->
+      <div class="exp-action-col">
+        <span class="exp-label-only">ONLY</span>
+        
+        <div class="exp-seats-counter-wrap">
+          <span class="exp-big-number" id="expRemainingCount">11</span>
+        </div>
 
-        <!-- 3D Watch Model Canvas Box -->
-        <div id="watch3DContainer" class="watch-3d-canvas-box"></div>
+        <span class="exp-label-remaining">SEATS REMAINING</span>
 
-        <!-- Dynamic 25 Chrono-Seat Ring Container -->
-        <div id="orbitalSeatRing" class="orbital-seat-ring"></div>
+        <p class="exp-subtext">
+          Hurry up! This experience is filling fast. <span class="exp-sparkle">✦</span>
+        </p>
+
+        <button id="expBookSeatBtn" class="exp-cta-btn nav-interactive" type="button">
+          <svg class="exp-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="6" width="20" height="12" rx="2" />
+            <line x1="6" y1="12" x2="6.01" y2="12" stroke-width="3" stroke-linecap="round" />
+            <line x1="10" y1="12" x2="18" y2="12" stroke-dasharray="2 2" />
+          </svg>
+          <span>BOOK YOUR SEAT</span>
+        </button>
+
+        <div class="exp-trust-note">
+          <svg class="exp-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            <polyline points="9 12 11 14 15 10" />
+          </svg>
+          <span>Secure booking. Your experience is our priority.</span>
+        </div>
       </div>
 
-      <!-- Luxury Status Legend Strip -->
-      <div class="dark-legend-strip">
-        <div class="dark-legend-item">
-          <div class="dark-legend-icon dark-legend-icon--open"></div>
-          <span>AVAILABLE</span>
+      <!-- Right Column: Timer & Live Features -->
+      <div class="exp-status-col">
+        
+        <!-- Timer Card -->
+        <div class="exp-timer-card">
+          <div class="exp-hourglass-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2" />
+            </svg>
+          </div>
+
+          <span class="exp-reserved-label">YOUR SEAT IS RESERVED</span>
+
+          <div class="exp-timer-display" id="expTimerDisplay">05:00</div>
+
+          <p class="exp-timer-sub" id="expTimerSub">Complete your booking within time.</p>
+
+          <div class="exp-progress-bar-wrap">
+            <div class="exp-progress-bar" id="expProgressBar"></div>
+          </div>
         </div>
-        <div class="dark-legend-item">
-          <div class="dark-legend-icon dark-legend-icon--booked">👤</div>
-          <span>BOOKED</span>
+
+        <!-- Live Features Card -->
+        <div class="exp-features-card">
+          <div class="exp-feature-row">
+            <div class="exp-feat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </div>
+            <div class="exp-feat-text">
+              <h4>LIVE COUNTDOWN</h4>
+              <p>Your seat is reserved for 5 minutes</p>
+            </div>
+          </div>
+
+          <div class="exp-feature-row">
+            <div class="exp-feat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <polyline points="9 12 11 14 15 10" />
+              </svg>
+            </div>
+            <div class="exp-feat-text">
+              <h4>REAL TIME UPDATES</h4>
+              <p>Seat availability updates instantly</p>
+            </div>
+          </div>
+
+          <div class="exp-feature-row">
+            <div class="exp-feat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="exp-feat-text">
+              <h4>EXCLUSIVE EXPERIENCE</h4>
+              <p>Limited seats. Unlimited memories.</p>
+            </div>
+          </div>
         </div>
-        <div class="dark-legend-item">
-          <div class="dark-legend-icon dark-legend-icon--selected"></div>
-          <span>SELECTED</span>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom Feature Cards Bar -->
+    <div class="exp-bottom-strip">
+      <div class="exp-bottom-card">
+        <div class="exp-bottom-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+        </div>
+        <div class="exp-bottom-info">
+          <h5>MEET STRANGERS</h5>
+          <p>Connect over great conversations</p>
+        </div>
+      </div>
+
+      <div class="exp-bottom-card">
+        <div class="exp-bottom-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+            <line x1="6" y1="1" x2="6" y2="4" />
+            <line x1="10" y1="1" x2="10" y2="4" />
+            <line x1="14" y1="1" x2="14" y2="4" />
+          </svg>
+        </div>
+        <div class="exp-bottom-info">
+          <h5>EXQUISITE DINING</h5>
+          <p>Curated meals for a memorable night</p>
+        </div>
+      </div>
+
+      <div class="exp-bottom-card">
+        <div class="exp-bottom-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </div>
+        <div class="exp-bottom-info">
+          <h5>TIME TRAVEL THEME</h5>
+          <p>Every detail is time-inspired</p>
+        </div>
+      </div>
+
+      <div class="exp-bottom-card">
+        <div class="exp-bottom-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="20 12 20 22 4 22 4 12" />
+            <rect x="2" y="7" width="20" height="5" />
+            <line x1="12" y1="22" x2="12" y2="7" />
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+          </svg>
+        </div>
+        <div class="exp-bottom-info">
+          <h5>MYSTERY & SURPRISES</h5>
+          <p>Exciting games and hidden rewards</p>
         </div>
       </div>
     </div>
-  </section>
+
+  </div>
+
+</section>

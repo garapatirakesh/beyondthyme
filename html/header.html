@@ -1,34 +1,44 @@
-<header class="max-width-container">
+<!-- html/header.html
+     Ultra-Luxury Floating Glassmorphic Header Navigation Bar
+-->
+<header class="header-sticky">
+  <div class="max-width-container">
     <nav class="nav-container">
-      <a href="#" class="logo font-display">
+      <!-- Logo -->
+      <a href="#" class="logo font-display nav-interactive">
         <img src="/logo.jpg" alt="Beyond Thyme Logo" class="logo-avatar-img">
-        <span>beyond <span class="italic">thyme</span></span>
+        <span class="logo-wordmark">beyond <span class="italic">thyme</span></span>
       </a>
 
+      <!-- Navigation Links -->
       <ul class="nav-links">
-        <li><a href="#manifesto" class="nav-interactive">Manifesto</a></li>
-        <li><a href="#eras"      class="nav-interactive">Eras of Flavor</a></li>
-        <li><a href="#schematic" class="nav-interactive">Floorplan</a></li>
-        <li><a href="#vault"     class="nav-interactive">Access Terminal</a></li>
+        <li><a href="#manifesto" class="nav-interactive nav-link font-mono">Manifesto</a></li>
+        <li><a href="#eras" class="nav-interactive nav-link font-mono">Eras of Flavor</a></li>
+        <li><a href="#schematic" class="nav-interactive nav-link font-mono">Floorplan</a></li>
+        <li><a href="#vault" class="nav-interactive nav-link font-mono">Access Terminal</a></li>
+        <li><a href="#community" class="nav-interactive nav-link font-mono">Community</a></li>
       </ul>
 
+      <!-- Luxury Action Controls Bar -->
       <div class="nav-actions">
-        <!-- Decorative sun indicator — theme is permanently light -->
-        <button id="lightModeToggle" class="light-mode-toggle nav-interactive" aria-label="Light mode active">
-          <span class="toggle-track">
-            <span class="toggle-thumb">
-              <span class="toggle-icon-sun">☀</span>
-            </span>
-          </span>
+        <!-- Audio Protocol Toggle -->
+        <button id="audioToggleBtn" class="btn-pill btn-ghost btn-audio nav-interactive" aria-label="Toggle Sound Protocol">
+          <span class="audio-pulse" id="audioPulse"></span>
+          <span class="audio-label font-mono">SOUND: OFF</span>
         </button>
 
-        <!-- Audio toggle -->
-        <button id="audioToggleBtn" class="btn-pill btn-ghost btn-audio nav-interactive">
-          <span class="audio-pulse" id="audioPulse"></span>SOUND_PROTOCOL: OFF
+        <!-- My Tickets Drawer Button -->
+        <button id="myTicketsNavBtn" class="btn-pill btn-ghost nav-interactive" aria-label="My Tickets">
+          <span class="ticket-icon">🎟️</span>
+          <span class="ticket-label font-mono">My Tickets</span>
         </button>
 
-        <a href="#vault"     class="btn-pill btn-ghost nav-interactive">Initialize Access</a>
-        <a href="#schematic" class="btn-pill btn-coral nav-interactive">Claim Seat <span class="arrow">→</span></a>
+        <!-- Primary Action CTA -->
+        <a href="#schematic" class="btn-pill btn-coral nav-interactive">
+          <span class="cta-label font-mono">Reserve Seat</span>
+          <span class="arrow">&rarr;</span>
+        </a>
       </div>
     </nav>
-  </header>
+  </div>
+</header>

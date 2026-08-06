@@ -86,10 +86,15 @@ function _setSimulatedUser() {
 }
 
 /**
- * Trigger the Google Auth modal programmatically.
+ * Trigger the Google Auth modal programmatically and initiate Google popup.
  */
 export function promptGoogleLogin() {
   _showModal();
+  const confirmGoogleBtn = document.getElementById('confirmGoogleSignInBtn');
+  if (confirmGoogleBtn) {
+    // Automatically trigger Google sign in popup on direct user click action
+    confirmGoogleBtn.click();
+  }
 }
 
 /**

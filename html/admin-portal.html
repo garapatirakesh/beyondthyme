@@ -1,5 +1,5 @@
 <!-- html/admin-portal.html -->
-<!-- Full-screen Rolex-inspired dark Admin Portal overlay -->
+<!-- Full-screen Warm Parchment Executive Admin Portal overlay -->
 <div id="adminPortalOverlay" class="admin-portal-overlay">
 
   <!-- ─── 1. Auth Lock View (Shown when unauthorized) ──────────────────────── -->
@@ -10,12 +10,12 @@
       <p class="admin-auth-subtitle">Restricted Executive Command Suite.<br>Authorized Google authentication required.</p>
       
       <div class="admin-form-group">
-        <button id="btnAdminGoogleLogin" class="admin-btn admin-btn-gold" style="width: 100%; justify-content: center; padding: 0.85rem;">
-          <span>🔑</span> Sign in with Google (beyondthyme.in@gmail.com)
+        <button id="btnAdminGoogleLogin" class="admin-btn admin-btn-gold admin-w-full admin-justify-center admin-p-35">
+          <span>🔑</span> Sign in with Google
         </button>
       </div>
 
-      <div style="margin-top: 1.5rem;">
+      <div class="admin-mt-15">
         <button id="btnAdminCloseLock" class="admin-btn admin-btn-outline admin-btn-sm">
           ← Return to Supper Club
         </button>
@@ -24,7 +24,7 @@
   </div>
 
   <!-- ─── 2. Admin Shell (Shown when authenticated) ────────────────────────── -->
-  <div id="adminShell" class="admin-shell" style="display: none;">
+  <div id="adminShell" class="admin-shell admin-hidden">
 
     <!-- ─── Sidebar ────────────────────────────────────────────────────────── -->
     <aside id="adminSidebar" class="admin-sidebar">
@@ -33,7 +33,7 @@
           <span class="admin-brand-logo">👑</span>
           <span class="admin-brand-text">BEYOND THYME</span>
         </div>
-        <button id="btnToggleAdminSidebar" class="admin-btn admin-btn-outline admin-btn-sm" style="padding: 0.2rem 0.5rem;" title="Toggle Sidebar">
+        <button id="btnToggleAdminSidebar" class="admin-btn admin-btn-outline admin-btn-sm admin-p-btn-sm" title="Toggle Sidebar">
           ☰
         </button>
       </div>
@@ -105,7 +105,7 @@
                 <h3 class="admin-card-title">⚡ Live Booking Stream</h3>
                 <span class="admin-badge admin-badge-success">Realtime</span>
               </div>
-              <div id="adminLiveBookingStream" style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div id="adminLiveBookingStream" class="admin-flex-col-gap-md">
                 <!-- Live items -->
               </div>
             </div>
@@ -115,7 +115,7 @@
                 <h3 class="admin-card-title">📍 Today's Check-ins</h3>
                 <span class="admin-badge admin-badge-warning" id="adminCheckinRatio">0 / 25</span>
               </div>
-              <div id="adminTodayCheckinsList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div id="adminTodayCheckinsList" class="admin-flex-col-gap-md">
                 <!-- Checkin items -->
               </div>
             </div>
@@ -163,7 +163,7 @@
               <h1 class="admin-section-title">25-Seat Floorplan Controls</h1>
               <p class="admin-section-desc">Lock, reserve, assign, or reassign seats in real-time on the digital floorplan.</p>
             </div>
-            <div style="display: flex; gap: 0.5rem;">
+            <div class="admin-flex-gap-md">
               <button id="btnResetAllSeats" class="admin-btn admin-btn-danger admin-btn-sm">
                 ⚠️ Reset Floorplan
               </button>
@@ -173,10 +173,10 @@
           <div class="admin-card">
             <div class="admin-card-header">
               <h3 class="admin-card-title">Banquet Table Schematic (25 Seats)</h3>
-              <div style="display: flex; gap: 1rem; font-size: 0.8rem;">
-                <span style="color: var(--admin-accent-green);">● Available</span>
-                <span style="color: var(--admin-accent-red);">● Booked</span>
-                <span style="color: var(--admin-gold);">● Locked / Reserved</span>
+              <div class="admin-flex-gap-md font-mono">
+                <span class="admin-text-green-indicator">● Available</span>
+                <span class="admin-text-red-indicator">● Booked</span>
+                <span class="admin-text-gold-indicator">● Locked / Reserved</span>
               </div>
             </div>
             <div class="admin-seat-grid" id="adminInteractiveSeatGrid">
@@ -269,7 +269,7 @@
                 <label class="admin-form-label">Ticket Pass Code / QR Value</label>
                 <input type="text" id="adminCheckinInput" class="admin-input" placeholder="e.g. TKT_PASS_9921" />
               </div>
-              <button id="btnProcessCheckin" class="admin-btn admin-btn-gold" style="width: 100%;">
+              <button id="btnProcessCheckin" class="admin-btn admin-btn-gold admin-w-full">
                 ✓ Validate & Check-In
               </button>
             </div>
@@ -278,7 +278,7 @@
               <div class="admin-card-header">
                 <h3 class="admin-card-title">📋 Door Telemetry Log</h3>
               </div>
-              <div id="adminCheckinLog" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 300px; overflow-y: auto;">
+              <div id="adminCheckinLog" class="admin-flex-col-gap-sm-scroll">
                 <!-- Recent door logs -->
               </div>
             </div>
@@ -321,7 +321,7 @@
               <div class="admin-card-header">
                 <h3 class="admin-card-title">🏆 Solver Leaderboard</h3>
               </div>
-              <div id="adminTreasureLeaderboard" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <div id="adminTreasureLeaderboard" class="admin-flex-col-gap-md">
                 <!-- Leaderboard items -->
               </div>
             </div>
@@ -367,7 +367,7 @@
             </div>
           </div>
 
-          <div class="admin-card" style="max-width: 650px;">
+          <div class="admin-card admin-max-w-650">
             <div class="admin-form-group">
               <label class="admin-form-label">Target Audience</label>
               <select id="notifAudience" class="admin-select">
@@ -407,7 +407,7 @@
               <div class="admin-card-header">
                 <h3 class="admin-card-title">📈 Revenue Analytics</h3>
               </div>
-              <div id="chartRevenueContainer" style="height: 220px; display: flex; align-items: center; justify-content: center;">
+              <div id="chartRevenueContainer" class="admin-chart-wrap">
                 <!-- SVG chart injected via adminReports.js -->
               </div>
             </div>
@@ -416,7 +416,7 @@
               <div class="admin-card-header">
                 <h3 class="admin-card-title">🪑 Occupancy Rate</h3>
               </div>
-              <div id="chartOccupancyContainer" style="height: 220px; display: flex; align-items: center; justify-content: center;">
+              <div id="chartOccupancyContainer" class="admin-chart-wrap">
                 <!-- SVG chart injected via adminReports.js -->
               </div>
             </div>

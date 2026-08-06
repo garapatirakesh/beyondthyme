@@ -10,7 +10,8 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { 
   getFirestore, doc, setDoc, getDoc, runTransaction, 
-  collection, onSnapshot, deleteDoc, updateDoc
+  collection, onSnapshot, deleteDoc, updateDoc,
+  getDocs, query, where
 } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported } from 'firebase/analytics';
@@ -43,6 +44,7 @@ export const collections = {
   treasureHunts: collection(db, 'treasureHunts'),
   timeCapsules: collection(db, 'timeCapsules'),
   admins: collection(db, 'admins'),
+  tickets: collection(db, 'tickets'),
 };
 
 // ── 3. Automatic Database Seeder ──────────────────────────────────────────
@@ -371,4 +373,121 @@ export async function removeFirestoreDoc(collName, docId) {
     throw err;
   }
 }
+
+// ── 8. Ticket Operations ──────────────────────────────────────────────────
+/**
+ * Save ticket document to 'tickets' collection.
+ * @param {object} ticketData
+ */
+export async function saveTicketDoc(ticketData) {
+  const tId = ticketData.ticketId || ticketData.bookingId;
+  const docRef = doc(db, 'tickets', tId);
+  await setDoc(docRef, { ...ticketData, updatedAt: new Date().toISOString() }, { merge: true });
+  return tId;
+}
+
+/**
+ * Fetch a single ticket document by ticketId / bookingId.
+ * @param {string} ticketId
+ */
+export async function getTicketDoc(ticketId) {
+  if (!ticketId) return null;
+  try {
+    const docRef = doc(db, 'tickets', ticketId);
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return snap.data();
+    }
+    return null;
+  } catch (err) {
+    console.warn('Error fetching ticket document:', err);
+    return null;
+  }
+}
+
+/**
+ * Listen in real time to updates on a specific ticket document.
+ * @param {string} ticketId
+ * @param {function} callback
+ */
+export function listenToTicketDoc(ticketId, callback) {
+  if (!ticketId) return () => {};
+  try {
+    const docRef = doc(db, 'tickets', ticketId);
+    return onSnapshot(docRef, (snap) => {
+      if (snap.exists()) {
+        callback(snap.data());
+      } else {
+        callback(null);
+      }
+    }, (err) => {
+      console.warn('Ticket snapshot error:', err);
+    });
+  } catch (err) {
+    console.warn('Unable to listen to ticket doc:', err);
+    return () => {};
+  }
+}
+
+/**
+ * Mark a ticket document as checked-in with timestamp.
+ * @param {string} ticketId
+ */
+export async function markTicketCheckedIn(ticketId) {
+  if (!ticketId) return false;
+  try {
+    const docRef = doc(db, 'tickets', ticketId);
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) return { success: false, reason: 'NOT_FOUND' };
+
+    const data = snap.data();
+    if (data.checkedIn || data.status === 'Checked In') {
+      return { success: false, reason: 'ALREADY_CHECKED_IN', ticket: data };
+    }
+    if (data.status === 'CANCELLED') {
+      return { success: false, reason: 'CANCELLED', ticket: data };
+    }
+
+    const checkinTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const checkinTimestamp = new Date().toISOString();
+
+    const updateObj = {
+      checkedIn: true,
+      status: 'Checked In',
+      checkinTime: checkinTime,
+      checkedInAt: checkinTimestamp,
+    };
+
+    await updateDoc(docRef, updateObj);
+    return { success: true, ticket: { ...data, ...updateObj } };
+  } catch (err) {
+    console.warn('Error marking ticket checked in:', err);
+    throw err;
+  }
+}
+
+/**
+ * Fetch all tickets belonging to a user (by uid or email).
+ * @param {string} userIdentifier - uid or email
+ */
+export async function getUserTickets(userIdentifier) {
+  if (!userIdentifier) return [];
+  try {
+    const q1 = query(collections.tickets, where('uid', '==', userIdentifier));
+    const snap1 = await getDocs(q1);
+    const ticketsMap = new Map();
+
+    snap1.forEach(d => ticketsMap.set(d.id, d.data()));
+
+    const q2 = query(collections.tickets, where('email', '==', userIdentifier));
+    const snap2 = await getDocs(q2);
+    snap2.forEach(d => ticketsMap.set(d.id, d.data()));
+
+    return Array.from(ticketsMap.values());
+  } catch (err) {
+    console.warn('Error fetching user tickets:', err);
+    return [];
+  }
+}
+
 

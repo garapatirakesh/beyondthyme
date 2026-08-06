@@ -25,34 +25,31 @@ import {
 import {
   generateDailyCoords, hideCoordY, initTimeCapsule, initVaultBreaker,
 } from './modules/vault.js';
-import { initWatch3D, pulseWatch3D } from './modules/watch3d.js';
+import { initExperienceSection, updateSeatsRemaining } from './modules/experience.js';
 import { initGoldParticles } from './modules/particles.js';
 import { listenToLiveSeatBookings } from './modules/firebase.js';
 import { initAuth, promptGoogleLogin, getCurrentUser } from './modules/auth.js';
 import { initAdminDashboard, openAdminDashboard } from './modules/admin.js';
 import { initVetting, openVettingModal } from './modules/vetting.js';
-import {
-  renderClubCards, renderMenu, renderGuestbook, appendGuestbookEntry,
-} from './modules/renderer.js';
+import { renderClubCards, renderMenu, renderGuestbook, appendGuestbookEntry } from './modules/renderer.js';
 import { createRotaryDial }  from './modules/dials.js';
+import { initMyTickets, openTicketVerificationModal } from './modules/myTickets.js';
+import { downloadTicketAsPDF, downloadTicketAsPNG, shareTicketOnWhatsApp, dispatchTicketEmail } from './modules/ticketExporter.js';
+import { getTicketDoc } from './modules/firebase.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Initialize 3D Watch Visualizer & Dark Gold Particle Canvas
+  // Initialize Midnight Memories Experience Section & Dark Gold Particle Canvas
+  initExperienceSection();
   setTimeout(() => {
-    initWatch3D('watch3DContainer');
     initGoldParticles('goldParticleCanvas');
   }, 300);
 
   // Initialize Google Auth
   initAuth({
     onAuthSuccess(user) {
-      if (selectedSeat) {
-        openVettingModal(selectedSeat);
-      } else {
-        alert(`Welcome back, ${user.name}! Please select an open seat on the table.`);
-      }
+      openVettingModal(selectedSeat || 'Seat_11');
     },
     onAdminAccess(user) {
       openAdminDashboard();
@@ -61,6 +58,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Admin Portal Engine
   initAdminDashboard();
+
+  // Initialize My Tickets Profile Hub
+  initMyTickets();
+
+  // QR Code Verification Route Handler (e.g. ?id=BT-2026-08-000127 or #verify?id=BT-2026-08-000127)
+  async function checkTicketVerificationRoute() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let ticketId = urlParams.get('id') || urlParams.get('verify');
+
+    if (!ticketId && window.location.hash.includes('id=')) {
+      const hashParts = window.location.hash.split('id=');
+      ticketId = hashParts[1]?.split('&')[0];
+    } else if (!ticketId) {
+      const match = window.location.href.match(/BT-\d{4}-\d{2}-\d+/i);
+      if (match) ticketId = match[0];
+    }
+
+    if (ticketId) {
+      ticketId = ticketId.trim();
+      const ticketDoc = await getTicketDoc(ticketId);
+      if (ticketDoc) {
+        openTicketVerificationModal(ticketDoc);
+      } else {
+        openTicketVerificationModal({
+          bookingId: ticketId,
+          userName: 'Honored Guest',
+          themeName: 'Beyond Thyme',
+          date: '17 MAY 2025',
+          time: '7:30 PM',
+          venue: 'HYDERABAD',
+          status: 'CONFIRMED',
+          checkedIn: false,
+        });
+      }
+    }
+  }
+
+  checkTicketVerificationRoute();
+  window.addEventListener('hashchange', checkTicketVerificationRoute);
+
+  // Digital Ticket Action Buttons Wiring
+  let activeOverlayTicket = null;
+
+  document.getElementById('closeTicketOverlayBtn')?.addEventListener('click', () => {
+    const overlay = document.getElementById('ticketOverlay');
+    if (overlay) {
+      overlay.classList.add('overlay-backdrop--hidden');
+      overlay.classList.remove('active');
+    }
+  });
+
+  document.getElementById('btnDownloadTicketPDF')?.addEventListener('click', async () => {
+    const cardEl = document.querySelector('#ticketOverlayContainer #luxuryTicketCard');
+    const bId = cardEl?.querySelector('.luxury-spec-value.font-mono')?.textContent || 'BT-TICKET';
+    await downloadTicketAsPDF(cardEl, bId);
+  });
+
+  document.getElementById('btnDownloadTicketPNG')?.addEventListener('click', async () => {
+    const cardEl = document.querySelector('#ticketOverlayContainer #luxuryTicketCard');
+    const bId = cardEl?.querySelector('.luxury-spec-value.font-mono')?.textContent || 'BT-TICKET';
+    await downloadTicketAsPNG(cardEl, bId);
+  });
+
+  document.getElementById('btnShareTicketWhatsApp')?.addEventListener('click', () => {
+    const cardEl = document.querySelector('#ticketOverlayContainer #luxuryTicketCard');
+    const bId = cardEl?.querySelector('.luxury-spec-value.font-mono')?.textContent || 'BT-TICKET';
+    const name = cardEl?.querySelector('.luxury-spec-value.text-gold')?.textContent || 'Guest';
+    const theme = cardEl?.querySelector('.luxury-banner-title')?.textContent || 'Midnight Memories';
+    shareTicketOnWhatsApp({ bookingId: bId, userName: name, themeName: theme });
+  });
+
+  document.getElementById('btnMailTicketEmail')?.addEventListener('click', () => {
+    const cardEl = document.querySelector('#ticketOverlayContainer #luxuryTicketCard');
+    const bId = cardEl?.querySelector('.luxury-spec-value.font-mono')?.textContent || 'BT-TICKET';
+    const name = cardEl?.querySelector('.luxury-spec-value.text-gold')?.textContent || 'Guest';
+    const theme = cardEl?.querySelector('.luxury-banner-title')?.textContent || 'Midnight Memories';
+    dispatchTicketEmail({ bookingId: bId, userName: name, themeName: theme, email: '' });
+  });
 
   // Hash Router for #admin or /admin
   function handleAdminHashRoute() {
@@ -163,9 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedSeat   = rawNum ? `Seat_${String(rawNum).padStart(2, '0')}` : chairEl.getAttribute('data-seat') || 'Seat_01';
         selectedSeatEl = chairEl;
 
-        // Pulse 3D watch mechanism
-        pulseWatch3D();
-
         if (isAudioPlaying()) playBeaconChime();
 
         const user = getCurrentUser();
@@ -178,7 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
       onSeatHoverEnter() { 
-        pulseWatch3D();
         if (isAudioPlaying()) playBeaconChime(); 
       },
       onSeatHoverLeave() {},
@@ -341,10 +412,28 @@ document.addEventListener('DOMContentLoaded', () => {
   drawRadar();
 
   // Dials event wiring
+  // Dials & HUD Synchronization Scoring wiring
   let printTimeout;
   function onDialUpdate() {
     drawRadar();
     updateAudioCalibration(sliders);
+
+    // Calculate real-time Synchronization Score
+    const hasPseudo = pseudonymInput?.value.trim().length > 0;
+    const hasEmail = EMAIL_REGEX.test(emailInput?.value.trim() || '');
+    const syncScore = Math.min(100, Math.round(
+      20 +
+      (dialValues.openness * 0.25) +
+      (dialValues.depth * 0.25) +
+      (dialValues.energy * 0.3) +
+      (hasPseudo ? 10 : 0) +
+      (hasEmail ? 10 : 0)
+    ));
+
+    const syncScoreEl = document.getElementById('hudSyncScoreValue');
+    const radarSyncTag = document.getElementById('radarSyncTag');
+    if (syncScoreEl) syncScoreEl.innerText = `${syncScore}%`;
+    if (radarSyncTag) radarSyncTag.innerText = `VECTOR: SYNC ${syncScore}%`;
 
     // Sync vetting overlay ticket preview coordinates block
     const previewVector = document.getElementById('previewVector');
@@ -355,7 +444,8 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(printTimeout);
     printTimeout = setTimeout(() => {
       printToTerminal(
-        `> TEMPORAL VECTOR ADJUSTED: [TIME: ${Math.round(dialValues.openness)}% | SOCIAL: ${Math.round(dialValues.depth)}% | FLAVOR: ${Math.round(dialValues.energy)}%]`
+        `> AI ANALYSIS: VECTOR ALIGNED [TIME: ${Math.round(dialValues.openness)}% | SOCIAL: ${Math.round(dialValues.depth)}% | FLAVOR: ${Math.round(dialValues.energy)}%] — SYNC: ${syncScore}%`,
+        'accent'
       );
     }, DEBOUNCE_PRINT_MS);
   }
@@ -370,17 +460,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ── 9. Main form (chrono terminal) ─────────────────────────────────────────
-  const chronoForm    = document.getElementById('chronoForm');
+  // ── 9. Main form (chrono terminal & calibration console) ───────────────────
+  const chronoForm     = document.getElementById('chronoForm');
   const pseudonymInput = document.getElementById('pseudonymInput');
-  const emailInput    = document.getElementById('emailInput');
-  const submitBtn     = document.getElementById('submitBtn');
-  const terminalBox   = document.getElementById('terminalBox');
+  const emailInput     = document.getElementById('emailInput');
+  const submitBtn      = document.getElementById('submitBtn');
+  const terminalBox    = document.getElementById('terminalBox');
   const successOverlay = document.getElementById('successOverlay');
   const closeSuccessBtn = document.getElementById('closeSuccessBtn');
 
-  if (pseudonymInput) pseudonymInput.addEventListener('input', validateForm);
-  if (emailInput)     emailInput.addEventListener('input', validateForm);
+  if (pseudonymInput) {
+    pseudonymInput.addEventListener('input', () => {
+      const badge = document.getElementById('pseudonymStatusBadge');
+      if (badge) {
+        badge.innerText = pseudonymInput.value.trim().length > 0 ? 'VERIFIED' : 'CALIBRATING';
+        badge.style.color = pseudonymInput.value.trim().length > 0 ? '#4caf50' : '#ff5a2e';
+      }
+      validateForm();
+      onDialUpdate();
+    });
+  }
+
+  if (emailInput) {
+    emailInput.addEventListener('input', () => {
+      const badge = document.getElementById('emailStatusBadge');
+      const isValid = EMAIL_REGEX.test(emailInput.value.trim());
+      if (badge) {
+        badge.innerText = isValid ? 'VALIDATED' : 'UNVERIFIED';
+        badge.style.color = isValid ? '#4caf50' : '#ff5a2e';
+      }
+      validateForm();
+      onDialUpdate();
+    });
+  }
 
   function validateForm() {
     const isExpired = new Date(CLUBS_CONFIG[activeClubId].eventDate) <= new Date();
@@ -389,17 +501,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const valid = pseudonymInput?.value.trim().length > 0
-               && EMAIL_REGEX.test(emailInput?.value.trim())
-               && selectedSeat !== null;
+    const valid = pseudonymInput?.value.trim().length > 0 && EMAIL_REGEX.test(emailInput?.value.trim());
     if (submitBtn) submitBtn.disabled = !valid;
   }
 
   chronoForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (!selectedSeat) return;
 
     submitBtn.disabled = true;
+    submitBtn.innerText = '⚡ TRANSMITTING CALIBRATION VECTOR...';
     pseudonymInput?.setAttribute('disabled', 'true');
     emailInput?.setAttribute('disabled', 'true');
     document.getElementById('calibrationDialsRow')?.classList.add('disabled');
@@ -407,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
     runDiagnosticSequence(
       {
         pseudo: pseudonymInput?.value.trim(),
-        seat:   selectedSeat,
+        seat:   selectedSeat || 'Seat_01',
         o:      String(Math.round(dialValues.openness)),
         d:      String(Math.round(dialValues.depth)),
         eVal:   String(Math.round(dialValues.energy)),
@@ -426,6 +536,20 @@ document.addEventListener('DOMContentLoaded', () => {
         clubName: CLUBS_CONFIG[activeClubId].name,
       }
     );
+
+    // Unlock Timeline Vault dial wheel
+    setTimeout(() => {
+      const vaultStateLocked = document.getElementById('vaultStateLocked');
+      const vaultStateUnlocked = document.getElementById('vaultStateUnlocked');
+      if (vaultStateLocked) vaultStateLocked.style.display = 'none';
+      if (vaultStateUnlocked) vaultStateUnlocked.style.display = 'flex';
+
+      submitBtn.innerText = '✨ CONTINUED TO RESERVE SEAT →';
+      submitBtn.disabled = false;
+      submitBtn.onclick = () => {
+        openVettingModal(selectedSeat || 'Seat_01');
+      };
+    }, 2400);
   });
 
   closeSuccessBtn?.addEventListener('click', () => {
@@ -465,8 +589,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   hideCoordY(coordY, hidingSpotIndex);
 
-  initTimeCapsule(coordX, () => { if (isAudioPlaying()) playBeaconChime(); });
-
   initVaultBreaker(
     { coordX, coordY },
     { playBeaconChime, playSuccessArpeggio, playErrorBuzzer },
@@ -483,16 +605,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     appendGuestbookEntry(alias, message);
     document.getElementById('guestbookMsg').value = '';
-    if (isAudioPlaying()) playBeaconChime();
-  });
-
-  // ── 12. Waitlist form ─────────────────────────────────────────────────────
-  document.getElementById('waitlistForm')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const emailEl = document.getElementById('waitlistEmail');
-    if (!emailEl?.value.trim()) return;
-    alert(`COORDINATES SYNCED: email channel ${emailEl.value.trim()} registered for private drops.`);
-    emailEl.value = '';
     if (isAudioPlaying()) playBeaconChime();
   });
 

@@ -24,6 +24,7 @@ let liveEvents = [];
 let liveThemes = [];
 let liveHunts = [];
 let liveCapsules = [];
+let realtimeUnsubscribers = [];
 
 /**
  * Initialize Admin Portal system and real-time listeners.
@@ -35,8 +36,10 @@ export function initAdminPortal() {
       _refreshCurrentTab(tabId);
     },
     onAuthChange: (adminUser) => {
-      if (adminUser) {
+      if (adminUser && (adminUser.email || '').toLowerCase() === 'beyondthyme.in@gmail.com') {
         _subscribeRealtimeListeners();
+      } else {
+        _clearAdminData();
       }
     },
   });
@@ -78,47 +81,96 @@ export function initAdminPortal() {
     });
   }
 
-  // Auto-subscribe to Firestore realtime collections
-  _subscribeRealtimeListeners();
+  // Ensure data is clear until authenticated
+  _clearAdminData();
 }
 
 /**
  * Subscribe to all Firestore collections real-time snapshots.
  */
 function _subscribeRealtimeListeners() {
-  listenToCollection('seatBookings', (data) => {
-    liveBookings = data;
-    renderAdminDashboardView(liveBookings, liveUsers, liveEvents);
-    renderAdminSeatingView(liveBookings);
-    renderAdminBookingsView(liveBookings);
-    renderAdminReportsView(liveBookings);
-  });
+  _unsubscribeRealtimeListeners();
 
-  listenToCollection('users', (data) => {
-    liveUsers = data;
-    renderAdminUsersView(liveUsers);
-    renderAdminDashboardView(liveBookings, liveUsers, liveEvents);
-  });
+  realtimeUnsubscribers.push(
+    listenToCollection('seatBookings', (data) => {
+      liveBookings = data;
+      renderAdminDashboardView(liveBookings, liveUsers, liveEvents);
+      renderAdminSeatingView(liveBookings);
+      renderAdminBookingsView(liveBookings);
+      renderAdminReportsView(liveBookings);
+    })
+  );
 
-  listenToCollection('events', (data) => {
-    liveEvents = data;
-    renderAdminEventsView(liveEvents);
-  });
+  realtimeUnsubscribers.push(
+    listenToCollection('users', (data) => {
+      liveUsers = data;
+      renderAdminUsersView(liveUsers);
+      renderAdminDashboardView(liveBookings, liveUsers, liveEvents);
+    })
+  );
 
-  listenToCollection('themes', (data) => {
-    liveThemes = data;
-    renderAdminThemesView(liveThemes);
-  });
+  realtimeUnsubscribers.push(
+    listenToCollection('events', (data) => {
+      liveEvents = data;
+      renderAdminEventsView(liveEvents);
+    })
+  );
 
-  listenToCollection('treasureHunts', (data) => {
-    liveHunts = data;
-    renderAdminTreasureView(liveHunts);
-  });
+  realtimeUnsubscribers.push(
+    listenToCollection('themes', (data) => {
+      liveThemes = data;
+      renderAdminThemesView(liveThemes);
+    })
+  );
 
-  listenToCollection('timeCapsules', (data) => {
-    liveCapsules = data;
-    renderAdminCapsulesView(liveCapsules);
+  realtimeUnsubscribers.push(
+    listenToCollection('treasureHunts', (data) => {
+      liveHunts = data;
+      renderAdminTreasureView(liveHunts);
+    })
+  );
+
+  realtimeUnsubscribers.push(
+    listenToCollection('timeCapsules', (data) => {
+      liveCapsules = data;
+      renderAdminCapsulesView(liveCapsules);
+    })
+  );
+}
+
+function _unsubscribeRealtimeListeners() {
+  realtimeUnsubscribers.forEach(unsub => {
+    if (typeof unsub === 'function') unsub();
   });
+  realtimeUnsubscribers = [];
+}
+
+function _clearAdminData() {
+  _unsubscribeRealtimeListeners();
+  liveBookings = [];
+  liveUsers = [];
+  liveEvents = [];
+  liveThemes = [];
+  liveHunts = [];
+  liveCapsules = [];
+
+  // Reset rendered DOM containers so zero admin data exists in DOM
+  const kpi = document.getElementById('adminKpiGrid');
+  if (kpi) kpi.innerHTML = '';
+  const bookingsBody = document.getElementById('adminBookingsTableBody');
+  if (bookingsBody) bookingsBody.innerHTML = '';
+  const usersBody = document.getElementById('adminUsersTableBody');
+  if (usersBody) usersBody.innerHTML = '';
+  const eventsGrid = document.getElementById('adminEventsGrid');
+  if (eventsGrid) eventsGrid.innerHTML = '';
+  const themesGrid = document.getElementById('adminThemesGrid');
+  if (themesGrid) themesGrid.innerHTML = '';
+  const capsulesBody = document.getElementById('adminCapsulesTableBody');
+  if (capsulesBody) capsulesBody.innerHTML = '';
+  const liveStream = document.getElementById('adminLiveBookingStream');
+  if (liveStream) liveStream.innerHTML = '';
+  const checkins = document.getElementById('adminTodayCheckinsList');
+  if (checkins) checkins.innerHTML = '';
 }
 
 function _refreshCurrentTab(tabId) {

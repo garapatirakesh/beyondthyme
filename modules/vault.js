@@ -114,16 +114,67 @@ export function initTimeCapsule(coordX, onReveal) {
 // ─── Vault Breaker ────────────────────────────────────────────────────────────
 
 /**
+ * Initialize Quantum Oscilloscope 60fps sine wave animation.
+ */
+export function initQuantumOscilloscope() {
+  const canvas = document.getElementById('quantumOscilloscopeCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let phase = 0;
+
+  function renderWave() {
+    const { width: w, height: h } = canvas;
+    ctx.clearRect(0, 0, w, h);
+
+    // Draw central grid axis line
+    ctx.strokeStyle = 'rgba(255, 90, 46, 0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, h / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.stroke();
+
+    // Draw primary glowing neon sine wave
+    ctx.strokeStyle = '#ff5a2e';
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = '#ff5a2e';
+
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const y = h / 2 + Math.sin(x * 0.05 + phase) * 16 + Math.cos(x * 0.02 - phase) * 6;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Reset shadow blur for secondary wave
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const y = h / 2 + Math.sin(x * 0.08 - phase * 1.5) * 8;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    phase += 0.06;
+    requestAnimationFrame(renderWave);
+  }
+
+  renderWave();
+}
+
+/**
  * Initialise the BREACH button and wire vault unlock / failure flows.
  * @param {{ coordX: string, coordY: string }} coords
  * @param {object} audio  — { playBeaconChime, playSuccessArpeggio, playErrorBuzzer }
  * @param {HTMLElement} cursor
  */
 export function initVaultBreaker(coords, audio, cursor) {
-  const { coordX, coordY } = coords;
-
-  const chronoKeyX       = document.getElementById('chronoKeyX');
-  const chronoKeyY       = document.getElementById('chronoKeyY');
   const btnDecrypt       = document.getElementById('btnDecryptVault');
   const statusEl         = document.getElementById('vaultBreakerStatus');
   const vaultInnerGear   = document.getElementById('vaultInnerGear');
@@ -134,31 +185,23 @@ export function initVaultBreaker(coords, audio, cursor) {
   const btnOpenVIP       = document.getElementById('btnOpenVIPPass');
   const closeVipBtn      = document.getElementById('closeVipBtn');
 
+  initQuantumOscilloscope();
+
   if (btnDecrypt) {
     btnDecrypt.addEventListener('click', () => {
-      const enteredX = chronoKeyX?.value.trim();
-      const enteredY = chronoKeyY?.value.trim();
-
-      if (enteredX === coordX && enteredY === coordY) {
-        if (statusEl) { statusEl.innerText = '> ACCESS GRANTED. SATELLITE CHRONO-ALIGNMENT LOCKED.'; statusEl.style.color = '#2a9d5c'; }
-        if (vaultInnerGear) vaultInnerGear.style.transform = 'rotate(720deg)';
-        audio.playSuccessArpeggio?.();
-
-        setTimeout(() => {
-          if (vaultStateLocked)   vaultStateLocked.style.display   = 'none';
-          if (vaultStateUnlocked) vaultStateUnlocked.style.display = 'flex';
-          _showVipOverlay(vipOverlay, vipTimestamp);
-          _unlockAmritMenu(cursor);
-        }, VAULT_UNLOCK_DELAY_MS);
-
-      } else {
-        if (statusEl) { statusEl.innerText = '> ACCESS DENIED. KEY SIGNALS DESYNCHRONIZED. TRY AGAIN.'; statusEl.style.color = 'var(--color-coral)'; }
-        if (vaultInnerGear) {
-          vaultInnerGear.style.transform = 'rotate(-25deg)';
-          setTimeout(() => { vaultInnerGear.style.transform = 'rotate(0deg)'; }, VAULT_JITTER_RESET_MS);
-        }
-        audio.playErrorBuzzer?.();
+      if (statusEl) { 
+        statusEl.innerText = '> ACCESS GRANTED. VIP CHRONO-PASSPORT UNLOCKED.'; 
+        statusEl.style.color = '#4caf50'; 
       }
+      if (vaultInnerGear) vaultInnerGear.style.transform = 'rotate(720deg)';
+      audio.playSuccessArpeggio?.();
+
+      setTimeout(() => {
+        if (vaultStateLocked)   vaultStateLocked.style.display   = 'none';
+        if (vaultStateUnlocked) vaultStateUnlocked.style.display = 'flex';
+        _showVipOverlay(vipOverlay, vipTimestamp);
+        _unlockAmritMenu(cursor);
+      }, VAULT_UNLOCK_DELAY_MS);
     });
   }
 

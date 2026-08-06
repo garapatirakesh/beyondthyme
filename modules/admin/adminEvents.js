@@ -17,7 +17,7 @@ export function renderAdminEventsView(events = []) {
 
   grid.innerHTML = '';
   if (events.length === 0) {
-    grid.innerHTML = '<p style="color: var(--admin-text-secondary); font-size: 0.9rem;">No events configured. Click "Create New Event" to add an experience.</p>';
+    grid.innerHTML = '<p class="admin-section-desc">No events configured. Click "Create New Event" to add an experience.</p>';
     return;
   }
 
@@ -29,13 +29,13 @@ export function renderAdminEventsView(events = []) {
         <h3 class="admin-card-title">${ev.title || 'Supper Experience'}</h3>
         <span class="admin-badge ${ev.status === 'Published' ? 'admin-badge-success' : 'admin-badge-warning'}">${ev.status || 'Draft'}</span>
       </div>
-      <p style="color: var(--admin-text-secondary); font-size: 0.88rem; margin-bottom: 0.75rem;">${ev.description || ''}</p>
-      <div style="font-size: 0.82rem; color: var(--admin-text-primary); display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem;">
+      <p class="admin-section-desc admin-mb-075">${ev.description || ''}</p>
+      <div class="admin-flex-col-gap-sm">
         <div>📍 Venue: <strong>${ev.venue || 'Secret Villa'}</strong></div>
         <div>📅 Date: <strong>${ev.eventDate || 'October 24, 2026'}</strong></div>
         <div>🪑 Capacity: <strong>${ev.capacity || 25} Seats</strong></div>
       </div>
-      <div style="display: flex; gap: 0.5rem;">
+      <div class="admin-flex-gap-md">
         <button class="admin-btn admin-btn-outline admin-btn-sm btn-edit-event" data-id="${ev.id}">Edit</button>
         <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-event" data-id="${ev.id}">Delete</button>
       </div>

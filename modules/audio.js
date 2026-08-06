@@ -324,9 +324,14 @@ function _playTone(type, freq, gain, duration) {
 
 function _setToggleUI(btn, active) {
   if (!btn) return;
+  const label = btn.querySelector('.audio-label');
   if (active) {
-    btn.innerHTML = '<span class="audio-pulse audio-pulse--active"></span>SOUND_PROTOCOL: ACTIVE';
+    btn.classList.add('active');
+    if (label) label.innerText = 'SOUND: ON';
+    else btn.innerHTML = '<span class="audio-pulse"></span><span class="audio-label font-mono">SOUND: ON</span>';
   } else {
-    btn.innerHTML = '<span class="audio-pulse"></span>SOUND_PROTOCOL: OFF';
+    btn.classList.remove('active');
+    if (label) label.innerText = 'SOUND: OFF';
+    else btn.innerHTML = '<span class="audio-pulse"></span><span class="audio-label font-mono">SOUND: OFF</span>';
   }
 }

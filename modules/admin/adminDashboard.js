@@ -68,15 +68,15 @@ export function renderAdminDashboardView(bookings = [], users = [], events = [])
   if (liveStreamContainer) {
     liveStreamContainer.innerHTML = '';
     if (bookings.length === 0) {
-      liveStreamContainer.innerHTML = '<p style="color: var(--admin-text-secondary); font-size: 0.88rem;">No bookings recorded yet.</p>';
+      liveStreamContainer.innerHTML = '<p class="admin-section-desc">No bookings recorded yet.</p>';
     } else {
       bookings.slice(-5).reverse().forEach(b => {
         const item = document.createElement('div');
-        item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.8rem; background: rgba(11, 12, 16, 0.6); border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.1);';
+        item.className = 'admin-recessed-box-subtle';
         item.innerHTML = `
           <div>
-            <span style="color: var(--admin-gold); font-weight: 600; font-size: 0.88rem;">${b.seatId || 'Seat'}</span>
-            <span style="color: var(--admin-text-primary); margin-left: 0.5rem; font-size: 0.88rem;">${b.userName || b.userEmail || 'Member'}</span>
+            <span class="admin-text-coral-accent">${b.seatId || 'Seat'}</span>
+            <span class="admin-ml-05">${b.userName || b.userEmail || 'Member'}</span>
           </div>
           <span class="admin-badge admin-badge-success">${b.status || 'BOOKED'}</span>
         `;
@@ -90,17 +90,17 @@ export function renderAdminDashboardView(bookings = [], users = [], events = [])
     checkinsContainer.innerHTML = '';
     const checkedInBookings = bookings.filter(b => b.attendance === 'Checked In');
     if (checkedInBookings.length === 0) {
-      checkinsContainer.innerHTML = '<p style="color: var(--admin-text-secondary); font-size: 0.88rem;">No guests checked in yet today.</p>';
+      checkinsContainer.innerHTML = '<p class="admin-section-desc">No guests checked in yet today.</p>';
     } else {
       checkedInBookings.forEach(b => {
         const item = document.createElement('div');
-        item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.8rem; background: rgba(11, 12, 16, 0.6); border-radius: 8px; border: 1px solid rgba(46, 196, 182, 0.2);';
+        item.className = 'admin-recessed-box-subtle';
         item.innerHTML = `
           <div>
-            <span style="color: var(--admin-accent-green); font-weight: 600; font-size: 0.88rem;">✓ ${b.seatId}</span>
-            <span style="color: var(--admin-text-primary); margin-left: 0.5rem; font-size: 0.88rem;">${b.userName || 'Member'}</span>
+            <span class="admin-badge admin-badge-success">✓ ${b.seatId}</span>
+            <span class="admin-ml-05">${b.userName || 'Member'}</span>
           </div>
-          <small style="color: var(--admin-text-secondary);">${b.checkinTime || 'Just now'}</small>
+          <small class="admin-section-desc">${b.checkinTime || 'Just now'}</small>
         `;
         checkinsContainer.appendChild(item);
       });

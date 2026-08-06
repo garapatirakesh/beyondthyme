@@ -14,7 +14,7 @@ export function renderAdminThemesView(themes = []) {
 
   grid.innerHTML = '';
   if (themes.length === 0) {
-    grid.innerHTML = '<p style="color: var(--admin-text-secondary); font-size: 0.9rem;">No themes found in database.</p>';
+    grid.innerHTML = '<p class="admin-section-desc">No themes found in database.</p>';
     return;
   }
 
@@ -26,11 +26,11 @@ export function renderAdminThemesView(themes = []) {
         <h3 class="admin-card-title">${t.title || 'Theme'}</h3>
         <span class="admin-badge ${t.active ? 'admin-badge-success' : 'admin-badge-warning'}">${t.active ? 'Active' : 'Inactive'}</span>
       </div>
-      <p style="color: var(--admin-text-secondary); font-size: 0.88rem; margin-bottom: 0.75rem;">${t.description || ''}</p>
-      <div style="font-size: 0.82rem; color: var(--admin-gold); margin-bottom: 1rem;">
+      <p class="admin-section-desc admin-mb-075">${t.description || ''}</p>
+      <div class="admin-text-gold admin-mb-1rem">
         Week ${t.week || 1} • ${t.month || 'October'}
       </div>
-      <div style="display: flex; gap: 0.5rem;">
+      <div class="admin-flex-gap-md">
         <button class="admin-btn ${t.active ? 'admin-btn-outline' : 'admin-btn-gold'} admin-btn-sm btn-toggle-theme" data-id="${t.id}">
           ${t.active ? 'Deactivate' : 'Activate Theme'}
         </button>

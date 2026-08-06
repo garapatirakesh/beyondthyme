@@ -85,6 +85,7 @@ export function initAdminAuth(callbacks = {}) {
   }
 
   _renderSidebarNav(callbacks.onTabChange);
+  _showAuthLock();
 }
 
 /**
@@ -147,7 +148,8 @@ export function openAdminPortal() {
   const overlay = document.getElementById('adminPortalOverlay');
   if (overlay) overlay.classList.add('active');
 
-  if (currentAdminUser) {
+  const isAuthorized = currentAdminUser && (currentAdminUser.email || '').toLowerCase() === ADMIN_AUTHORIZED_EMAIL.toLowerCase();
+  if (isAuthorized) {
     _showAdminShell();
   } else {
     _showAuthLock();
@@ -165,8 +167,8 @@ export function closeAdminPortal() {
 function _showAdminShell() {
   const lock = document.getElementById('adminAuthLock');
   const shell = document.getElementById('adminShell');
-  if (lock) lock.style.display = 'none';
-  if (shell) shell.style.display = 'flex';
+  if (lock) lock.classList.add('admin-hidden');
+  if (shell) shell.classList.remove('admin-hidden');
 
   const nameEl = document.getElementById('adminUserName');
   if (nameEl && currentAdminUser) {
@@ -177,8 +179,8 @@ function _showAdminShell() {
 function _showAuthLock() {
   const lock = document.getElementById('adminAuthLock');
   const shell = document.getElementById('adminShell');
-  if (lock) lock.style.display = 'flex';
-  if (shell) shell.style.display = 'none';
+  if (lock) lock.classList.remove('admin-hidden');
+  if (shell) shell.classList.add('admin-hidden');
 }
 
 export function getCurrentAdminUser() {
