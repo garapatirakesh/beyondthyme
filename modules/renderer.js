@@ -24,12 +24,20 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
   const now = new Date();
 
   Object.values(clubsConfig).forEach((club) => {
-    const isExpired = new Date(club.eventDate) <= now;
+    const isExpired = new Date(club.eventDate) <= now || club.status === 'Closed';
     const available = getAvailableSeats(club);
+    const isSoldOut = available <= 0;
     const isActive  = club.id === activeClubId;
 
+    let availLabel = `${available} SEATS OPEN`;
+    if (club.status === 'Closed' || isExpired) {
+      availLabel = 'CLOSED';
+    } else if (isSoldOut) {
+      availLabel = 'SOLD OUT';
+    }
+
     const btn = document.createElement('button');
-    btn.className  = `club-card nav-interactive${isActive ? ' active' : ''}${isExpired ? ' expired' : ''}`;
+    btn.className  = `club-card nav-interactive${isActive ? ' active' : ''}${(isExpired || isSoldOut) ? ' expired' : ''}`;
     btn.setAttribute('data-club', club.id);
     btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
 
@@ -41,15 +49,16 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
       <div class="club-card-content">
         <div class="club-card-header-row">
           <span class="club-card-emblem">${club.emblem}</span>
-          <div class="club-card-availability ${isExpired ? 'is-expired' : ''}">
+          <div class="club-card-availability ${(isExpired || isSoldOut) ? 'is-expired' : ''}">
             <span class="club-avail-dot"></span>
-            <span class="club-avail-text">${isExpired ? 'CLOSED' : `${available} SEATS OPEN`}</span>
+            <span class="club-avail-text">${availLabel}</span>
           </div>
         </div>
         <h3 class="club-card-name">${club.name}</h3>
         <p class="club-card-location">${club.location}</p>
         <div class="club-card-night">
           <span>${club.displayNight}</span>
+          <span class="club-card-price-tag">₹${(club.price || 3500).toLocaleString('en-IN')}</span>
         </div>
       </div>
     `;

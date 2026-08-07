@@ -55,40 +55,62 @@ export async function seedInitialFirestoreCollections() {
   if (!db) return;
 
   try {
-    // 1. Events Collection (current-event)
-    await setDoc(doc(db, 'events', 'current-event'), {
-      eventId: 'current-event',
-      title: EVENT_DETAILS.theme,
-      description: 'Exclusive luxury mystery dinner experience where time stops at the table.',
-      themeId: 'vedic_fire',
-      venue: EVENT_DETAILS.venue,
-      capacity: 25,
-      availableSeats: 22,
-      bookingOpen: true,
-      eventDate: EVENT_DETAILS.date,
-      createdAt: new Date().toISOString(),
-    }, { merge: true });
+    // 1. Events Collection (Only seed if empty on fresh startup)
+    // 1. Seed Zenitsu & Tanjiro if events collection is empty
+    if (eventsSnap.empty) {
+      const initialAdminEvents = [
+        {
+          id: 'zenitsu',
+          clubKey: 'zenitsu',
+          title: 'Zenitsu',
+          name: 'Zenitsu',
+          venue: 'Erragadda',
+          location: 'Erragadda',
+          eventDate: '2026-08-15T20:00:00+05:30',
+          displayNight: 'Sat Aug 15 · 20:00',
+          capacity: 7,
+          price: 500,
+          status: 'Published',
+          description: 'Exclusive luxury mystery dining experience where time stops at the table.',
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 'tanjiro',
+          clubKey: 'tanjiro',
+          title: 'Tanjiro',
+          name: 'Tanjiro',
+          venue: 'Hyderabad',
+          location: 'Hyderabad',
+          eventDate: '2026-08-26T20:00:00+05:30',
+          displayNight: 'Sat Aug 26 · 20:00',
+          capacity: 5,
+          price: 500,
+          status: 'Published',
+          description: 'Exclusive private dining experiment celebrating precision flavor calibration.',
+          createdAt: new Date(Date.now() - 1000).toISOString(),
+        }
+      ];
 
-    // 2. Themes Collection
-    await setDoc(doc(db, 'themes', 'vedic_fire'), {
-      id: 'vedic_fire',
-      title: 'Vedic Fire',
-      description: 'Charcoal smoked heirlooms & sacred spices.',
-      image: '/logo.jpg',
-      week: 1,
-      month: 'October',
-      active: true,
-    }, { merge: true });
+      for (const ev of initialAdminEvents) {
+        await setDoc(doc(db, 'events', ev.id), ev, { merge: true });
+        console.log(`✨ Seeded Admin Event into Firestore: events/${ev.id}`);
+      }
+    }
 
-    await setDoc(doc(db, 'themes', 'victorian_clockwork'), {
-      id: 'victorian_clockwork',
-      title: 'Victorian Clockwork',
-      description: 'Precision roasts & barrel-aged herbal elixirs.',
-      image: '/logo.jpg',
-      week: 2,
-      month: 'October',
-      active: false,
-    }, { merge: true });
+    // Clean up old hardcoded seed themes if present in Firestore
+    const oldThemeIds = ['vedic_fire', 'victorian_clockwork'];
+    for (const themeId of oldThemeIds) {
+      try {
+        const themeRef = doc(db, 'themes', themeId);
+        const themeSnap = await getDoc(themeRef);
+        if (themeSnap.exists()) {
+          await deleteDoc(themeRef);
+          console.log(`🧹 Purged legacy default theme document: themes/${themeId}`);
+        }
+      } catch (e) {
+        // ignore cleanup notice
+      }
+    }
 
     // 3. Admins Collection
     await setDoc(doc(db, 'admins', 'super_admin'), {
@@ -105,45 +127,35 @@ export async function seedInitialFirestoreCollections() {
       createdAt: new Date().toISOString(),
     }, { merge: true });
 
-    // 5. Seed All 25 Seats in seatBookings
-    const defaultOccupied = [1, 2, 4];
-    for (let i = 1; i <= 25; i++) {
-      const seatStr = String(i).padStart(2, '0');
-      const isOccupied = defaultOccupied.includes(i);
-      await setDoc(doc(db, 'seatBookings', `seat_${seatStr}`), {
-        seatId: `Seat_${seatStr}`,
-        seatNum: i,
-        userName: isOccupied ? (i === 1 ? 'Vedic_Chrono' : i === 2 ? 'Kala_Master' : 'Time_Traveler') : '',
-        userAvatar: isOccupied ? (i === 1 ? '⏳' : i === 2 ? '⌛' : '🪩') : '',
-        status: isOccupied ? 'BOOKED' : 'AVAILABLE',
-        bookedAt: isOccupied ? new Date().toISOString() : null,
-      }, { merge: true });
-    }
-
-    // 6. Treasure Hunts Collection
-    await setDoc(doc(db, 'treasureHunts', 'clue_01'), {
-      clueId: 'clue_01',
-      hint: 'The pendulum holds the key to the vault.',
-      xCoord: 28.5355,
-      yCoord: 77.2410,
-    }, { merge: true });
-
-    // 7. Time Capsules Collection
-    await setDoc(doc(db, 'timeCapsules', 'capsule_01'), {
-      capsuleId: 'capsule_01',
-      sealedBy: 'Society Master',
-      message: 'A secret left for the 2026 autumn dinner.',
-      sealedAt: new Date().toISOString(),
-    }, { merge: true });
-
-    console.log('✨ All 8 Firestore Collections & 25 Seats initialized & seeded!');
+    console.log('✨ Firestore backend synchronized cleanly!');
   } catch (err) {
     console.warn('Firestore seeding notice:', err?.message);
   }
 }
 
-// Automatically trigger seeder on initialization
+/**
+ * Actively purge all legacy hardcoded 'seat_01' .. 'seat_25' documents from Firestore seatBookings.
+ */
+export async function purgeAllLegacySeatDocs() {
+  try {
+    const snap = await getDocs(collections.seatBookings);
+    let deletedCount = 0;
+    for (const docSnap of snap.docs) {
+      if (docSnap.id.startsWith('seat_')) {
+        await deleteDoc(doc(db, 'seatBookings', docSnap.id));
+        deletedCount++;
+        console.log(`🔥 Deleted legacy document from Firestore: seatBookings/${docSnap.id}`);
+      }
+    }
+    console.log(`✅ Purged ${deletedCount} legacy seat documents from Firestore!`);
+  } catch (err) {
+    console.warn('Legacy seat purge notice:', err?.message);
+  }
+}
+
+// Automatically trigger seeder and legacy purge on initialization
 seedInitialFirestoreCollections();
+purgeAllLegacySeatDocs();
 
 // ── 4. Google Authentication Flow ──────────────────────────────────────────
 /**
@@ -153,6 +165,7 @@ seedInitialFirestoreCollections();
  */
 export async function loginWithGoogle() {
   try {
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
     const result = await signInWithPopup(auth, googleProvider);
     const fbUser = result.user;
 
@@ -218,39 +231,32 @@ export function subscribeAuthChange(callback) {
  */
 export async function bookSeatTransaction(seatNum, vettingData, user) {
   const seatIdStr = String(seatNum).replace('SEAT_', '').replace('Seat_', '').padStart(2, '0');
-  const seatDocId = `seat_${seatIdStr}`;
-  const seatRef   = doc(db, 'seatBookings', seatDocId);
+  const targetClubId = vettingData.clubId || 'vedic';
+  const bookingDocId = `booking_${targetClubId}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+  const seatRef = doc(db, 'seatBookings', bookingDocId);
 
   try {
-    const bookingData = await runTransaction(db, async (transaction) => {
-      const seatSnap = await transaction.get(seatRef);
+    const newBooking = {
+      bookingId: bookingDocId,
+      seatId: `Seat_${seatIdStr}`,
+      seatNum: parseInt(seatIdStr, 10),
+      uid: user?.uid || 'ANONYMOUS',
+      userEmail: user?.email || vettingData.email || 'member@gmail.com',
+      userName: vettingData.fullName || user?.displayName || 'Member',
+      userAvatar: user?.photoURL || '⏳',
+      status: 'BOOKED',
+      quantity: vettingData.quantity || 1,
+      clubId: targetClubId,
+      themeName: vettingData.themeName || '',
+      vetting: vettingData,
+      bookedAt: new Date().toISOString(),
+      amount: vettingData.amount || 2000,
+      paymentId: vettingData.paymentId || `pay_test_${Date.now()}`,
+    };
 
-      if (seatSnap.exists() && seatSnap.data().status === 'BOOKED') {
-        const err = new Error('DUPLICATE_BOOKING');
-        err.code = 'DUPLICATE_BOOKING';
-        throw err;
-      }
-
-      const newBooking = {
-        seatId: `Seat_${seatIdStr}`,
-        seatNum: parseInt(seatIdStr, 10),
-        uid: user?.uid || 'ANONYMOUS',
-        userEmail: user?.email || vettingData.email || 'member@gmail.com',
-        userName: vettingData.fullName || user?.displayName || 'Member',
-        userAvatar: user?.photoURL || '⏳',
-        status: 'BOOKED',
-        vetting: vettingData,
-        bookedAt: new Date().toISOString(),
-        amount: vettingData.amount || 2000,
-        paymentId: vettingData.paymentId || `pay_test_${Date.now()}`,
-      };
-
-      transaction.set(seatRef, newBooking);
-      return newBooking;
-    });
-
-    console.log('✅ Seat successfully booked with ACID transaction:', bookingData.seatId);
-    return bookingData;
+    await setDoc(seatRef, newBooking, { merge: true });
+    console.log('✅ Seat reservation written to Firestore:', bookingDocId);
+    return newBooking;
   } catch (err) {
     throw handleFirebaseError(err);
   }

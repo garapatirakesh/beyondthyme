@@ -8,8 +8,11 @@ let startX = 0;
 let startRotation = 0;
 let animationFrameId = null;
 
+let currentEventCapacity = 25;
+
 /**
  * Initialize 360° Orbital Seating System around 3D Watch.
+ * Render seating nodes strictly based on event capacity given by admin.
  * @param {object} clubConfig
  * @param {object} callbacks
  */
@@ -22,12 +25,16 @@ export function initOrbitalSeating(clubConfig, callbacks = {}) {
   currentRotation = 0;
   targetRotation = 0;
 
-  const isExpired = new Date(clubConfig.eventDate) <= new Date();
+  currentEventCapacity = typeof clubConfig?.capacity === 'number' 
+    ? clubConfig.capacity 
+    : (parseInt(clubConfig?.capacity, 10) || 25);
 
-  // Create 25 Chrono-Seat Nodes
-  for (let i = 0; i < ORBITAL_SEATING_CONFIG.TOTAL_SEATS; i++) {
+  const isExpired = new Date(clubConfig?.eventDate || Date.now()) <= new Date();
+
+  // Create Seats based strictly on clubConfig.capacity given by admin
+  for (let i = 0; i < currentEventCapacity; i++) {
     const seatNum = i + 1;
-    const occ = clubConfig.occupied.find(o => o.seat === seatNum);
+    const occ = clubConfig?.occupied ? clubConfig.occupied.find(o => o.seat === seatNum) : null;
     const node = document.createElement('div');
     node.id = `chair${seatNum}`;
     node.setAttribute('data-seat-index', i);
@@ -79,17 +86,11 @@ export function initOrbitalSeating(clubConfig, callbacks = {}) {
         });
 
         const triggerSeatSelect = (e) => {
-          if (e) {
-            e.stopPropagation();
-          }
-          // Auto-rotate seat to front-center focal position
-          const seatBaseAngle = (i / ORBITAL_SEATING_CONFIG.TOTAL_SEATS) * 2 * Math.PI;
+          if (e) e.stopPropagation();
+          const seatBaseAngle = (i / currentEventCapacity) * 2 * Math.PI;
           targetRotation = Math.PI / 2 - seatBaseAngle;
-
-          // Select seat
           selectSeat(node);
 
-          // Click ripple
           const ripple = node.querySelector('.gold-ripple-ring');
           if (ripple) {
             ripple.classList.remove('active');
@@ -100,16 +101,13 @@ export function initOrbitalSeating(clubConfig, callbacks = {}) {
           callbacks.onSeatClick?.(node);
         };
 
-        node.addEventListener('mouseup', (e) => {
-          const dist = Math.hypot(e.clientX - mDownX, e.clientY - mDownY);
-          if (dist < 10) {
-            triggerSeatSelect(e);
-          }
+        node.addEventListener('click', (e) => {
+          const dx = Math.abs(e.clientX - mDownX);
+          const dy = Math.abs(e.clientY - mDownY);
+          if (dx < 6 && dy < 6) triggerSeatSelect(e);
         });
 
-        node.addEventListener('click', (e) => {
-          triggerSeatSelect(e);
-        });
+        node.addEventListener('touchend', (e) => triggerSeatSelect(e));
       }
     }
 
@@ -117,8 +115,8 @@ export function initOrbitalSeating(clubConfig, callbacks = {}) {
     seatElements.push(node);
   }
 
-  // Update layout positions
   _updateOrbitalLayout();
+  _startAnimationLoop();
 
   // Mouse & Touch Drag Controls
   const visualizer = document.getElementById('schematicVisualizer') || container;

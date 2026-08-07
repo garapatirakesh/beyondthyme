@@ -11,13 +11,15 @@ let seatBookingsData = [];
  * Render Interactive 25-Seat Floorplan Grid.
  * @param {Array} bookings
  */
-export function renderAdminSeatingView(bookings = []) {
+export function renderAdminSeatingView(bookings = [], eventCapacity = 25) {
   seatBookingsData = bookings;
   const grid = document.getElementById('adminInteractiveSeatGrid');
   if (!grid) return;
 
+  const maxSeats = typeof eventCapacity === 'number' ? eventCapacity : (parseInt(eventCapacity, 10) || 25);
+
   grid.innerHTML = '';
-  for (let i = 1; i <= ADMIN_DEFAULTS.MAX_SEATS; i++) {
+  for (let i = 1; i <= maxSeats; i++) {
     const seatIdStr = `Seat_${String(i).padStart(2, '0')}`;
     const booking = bookings.find(b => b.seatNum === i || b.seatId === seatIdStr);
 

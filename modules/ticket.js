@@ -30,19 +30,26 @@ export function buildTicketData(vettingData = {}, user = null) {
   const bookingId = generateBookingId();
   const verifyUrl = getVerifyUrl(bookingId);
 
+  const themeName = vettingData.themeName || vettingData.theme || vettingData.title || EVENT_DETAILS.theme;
+  const date = vettingData.date || vettingData.displayNight || vettingData.eventDate || EVENT_DETAILS.date;
+  const time = vettingData.time || '20:00 IST ONWARDS';
+  const venue = vettingData.venue || vettingData.location || EVENT_DETAILS.venue;
+  const userName = vettingData.fullName || user?.name || user?.displayName || 'Honored Guest';
+  const amount = vettingData.amount || ((vettingData.quantity || 1) * (vettingData.unitPrice || 3500));
+
   return {
     ticketId: bookingId,
     bookingId: bookingId,
-    eventId: 'current-event',
+    eventId: vettingData.eventId || 'current-event',
     themeId: vettingData.themeId || 'midnight_memories',
-    themeName: vettingData.theme || EVENT_DETAILS.theme,
+    themeName: themeName,
     uid: user?.uid || 'GUEST_ANONYMOUS',
-    userName: vettingData.fullName || user?.name || 'Honored Guest',
+    userName: userName,
     email: vettingData.email || user?.email || 'guest@beyondthyme.com',
     phone: vettingData.phone || '',
-    venue: EVENT_DETAILS.venue,
-    date: EVENT_DETAILS.date,
-    time: EVENT_DETAILS.time,
+    venue: venue,
+    date: date,
+    time: time,
     seatId: vettingData.seatId || 'Seat_01',
     dressCode: TICKET_SYSTEM.DEFAULT_DRESS_CODE,
     status: TICKET_STATUS.CONFIRMED.code,
@@ -54,7 +61,7 @@ export function buildTicketData(vettingData = {}, user = null) {
     createdAt: new Date().toISOString(),
     quantity: vettingData.quantity || 1,
     unitPrice: vettingData.unitPrice || 3500,
-    amount: vettingData.amount || ((vettingData.quantity || 1) * 3500),
+    amount: amount,
     paymentId: vettingData.paymentId || `pay_${Date.now()}`,
   };
 }
@@ -118,7 +125,7 @@ export async function renderLuxuryTicket(ticket, container) {
       <div class="luxury-ticket-specs border-grid">
         <div class="luxury-spec-item">
           <span class="luxury-spec-label">GUEST NAME</span>
-          <span class="luxury-spec-value text-gold">${ticket.userName}</span>
+          <span class="luxury-spec-value text-gold">${ticket.userName || 'Honored Guest'}</span>
         </div>
         <div class="luxury-spec-item">
           <span class="luxury-spec-label">SEATS RESERVED</span>
@@ -130,11 +137,11 @@ export async function renderLuxuryTicket(ticket, container) {
         </div>
         <div class="luxury-spec-item">
           <span class="luxury-spec-label">DATE & TIME</span>
-          <span class="luxury-spec-value">${ticket.date} • ${ticket.time}</span>
+          <span class="luxury-spec-value">${ticket.date || EVENT_DETAILS.date} • ${ticket.time || EVENT_DETAILS.time}</span>
         </div>
         <div class="luxury-spec-item">
           <span class="luxury-spec-label">VENUE LOCATION</span>
-          <span class="luxury-spec-value">${ticket.venue}</span>
+          <span class="luxury-spec-value">${ticket.venue || EVENT_DETAILS.venue}</span>
         </div>
         <div class="luxury-spec-item">
           <span class="luxury-spec-label">DRESS CODE</span>
@@ -146,22 +153,7 @@ export async function renderLuxuryTicket(ticket, container) {
         </div>
       </div>
 
-      <!-- QR Code & Scanner Box -->
-      <div class="luxury-ticket-qr-section border-grid">
-        <div class="luxury-qr-box" id="luxuryTicketQRBox">
-          ${qrSvg}
-        </div>
-        <div class="luxury-qr-meta">
-          <span class="luxury-qr-tip font-mono">SCAN AT ENTRANCE FOR ACCESS</span>
-          <span class="luxury-qr-url font-mono">${ticket.qrUrl || ticket.bookingId}</span>
-          <div class="luxury-qr-stamp">
-            <span class="luxury-stamp-icon">🛡️</span>
-            <span class="luxury-stamp-text">ENCRYPTED VERIFICATION PASSPORT</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Footer Countdown -->
+      <!-- Footer Live Status -->
       <footer class="luxury-ticket-footer">
         <div class="luxury-footer-live">
           <span class="luxury-live-pulse"></span>

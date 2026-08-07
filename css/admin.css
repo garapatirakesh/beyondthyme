@@ -680,3 +680,228 @@
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.8); }
 }
+
+/* ─── Admin Event Manager Luxury Modal & Animations ──────────────────────── */
+.overlay-backdrop#adminEventModal {
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+}
+
+.overlay-backdrop#adminEventModal.active .admin-modal-card {
+  animation: modalSpringIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalSpringIn {
+  0% { opacity: 0; transform: scale(0.92) translateY(24px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.admin-modal-card {
+  width: 94%;
+  max-width: 780px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: #fbf8f3;
+  border: 1.5px solid rgba(196, 120, 0, 0.3);
+  border-radius: 20px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.45), 0 0 35px rgba(196, 120, 0, 0.15);
+  color: #0d0c0b;
+  position: relative;
+  text-align: left;
+}
+
+.admin-modal-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ff5a2e;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.admin-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #0d0c0b;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.admin-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.admin-form-row-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.admin-form-row-4col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.85rem;
+  margin-bottom: 0.9rem;
+}
+
+.admin-field-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.76rem !important;
+  font-weight: 700;
+  color: #2b2622 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.admin-input-luxury {
+  width: 100%;
+  background: #ffffff !important;
+  border: 1.5px solid #d4cbbd !important;
+  border-radius: 10px !important;
+  padding: 0.65rem 0.95rem !important;
+  color: #0d0c0b !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  color-scheme: light;
+  accent-color: #ff5a2e !important;
+}
+
+.admin-input-luxury[type="datetime-local"] {
+  cursor: pointer;
+}
+
+.admin-input-luxury[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  filter: invert(35%) sepia(80%) saturate(1500%) hue-rotate(345deg);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.admin-input-luxury[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.18);
+  filter: invert(40%) sepia(90%) saturate(2000%) hue-rotate(350deg);
+}
+
+.admin-input-luxury:hover {
+  border-color: #c47800 !important;
+}
+
+.admin-input-luxury:focus {
+  outline: none !important;
+  border-color: #ff5a2e !important;
+  box-shadow: 0 0 0 3px rgba(255, 90, 46, 0.18), 0 4px 12px rgba(255, 90, 46, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+.admin-input-luxury::placeholder {
+  color: #8c8275 !important;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.admin-textarea-luxury {
+  width: 100%;
+  background: #ffffff !important;
+  border: 1.5px solid #d4cbbd !important;
+  border-radius: 10px !important;
+  padding: 0.65rem 0.95rem !important;
+  color: #0d0c0b !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  resize: vertical;
+  min-height: 65px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.admin-textarea-luxury:focus {
+  outline: none !important;
+  border-color: #ff5a2e !important;
+  box-shadow: 0 0 0 3px rgba(255, 90, 46, 0.18) !important;
+  transform: translateY(-1px);
+}
+
+.admin-select-luxury {
+  width: 100%;
+  background: #ffffff !important;
+  border: 1.5px solid #d4cbbd !important;
+  border-radius: 10px !important;
+  padding: 0.65rem 0.95rem !important;
+  color: #0d0c0b !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  accent-color: #ff5a2e !important;
+}
+
+.admin-select-luxury:focus {
+  outline: none !important;
+  border-color: #ff5a2e !important;
+  box-shadow: 0 0 0 3px rgba(255, 90, 46, 0.18) !important;
+}
+
+.admin-btn-save-luxury {
+  width: 100%;
+  background: linear-gradient(135deg, #ff5a2e 0%, #d94e28 100%) !important;
+  color: #ffffff !important;
+  font-family: var(--font-body) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.08em !important;
+  padding: 0.85rem 1.5rem !important;
+  border: none !important;
+  border-radius: 50px !important;
+  box-shadow: 0 10px 25px rgba(255, 90, 46, 0.35) !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  margin-top: 0.75rem;
+}
+
+.admin-btn-save-luxury:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 14px 32px rgba(255, 90, 46, 0.45) !important;
+}
+
+.admin-btn-save-luxury:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.admin-modal-close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(13, 12, 11, 0.06);
+  border: 1px solid rgba(13, 12, 11, 0.12);
+  color: #0d0c0b;
+  font-size: 1.6rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-modal-close-btn:hover {
+  background: rgba(255, 90, 46, 0.15);
+  color: #ff5a2e;
+  transform: rotate(90deg) scale(1.08);
+}

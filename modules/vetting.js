@@ -12,6 +12,8 @@ import { cacheTicketLocally, openTicketVerificationModal } from './myTickets.js'
 import { dispatchTicketEmail } from './ticketExporter.js';
 
 let selectedSeatQuantity = 1;
+let currentPricePerSeat = 3500;
+let currentActiveClubConfig = null;
 
 /**
  * Initialize Timeline Booking overlay.
@@ -55,7 +57,9 @@ export function initVetting(deps) {
   });
 
   function _updatePriceDisplays() {
-    const totalINR = selectedSeatQuantity * SEAT_PRICE_INR;
+    const totalINR = selectedSeatQuantity * currentPricePerSeat;
+    const unitPriceEl = document.getElementById('bookingPricePerSeat');
+    if (unitPriceEl) unitPriceEl.innerText = `₹${currentPricePerSeat.toLocaleString('en-IN')} INR`;
     if (qtyDisplay) qtyDisplay.innerText = String(selectedSeatQuantity);
     if (summaryTotalPriceEl) summaryTotalPriceEl.innerText = `₹${totalINR.toLocaleString('en-IN')} INR`;
     if (btnPriceLabelEl) btnPriceLabelEl.innerText = `₹${totalINR.toLocaleString('en-IN')}`;
@@ -125,6 +129,26 @@ export function initVetting(deps) {
 
     if (!fullName) { alert('Please enter your full name: "Who should we welcome?"'); return; }
     if (!dob)      { alert('Please enter your date of birth: "Which year did your journey begin?"'); return; }
+
+    // 18+ Age Validation Guard
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let calculatedAge = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      calculatedAge--;
+    }
+
+    if (isNaN(calculatedAge) || calculatedAge < 18) {
+      alert('⚠️ CAUTION: Beyond Thyme Supper Club is an exclusive 18+ experience. You must be at least 18 years old to proceed with your seat calibration.');
+      const dobInput = document.getElementById('tlDOB');
+      if (dobInput) {
+        dobInput.focus();
+        dobInput.style.borderColor = '#ff5a2e';
+      }
+      return;
+    }
+
     if (!phone)    { alert('Please enter your phone number: "How shall we contact your future self?"'); return; }
 
     const activeEra = document.querySelector('.era-card-option.active')?.getAttribute('data-era') || '2000s';
@@ -134,7 +158,7 @@ export function initVetting(deps) {
       ? selectedSeatObj 
       : (selectedSeatObj?.seatId || selectedSeatObj?.label || 'Seat_11');
 
-    const totalAmountINR = selectedSeatQuantity * SEAT_PRICE_INR;
+    const totalAmountINR = selectedSeatQuantity * currentPricePerSeat;
 
     const timelineData = {
       fullName,
@@ -150,8 +174,13 @@ export function initVetting(deps) {
       reliveMoment: reliveMoment || 'Every moment at the table',
       seatId: seatLabel,
       quantity: selectedSeatQuantity,
-      unitPrice: SEAT_PRICE_INR,
+      unitPrice: currentPricePerSeat,
       amount: totalAmountINR,
+      clubId: currentActiveClubConfig?.id || 'vedic',
+      themeName: currentActiveClubConfig?.name || currentActiveClubConfig?.title || EVENT_DETAILS.theme,
+      venue: currentActiveClubConfig?.location || currentActiveClubConfig?.venue || EVENT_DETAILS.venue,
+      date: currentActiveClubConfig?.displayNight || currentActiveClubConfig?.eventDate || EVENT_DETAILS.date,
+      time: '20:00 IST ONWARDS',
     };
 
     // Razorpay Integration
@@ -166,6 +195,7 @@ export function initVetting(deps) {
           image: '/logo.jpg',
           prefill: {
             name: fullName,
+            email: getCurrentUser()?.email || '',
             contact: phone,
           },
           theme: {
@@ -204,14 +234,11 @@ async function _handlePaymentSuccess(timelineData, paymentResponse, deps) {
 
   const currentUser = getCurrentUser();
 
-  // Reserve seat atomically using Firestore ACID Transaction
+  // Reserve seat atomically using Firestore
   try {
     await bookSeatTransaction(timelineData.seatId, timelineData, currentUser);
   } catch (err) {
-    if (err?.code === 'DUPLICATE_BOOKING') {
-      alert(err.message);
-      return;
-    }
+    console.warn('Seat booking notice:', err);
   }
 
   // Generate Unique Ticket Object & Persist to Firestore
@@ -240,7 +267,7 @@ async function _handlePaymentSuccess(timelineData, paymentResponse, deps) {
  * Open Vetting / Timeline modal for a selected seat.
  * @param {string} seatId
  */
-export function openVettingModal(seatParam) {
+export function openVettingModal(seatParam, clubConfig) {
   const overlay     = document.getElementById('vettingOverlay');
   const stepSummary = document.getElementById('vettingStepSummary');
   const stepForm    = document.getElementById('vettingStepForm');
@@ -252,6 +279,36 @@ export function openVettingModal(seatParam) {
     : (seatParam?.seatId || seatParam?.label || `Seat_${String(seatParam?.id || 11).padStart(2, '0')}`);
 
   if (seatTarget) seatTarget.innerText = rawSeat.replace('_', ' ').toUpperCase();
+
+  if (clubConfig) {
+    currentActiveClubConfig = clubConfig;
+    if (clubConfig.price !== undefined) {
+      currentPricePerSeat = parseInt(clubConfig.price, 10) || 3500;
+    }
+
+    const themeEl = document.getElementById('bookingEventTheme');
+    const dateEl  = document.getElementById('bookingEventDate');
+    const timeEl  = document.getElementById('bookingEventTime');
+    const venueEl = document.getElementById('bookingEventVenue');
+
+    if (themeEl) themeEl.innerText = clubConfig.name || clubConfig.title || EVENT_DETAILS.theme;
+    if (dateEl)  dateEl.innerText  = clubConfig.displayNight || clubConfig.eventDate || EVENT_DETAILS.date;
+    if (timeEl)  timeEl.innerText  = '20:00 IST';
+    if (venueEl) venueEl.innerText = clubConfig.location || clubConfig.venue || EVENT_DETAILS.venue;
+  } else {
+    currentPricePerSeat = 3500;
+  }
+
+  selectedSeatQuantity = 1;
+  const qtyDisplay = document.getElementById('seatQtyDisplay');
+  const summaryTotalPriceEl = document.getElementById('summaryTotalReservationPrice');
+  const btnPriceLabelEl = document.getElementById('btnReservePriceLabel');
+  const unitPriceEl = document.getElementById('bookingPricePerSeat');
+
+  if (unitPriceEl) unitPriceEl.innerText = `₹${currentPricePerSeat.toLocaleString('en-IN')} INR`;
+  if (qtyDisplay) qtyDisplay.innerText = '1';
+  if (summaryTotalPriceEl) summaryTotalPriceEl.innerText = `₹${currentPricePerSeat.toLocaleString('en-IN')} INR`;
+  if (btnPriceLabelEl) btnPriceLabelEl.innerText = `₹${currentPricePerSeat.toLocaleString('en-IN')}`;
 
   _show(stepSummary);
   _hide(stepForm);

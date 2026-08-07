@@ -25,9 +25,9 @@ import {
 import {
   generateDailyCoords, hideCoordY, initTimeCapsule, initVaultBreaker,
 } from './modules/vault.js';
-import { initExperienceSection, updateSeatsRemaining } from './modules/experience.js';
+import { initExperienceSection, updateSeatsRemaining, syncSelectedEventToExperience } from './modules/experience.js';
 import { initGoldParticles } from './modules/particles.js';
-import { listenToLiveSeatBookings } from './modules/firebase.js';
+import { listenToLiveSeatBookings, listenToCollection, getTicketDoc } from './modules/firebase.js';
 import { initAuth, promptGoogleLogin, getCurrentUser } from './modules/auth.js';
 import { initAdminDashboard, openAdminDashboard } from './modules/admin.js';
 import { initVetting, openVettingModal } from './modules/vetting.js';
@@ -35,7 +35,6 @@ import { renderClubCards, renderMenu, renderGuestbook, appendGuestbookEntry } fr
 import { createRotaryDial }  from './modules/dials.js';
 import { initMyTickets, openTicketVerificationModal } from './modules/myTickets.js';
 import { downloadTicketAsPDF, downloadTicketAsPNG, shareTicketOnWhatsApp, dispatchTicketEmail } from './modules/ticketExporter.js';
-import { getTicketDoc } from './modules/firebase.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Google Auth
   initAuth({
     onAuthSuccess(user) {
-      openVettingModal(selectedSeat || 'Seat_11');
+      openVettingModal(selectedSeat || 'Seat_11', CLUBS_CONFIG[activeClubId]);
     },
     onAdminAccess(user) {
       openAdminDashboard();
@@ -158,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindCursorHover(cursor, document.querySelectorAll('.nav-interactive, a, button, input, [type="range"]'));
 
   // ── 2. Render data-driven UI ───────────────────────────────────────────────
-  let activeClubId = 'vedic';
+  let activeClubId = Object.keys(CLUBS_CONFIG)[0] || 'zenitsu';
 
   renderMenu(MENU_ERAS);
   renderGuestbook(SEED_GUESTBOOK_ENTRIES);
@@ -240,14 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isAudioPlaying()) playBeaconChime();
 
-        const user = getCurrentUser();
-        if (!user) {
-          promptGoogleLogin();
-        } else if (user.role === 'admin') {
-          openAdminDashboard();
-        } else {
-          openVettingModal(selectedSeat);
-        }
+        promptGoogleLogin();
       },
       onSeatHoverEnter() { 
         if (isAudioPlaying()) playBeaconChime(); 
@@ -260,24 +252,126 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   buildSeating();
+  if (CLUBS_CONFIG[activeClubId]) {
+    syncSelectedEventToExperience(CLUBS_CONFIG[activeClubId]);
+  }
 
   // Listen in real time to Firebase Firestore live bookings across all devices
   listenToLiveSeatBookings((submissions) => {
-    const config = CLUBS_CONFIG[activeClubId];
-    if (!config || !submissions) return;
+    if (!submissions) return;
+
+    // Reset occupied seat lists for all clubs before calculating live bookings
+    Object.values(CLUBS_CONFIG).forEach(club => {
+      club.occupied = [];
+    });
 
     submissions.forEach(sub => {
-      const seatNumStr = (sub.seatId || 'Seat_03').replace('SEAT_', '').replace('Seat_', '');
-      const seatNum = parseInt(seatNumStr, 10);
-      const alias = (sub.fullName || 'Member').split(' ')[0].toUpperCase();
-      const emoji = '⏳';
+      const subClubId = sub.clubId || sub.vetting?.clubId;
+      const subTheme = (sub.themeName || sub.vetting?.themeName || sub.vetting?.theme || '').toLowerCase().trim();
 
-      if (!isNaN(seatNum) && !config.occupied.some(o => o.seat === seatNum)) {
-        config.occupied.push({ seat: seatNum, alias: alias, emoji: emoji });
+      // Find matching Supper Club event by Club ID or Theme Name
+      let targetConfig = Object.values(CLUBS_CONFIG).find(club => 
+        (subClubId && club.id === subClubId) || 
+        (subTheme && (club.name || '').toLowerCase().trim() === subTheme)
+      );
+
+      if (!targetConfig) {
+        targetConfig = CLUBS_CONFIG[activeClubId];
+      }
+
+      if (!targetConfig) return;
+
+      const qty = Math.max(1, parseInt(sub.quantity || sub.vetting?.quantity || 1, 10));
+      const startNumStr = (sub.seatId || 'Seat_01').replace(/[^0-9]/g, '');
+      const startNum = parseInt(startNumStr, 10) || 1;
+
+      for (let i = 0; i < qty; i++) {
+        const seatNum = Math.min(25, startNum + i);
+        const alias = (sub.userName || sub.fullName || sub.vetting?.fullName || 'Member').split(' ')[0].toUpperCase();
+        const emoji = '⏳';
+
+        if (!targetConfig.occupied.some(o => o.seat === seatNum)) {
+          targetConfig.occupied.push({ seat: seatNum, alias: alias, emoji: emoji });
+        }
       }
     });
 
     buildSeating();
+    renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
+    if (CLUBS_CONFIG[activeClubId]) {
+      syncSelectedEventToExperience(CLUBS_CONFIG[activeClubId]);
+    }
+  });
+
+  // Listen in real time to Admin Portal Events updates (max 4 slots replaced dynamically)
+  listenToCollection('events', (eventsData) => {
+    if (!eventsData || eventsData.length === 0) return;
+
+    // Sort events by creation timestamp or event date (newest created first)
+    const sortedEvents = [...eventsData].sort((a, b) => {
+      const timeA = new Date(a.createdAt || a.eventDate || 0).getTime();
+      const timeB = new Date(b.createdAt || b.eventDate || 0).getTime();
+      return timeB - timeA;
+    });
+
+    const cappedEvents = sortedEvents.slice(0, 4);
+    const romanNumerals = ['I', 'II', 'III', 'IV'];
+    const defaultEmblems = ['🔥', '🌊', '🏔️', '⚗️'];
+    const defaultImages = [
+      'assets/vedic_fire_food.png',
+      'assets/coastal_monsoon_food.png',
+      'assets/himalayan_mist_food.png',
+      'assets/neo_bengaluru_food.png'
+    ];
+
+    const newConfig = {};
+
+    cappedEvents.forEach((ev, idx) => {
+      const clubId = ev.id || ev.clubKey || `club_${idx + 1}`;
+      const existingOccupied = CLUBS_CONFIG[clubId]?.occupied || [];
+
+      // Evaluate Automatic Scheduling (Time Starts & Stops at Event Time)
+      const now = new Date();
+      const endTime = ev.eventEndTime ? new Date(ev.eventEndTime) : null;
+      let calculatedStatus = ev.status || 'Published';
+
+      if (endTime && !isNaN(endTime.getTime()) && now > endTime) {
+        calculatedStatus = 'Closed';
+      }
+
+      newConfig[clubId] = {
+        id: clubId,
+        name: ev.title || ev.name || `Supper Club ${idx + 1}`,
+        location: ev.venue || ev.location || 'Secret Villa',
+        emblem: ev.emblem || defaultEmblems[idx] || '✨',
+        glowColor: ev.glowColor || '255,90,46',
+        romanNumeral: romanNumerals[idx] || `${idx + 1}`,
+        price: ev.price || 3500,
+        capacity: ev.capacity !== undefined ? parseInt(ev.capacity, 10) : 25,
+        eventDate: ev.eventDate || ev.eventStartTime || '2026-08-15T20:00:00+05:30',
+        eventEndTime: ev.eventEndTime || null,
+        displayNight: ev.displayNight || 'Sat Aug 15 · 20:00',
+        image: ev.image || defaultImages[idx] || 'assets/vedic_fire_food.png',
+        description: ev.description || 'Exclusive luxury dining experience where time stops at the table.',
+        status: calculatedStatus,
+        occupied: existingOccupied,
+      };
+    });
+
+    Object.keys(CLUBS_CONFIG).forEach(key => delete CLUBS_CONFIG[key]);
+    Object.assign(CLUBS_CONFIG, newConfig);
+
+    if (!CLUBS_CONFIG[activeClubId]) {
+      activeClubId = Object.keys(CLUBS_CONFIG)[0] || '';
+    }
+
+    renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
+    if (CLUBS_CONFIG[activeClubId]) {
+      countdownInstance.stop();
+      countdownInstance = startCountdown(CLUBS_CONFIG[activeClubId], countdownEls);
+      syncSelectedEventToExperience(CLUBS_CONFIG[activeClubId]);
+      buildSeating();
+    }
   });
 
   // ── 5. Vetting & Timeline Booking Overlay ──────────────────────────────────
@@ -313,6 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     _updateTerminalSeatLine(null);
 
     const config = CLUBS_CONFIG[clubId];
+    syncSelectedEventToExperience(config);
     const isExpired = new Date(config.eventDate) <= new Date();
 
     // Refresh layout selections
@@ -320,22 +415,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle expired event constraints
     if (isExpired) {
-      if (pseudonymInput) {
-        pseudonymInput.value = '';
-        pseudonymInput.setAttribute('disabled', 'true');
-      }
-      if (emailInput) {
-        emailInput.value = '';
-        emailInput.setAttribute('disabled', 'true');
-      }
       if (submitBtn) {
         submitBtn.disabled = true;
       }
       document.getElementById('calibrationDialsRow')?.classList.add('disabled');
       printToTerminal(`> ACCESS PROTOCOL LOCK: ${config.name.toUpperCase()} EVENT CONCLUDED. SESSION ARCHIVED.`);
     } else {
-      if (pseudonymInput) pseudonymInput.removeAttribute('disabled');
-      if (emailInput)     emailInput.removeAttribute('disabled');
+      if (submitBtn) submitBtn.disabled = false;
       document.getElementById('calibrationDialsRow')?.classList.remove('disabled');
       printToTerminal(`> SWITCHING SYSTEM CHANNEL TO ${config.name.toUpperCase()}...`);
     }
@@ -418,22 +504,20 @@ document.addEventListener('DOMContentLoaded', () => {
     drawRadar();
     updateAudioCalibration(sliders);
 
-    // Calculate real-time Synchronization Score
-    const hasPseudo = pseudonymInput?.value.trim().length > 0;
-    const hasEmail = EMAIL_REGEX.test(emailInput?.value.trim() || '');
+    // Calculate real-time Synchronization Score from Vibe Vector Dials
     const syncScore = Math.min(100, Math.round(
-      20 +
-      (dialValues.openness * 0.25) +
-      (dialValues.depth * 0.25) +
-      (dialValues.energy * 0.3) +
-      (hasPseudo ? 10 : 0) +
-      (hasEmail ? 10 : 0)
+      (dialValues.openness * 0.33) +
+      (dialValues.depth * 0.33) +
+      (dialValues.energy * 0.34)
     ));
 
     const syncScoreEl = document.getElementById('hudSyncScoreValue');
     const radarSyncTag = document.getElementById('radarSyncTag');
+    const telemetryMatchVal = document.getElementById('telemetryMatchVal');
+
     if (syncScoreEl) syncScoreEl.innerText = `${syncScore}%`;
     if (radarSyncTag) radarSyncTag.innerText = `VECTOR: SYNC ${syncScore}%`;
+    if (telemetryMatchVal) telemetryMatchVal.innerText = `${syncScore}% MATCH`;
 
     // Sync vetting overlay ticket preview coordinates block
     const previewVector = document.getElementById('previewVector');
@@ -462,47 +546,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── 9. Main form (chrono terminal & calibration console) ───────────────────
   const chronoForm     = document.getElementById('chronoForm');
-  const pseudonymInput = document.getElementById('pseudonymInput');
-  const emailInput     = document.getElementById('emailInput');
   const submitBtn      = document.getElementById('submitBtn');
   const terminalBox    = document.getElementById('terminalBox');
   const successOverlay = document.getElementById('successOverlay');
   const closeSuccessBtn = document.getElementById('closeSuccessBtn');
 
-  if (pseudonymInput) {
-    pseudonymInput.addEventListener('input', () => {
-      const badge = document.getElementById('pseudonymStatusBadge');
-      if (badge) {
-        badge.innerText = pseudonymInput.value.trim().length > 0 ? 'VERIFIED' : 'CALIBRATING';
-        badge.style.color = pseudonymInput.value.trim().length > 0 ? '#4caf50' : '#ff5a2e';
-      }
-      validateForm();
-      onDialUpdate();
-    });
-  }
-
-  if (emailInput) {
-    emailInput.addEventListener('input', () => {
-      const badge = document.getElementById('emailStatusBadge');
-      const isValid = EMAIL_REGEX.test(emailInput.value.trim());
-      if (badge) {
-        badge.innerText = isValid ? 'VALIDATED' : 'UNVERIFIED';
-        badge.style.color = isValid ? '#4caf50' : '#ff5a2e';
-      }
-      validateForm();
-      onDialUpdate();
-    });
-  }
-
   function validateForm() {
     const isExpired = new Date(CLUBS_CONFIG[activeClubId].eventDate) <= new Date();
-    if (isExpired) {
-      if (submitBtn) submitBtn.disabled = true;
-      return;
-    }
-
-    const valid = pseudonymInput?.value.trim().length > 0 && EMAIL_REGEX.test(emailInput?.value.trim());
-    if (submitBtn) submitBtn.disabled = !valid;
+    if (submitBtn) submitBtn.disabled = isExpired;
   }
 
   chronoForm?.addEventListener('submit', (e) => {
@@ -510,13 +561,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     submitBtn.disabled = true;
     submitBtn.innerText = '⚡ TRANSMITTING CALIBRATION VECTOR...';
-    pseudonymInput?.setAttribute('disabled', 'true');
-    emailInput?.setAttribute('disabled', 'true');
     document.getElementById('calibrationDialsRow')?.classList.add('disabled');
+
+    const currentUser = getCurrentUser();
+    const userPseudo = currentUser ? currentUser.name : 'Chrono_Explorer';
 
     runDiagnosticSequence(
       {
-        pseudo: pseudonymInput?.value.trim(),
+        pseudo: userPseudo,
         seat:   selectedSeat || 'Seat_01',
         o:      String(Math.round(dialValues.openness)),
         d:      String(Math.round(dialValues.depth)),
@@ -537,17 +589,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     );
 
-    // Unlock Timeline Vault dial wheel
     setTimeout(() => {
-      const vaultStateLocked = document.getElementById('vaultStateLocked');
-      const vaultStateUnlocked = document.getElementById('vaultStateUnlocked');
-      if (vaultStateLocked) vaultStateLocked.style.display = 'none';
-      if (vaultStateUnlocked) vaultStateUnlocked.style.display = 'flex';
-
       submitBtn.innerText = '✨ CONTINUED TO RESERVE SEAT →';
       submitBtn.disabled = false;
       submitBtn.onclick = () => {
-        openVettingModal(selectedSeat || 'Seat_01');
+        openVettingModal(selectedSeat || 'Seat_01', CLUBS_CONFIG[activeClubId]);
       };
     }, 2400);
   });
@@ -556,7 +602,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (successOverlay) successOverlay.style.display = 'none';
     terminalBox?.classList.remove('diagnostic-running');
 
-    [pseudonymInput, emailInput].forEach(el => el?.removeAttribute('disabled'));
     document.getElementById('calibrationDialsRow')?.classList.remove('disabled');
 
     chronoForm?.reset();
@@ -599,10 +644,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const guestbookForm = document.getElementById('guestbookForm');
   guestbookForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const alias   = document.getElementById('guestbookName')?.value.trim();
     const message = document.getElementById('guestbookMsg')?.value.trim();
-    if (!alias || !message) return;
+    if (!message) return;
 
+    const user = getCurrentUser();
+    if (!user) {
+      promptGoogleLogin();
+      return;
+    }
+
+    const alias = user.name || (user.email ? user.email.split('@')[0].toUpperCase() : 'MEMBER');
     appendGuestbookEntry(alias, message);
     document.getElementById('guestbookMsg').value = '';
     if (isAudioPlaying()) playBeaconChime();

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Premium web canvas for Beyond Thyme supper club",
   "main": "index.html",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

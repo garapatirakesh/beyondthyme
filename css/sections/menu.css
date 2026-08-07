@@ -7,10 +7,10 @@
 .menu-column{background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:24px;padding:3rem 2.25rem;display:flex;flex-direction:column;position:relative;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);box-shadow:var(--shadow-md);}
 .menu-column-highlighted{background:linear-gradient(160deg,#fffcf7 0%,#fff8ef 100%);border-color:rgba(255,90,46,0.18);box-shadow:var(--shadow-lg),0 0 0 1px rgba(255,90,46,0.08);}
 .menu-column:hover{transform:translateY(-8px);border-color:rgba(255,90,46,0.25);box-shadow:var(--shadow-xl),0 0 0 1px rgba(255,90,46,0.1);}
-.menu-col-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;border-bottom:1px solid var(--border-subtle);padding-bottom:1.25rem;}
-.menu-col-num{font-family:var(--font-display);font-style:italic;font-size:2.5rem;color:var(--color-coral);line-height:1;}
-.menu-col-title{font-family:var(--font-body);font-size:1.25rem;font-weight:500;color:var(--text-primary);text-transform:uppercase;letter-spacing:0.05em;}
-.menu-col-status{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.35rem 0.65rem;border-radius:99px;background-color:var(--bg-recessed);border:1px solid var(--border-mid);}
+.menu-col-header{display:flex;align-items:center;gap:1.25rem;margin-bottom:2.5rem;border-bottom:1px solid var(--border-subtle);padding-bottom:1.25rem;}
+.menu-col-num{font-family:var(--font-display);font-style:italic;font-size:2.5rem;color:var(--color-coral);line-height:1;margin-right:0.75rem;flex-shrink:0;}
+.menu-col-title{font-family:var(--font-body);font-size:1.15rem;font-weight:500;color:var(--text-primary);text-transform:uppercase;letter-spacing:0.05em;margin-right:auto;}
+.menu-col-status{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.35rem 0.65rem;border-radius:99px;background-color:var(--bg-recessed);border:1px solid var(--border-mid);flex-shrink:0;}
 .status-archived{color:var(--text-muted);}.status-active{color:var(--color-gold);border-color:rgba(196,120,0,0.3);background-color:var(--color-gold-bg);}.status-speculative{color:var(--text-faint);border-style:dashed;}
 .course-list{list-style:none;display:flex;flex-direction:column;gap:2rem;}
 .course-item{position:relative;transition:transform 0.3s ease;}.course-item:hover{transform:translateX(4px);}

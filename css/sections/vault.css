@@ -44,8 +44,8 @@
   position: relative;
   z-index: 2;
   padding: 20px 28px;
-  background: rgba(18, 20, 26, 0.9);
-  border-bottom: 1px solid rgba(255, 90, 46, 0.2);
+  background: var(--color-parchment, #fbf7ee);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -76,15 +76,17 @@
 
 .hud-title {
   font-size: 20px;
-  color: #ffffff;
+  color: #0d0c0b !important;
+  font-weight: 700;
   margin: 0;
   letter-spacing: 1px;
 }
 
 .hud-subtitle {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 2px;
-  color: #ff5a2e;
+  color: var(--color-coral, #ff5a2e) !important;
+  font-weight: 700;
 }
 
 .hud-header-right {
@@ -98,8 +100,8 @@
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  background: rgba(255, 90, 46, 0.08);
-  border: 1px solid rgba(255, 90, 46, 0.3);
+  background: rgba(255, 90, 46, 0.1);
+  border: 1px solid rgba(255, 90, 46, 0.35);
   border-radius: 20px;
 }
 
@@ -112,8 +114,9 @@
 }
 
 .hud-status-text {
-  font-size: 10px;
-  color: #ff5a2e;
+  font-size: 11px;
+  color: #0d0c0b !important;
+  font-weight: 700;
   letter-spacing: 1px;
 }
 
@@ -121,20 +124,23 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 4px 12px;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 90, 46, 0.4);
-  border-radius: 8px;
+  padding: 6px 14px;
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
 .hud-score-label {
-  font-size: 8px;
-  letter-spacing: 1px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #0d0c0b !important;
+  font-weight: 700;
 }
 
 .hud-score-val {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-coral, #ff5a2e) !important;
 }
 
 /* ── Console Body Layout ───────────────────────────────────────────────────── */
@@ -300,33 +306,35 @@
 .btn-terminal-submit {
   width: 100%;
   padding: 16px 24px;
-  background: linear-gradient(135deg, #ff5a2e 0%, #e04a22 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #ff5a2e 0%, #d94e28 100%);
+  color: #ffffff !important;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 2px;
-  border: none;
+  letter-spacing: 1.5px;
+  border: 1px solid rgba(255, 90, 46, 0.5);
   border-radius: 30px;
   cursor: pointer;
-  box-shadow: 0 0 25px rgba(255, 90, 46, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 90, 46, 0.4);
   transition: all 0.3s ease;
+  opacity: 1;
 }
 
 .btn-terminal-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 0 35px rgba(255, 90, 46, 0.6);
+  background: linear-gradient(135deg, #ff6b42 0%, #ff5a2e 100%);
+  box-shadow: 0 6px 30px rgba(255, 90, 46, 0.6);
 }
 
 .btn-terminal-submit:disabled {
   background: rgba(30, 32, 40, 0.6);
-  color: #6a6058;
+  color: #a0958a !important;
   border: 1px solid rgba(255, 90, 46, 0.15);
   box-shadow: none;
   cursor: not-allowed;
 }
 
-/* Right Panel: Synchronization Log & Vault */
+/* Right Panel: Synchronization Log & Telemetry Pod */
 .console-body-right {
   display: flex;
   flex-direction: column;
@@ -341,7 +349,74 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  min-height: 220px;
+  min-height: 200px;
+}
+
+/* Temporal Match Telemetry Pod Styling */
+.telemetry-pod-card {
+  background: rgba(18, 20, 26, 0.85);
+  border: 1px solid rgba(255, 90, 46, 0.25);
+  border-radius: 18px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.telemetry-pod-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--color-coral, #ff5a2e);
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255, 90, 46, 0.15);
+  padding-bottom: 10px;
+}
+
+.telemetry-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.telemetry-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 90, 46, 0.15);
+  border-radius: 10px;
+}
+
+.telemetry-stat-label {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #d4cebe;
+  font-weight: 600;
+}
+
+.telemetry-stat-val {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #f5f0e6 !important;
+}
+
+.telemetry-pod-card .text-bone {
+  color: #f5f0e6 !important;
+}
+
+.telemetry-pod-card .text-gold {
+  color: #f3c868 !important;
+}
+
+.telemetry-pod-card .text-coral {
+  color: #ff6b42 !important;
 }
 
 .terminal-header {

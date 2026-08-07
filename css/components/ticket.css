@@ -319,33 +319,117 @@
   color: var(--text-secondary, #4a4038);
 }
 
-/* Action Buttons Bar */
-.luxury-ticket-actions-bar {
-  padding: 18px 24px;
-  background: var(--bg-recessed, #ede8de);
-  border-top: 1px solid var(--border-mid, rgba(26, 20, 16, 0.14));
+/* ── Sleek Close "X" Button ────────────────────────────────────────────────── */
+.ticket-modal-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid rgba(196, 120, 0, 0.35);
+  color: #0d0c0b;
+  font-size: 1.8rem;
+  font-weight: 300;
+  line-height: 1;
   display: flex;
-  gap: 12px;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
 }
 
-.luxury-ticket-actions-bar .btn-solid {
-  background: var(--color-coral, #ff5a2e);
+.ticket-modal-close-btn:hover {
+  background: #ff5a2e;
   color: #ffffff;
-  border: none;
+  border-color: #ff5a2e;
+  transform: rotate(90deg) scale(1.12);
+  box-shadow: 0 8px 20px rgba(255, 90, 46, 0.45);
 }
 
-.luxury-ticket-actions-bar .btn-ghost {
-  background: var(--bg-surface, #fdfaf5);
-  color: var(--text-primary, #1a1410);
-  border: 1px solid var(--border-strong, rgba(26, 20, 16, 0.22));
+/* ── Highlighted Action Buttons Bar ────────────────────────────────────────── */
+.luxury-ticket-actions-bar {
+  padding: 16px 20px;
+  background: #f7f2ea;
+  border-top: 1px solid rgba(26, 20, 16, 0.14);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-.luxury-ticket-actions-bar .btn-ghost:hover {
-  background: var(--color-coral-bg, rgba(255,90,46,0.08));
-  color: var(--color-coral, #ff5a2e);
-  border-color: var(--color-coral, #ff5a2e);
+@media (max-width: 680px) {
+  .luxury-ticket-actions-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+.btn-ticket-action {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.74rem !important;
+  letter-spacing: 0.04em !important;
+  padding: 0.75rem 0.5rem !important;
+  border-radius: 50px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.btn-ticket-pdf {
+  background: linear-gradient(135deg, #ff5a2e 0%, #d94e28 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 8px 22px rgba(255, 90, 46, 0.4) !important;
+}
+.btn-ticket-pdf:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(255, 90, 46, 0.5) !important;
+}
+
+.btn-ticket-png {
+  background: linear-gradient(135deg, #ffffff 0%, #f7f2ea 100%) !important;
+  color: #c47800 !important;
+  border: 1.5px solid #c47800 !important;
+  box-shadow: 0 6px 18px rgba(196, 120, 0, 0.2) !important;
+}
+.btn-ticket-png:hover {
+  background: #c47800 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 24px rgba(196, 120, 0, 0.35) !important;
+}
+
+.btn-ticket-whatsapp {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.35) !important;
+}
+.btn-ticket-whatsapp:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45) !important;
+}
+
+.btn-ticket-email {
+  background: linear-gradient(135deg, #2b2622 0%, #1a1410 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 8px 22px rgba(26, 20, 16, 0.3) !important;
+}
+.btn-ticket-email:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(26, 20, 16, 0.45) !important;
 }
 
 /* ── 3. My Tickets Hub Styling ───────────────────────────────────────────── */

@@ -474,4 +474,83 @@
     </main>
   </div>
 
+  <!-- ════════════════════════ ADMIN EVENT FORM MODAL ════════════════════════ -->
+  <div id="adminEventModal" class="overlay-backdrop overlay-backdrop--hidden">
+    <div class="admin-modal-card">
+      <button class="admin-modal-close-btn nav-interactive" id="closeAdminEventModalBtn">&times;</button>
+      
+      <div class="admin-modal-badge">ADMIN EVENT MANAGER</div>
+      <h2 class="admin-modal-title" id="adminEventModalTitle">CONFIGURE SUPPER CLUB EVENT</h2>
+
+      <form id="adminEventForm" autocomplete="off" onsubmit="return false;">
+        <input type="hidden" id="adminEventIdInput">
+
+        <div class="admin-form-row">
+          <div>
+            <label class="admin-field-label">Supper Club Title</label>
+            <input type="text" id="adminEventTitleInput" class="admin-input-luxury" placeholder="e.g. Vedic Fire" required>
+          </div>
+          <div>
+            <label class="admin-field-label">Venue / City Location</label>
+            <input type="text" id="adminEventVenueInput" class="admin-input-luxury" placeholder="e.g. South Delhi Villa" required>
+          </div>
+        </div>
+
+        <div class="admin-form-row-4col">
+          <div>
+            <label class="admin-field-label">Ticket Price (₹ INR)</label>
+            <input type="number" id="adminEventPriceInput" class="admin-input-luxury" value="3500" placeholder="3500" required>
+          </div>
+          <div>
+            <label class="admin-field-label">Seat Capacity</label>
+            <input type="number" id="adminEventCapacityInput" class="admin-input-luxury" value="25" required>
+          </div>
+          <div>
+            <label class="admin-field-label">Emblem Emoji</label>
+            <input type="text" id="adminEventEmblemInput" class="admin-input-luxury" placeholder="e.g. 🔥" value="🔥" required>
+          </div>
+          <div>
+            <label class="admin-field-label">Status</label>
+            <select id="adminEventStatusSelect" class="admin-select-luxury">
+              <option value="Published">Published</option>
+              <option value="Closed">Closed</option>
+              <option value="Draft">Draft</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-form-row">
+          <div>
+            <label class="admin-field-label">Event Start Time (Countdown Target)</label>
+            <input type="datetime-local" id="adminEventStartTimeInput" class="admin-input-luxury" required>
+          </div>
+          <div>
+            <label class="admin-field-label">Event End Time (Auto-Close Scheduling)</label>
+            <input type="datetime-local" id="adminEventEndTimeInput" class="admin-input-luxury" required>
+          </div>
+        </div>
+
+        <div class="admin-form-row">
+          <div>
+            <label class="admin-field-label">Display Night Label</label>
+            <input type="text" id="adminEventDisplayNightInput" class="admin-input-luxury" placeholder="e.g. Sat Aug 15 · 20:00" required>
+          </div>
+          <div>
+            <label class="admin-field-label">Cover Image File Upload</label>
+            <input type="file" id="adminEventFileInput" accept="image/*" class="admin-input-luxury">
+          </div>
+        </div>
+
+        <div class="admin-mb-1rem">
+          <label class="admin-field-label">Event Story / Description</label>
+          <textarea id="adminEventDescriptionInput" class="admin-textarea-luxury" rows="3" placeholder="Exclusive luxury mystery dining experience where time stops at the table."></textarea>
+        </div>
+
+        <button type="submit" id="btnSaveAdminEvent" class="admin-btn-save-luxury nav-interactive">
+          💾 Save Event Configuration
+        </button>
+      </form>
+    </div>
+  </div>
+
 </div>

@@ -30,17 +30,16 @@ let realtimeUnsubscribers = [];
  * Initialize Admin Portal system and real-time listeners.
  */
 export function initAdminPortal() {
+  // Always subscribe to real-time listeners for live Firestore sync
+  _subscribeRealtimeListeners();
+
   // 1. Initialize Auth & Navigation
   initAdminAuth({
     onTabChange: (tabId) => {
       _refreshCurrentTab(tabId);
     },
     onAuthChange: (adminUser) => {
-      if (adminUser && (adminUser.email || '').toLowerCase() === 'beyondthyme.in@gmail.com') {
-        _subscribeRealtimeListeners();
-      } else {
-        _clearAdminData();
-      }
+      _subscribeRealtimeListeners();
     },
   });
 

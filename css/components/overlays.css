@@ -175,6 +175,54 @@
   color: var(--text-primary);
   letter-spacing: -0.01em;
 }
+.editorial-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border-mid, #d4cbbd) !important;
+  border-radius: 14px !important;
+  background-color: #ffffff !important;
+  font-family: var(--font-display), Georgia, serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: #0d0c0b !important;
+  outline: none !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  color-scheme: light !important;
+  accent-color: #ff5a2e !important;
+}
+
+.editorial-input[type="date"],
+.editorial-input[type="datetime-local"] {
+  color: #0d0c0b !important;
+  cursor: pointer;
+}
+
+.editorial-input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  filter: invert(35%) sepia(80%) saturate(1500%) hue-rotate(345deg);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.editorial-input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.18);
+  filter: invert(40%) sepia(90%) saturate(2000%) hue-rotate(350deg);
+}
+
+.editorial-input::placeholder {
+  color: #7a7063 !important;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.editorial-input:focus {
+  border-color: #ff5a2e !important;
+  box-shadow: 0 4px 16px rgba(255, 90, 46, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  transform: translateY(-1px);
+}
+
 .editorial-textarea {
   box-sizing: border-box;
   width: 100%;
