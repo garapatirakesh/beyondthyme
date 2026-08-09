@@ -1,9 +1,4 @@
-/* modules/experience.js
- * Midnight Memories Experience Section controller.
- * Manages live countdown timer, seat availability, progress bar, and booking actions.
- */
-
-import { EXPERIENCE_CONFIG } from '../config/app.config.js';
+import { EXPERIENCE_CONFIG, INVENTORY_MESSAGES } from '../config/app.config.js';
 import { getAvailableSeats } from '../config/clubs.js';
 import { getCurrentUser, promptGoogleLogin } from './auth.js';
 import { openVettingModal } from './vetting.js';
@@ -23,6 +18,7 @@ export function initExperienceSection() {
 
   if (bookBtn) {
     bookBtn.addEventListener('click', async () => {
+      if (bookBtn.disabled) return;
       await promptGoogleLogin();
       openVettingModal('Seat_01', currentActiveClubConfig);
     });
@@ -120,13 +116,57 @@ function _updateDisplay() {
 }
 
 /**
- * Update remaining seats count dynamically.
- * @param {number} count
+ * Update remaining seats count & UI states dynamically.
+ * @param {number} availableSeats
+ * @param {object} [clubConfig]
  */
-export function updateSeatsRemaining(count) {
-  const el = document.getElementById('expRemainingCount');
-  if (el) {
-    el.innerText = String(count);
+export function updateSeatsRemaining(availableSeats, clubConfig) {
+  const labelOnly = document.getElementById('expLabelOnly');
+  const seatsEl = document.getElementById('expRemainingCount');
+  const remainingLabel = document.getElementById('expRemainingLabel');
+  const bookBtn = document.getElementById('expBookSeatBtn');
+  const subtextEl = document.getElementById('expSubtext') || document.querySelector('.exp-action-subtext');
+
+  const isClosed = clubConfig && clubConfig.status === 'Closed';
+  const isSoldOut = availableSeats <= 0 || isClosed;
+
+  if (isSoldOut) {
+    if (labelOnly) labelOnly.style.display = 'none';
+    if (seatsEl) {
+      seatsEl.innerText = INVENTORY_MESSAGES.SOLD_OUT_LABEL;
+      seatsEl.classList.add('exp-sold-out-text');
+    }
+    if (remainingLabel) remainingLabel.style.display = 'none';
+
+    if (bookBtn) {
+      bookBtn.disabled = true;
+      bookBtn.classList.add('disabled');
+      bookBtn.innerText = INVENTORY_MESSAGES.SOLD_OUT_LABEL;
+    }
+    if (subtextEl) {
+      subtextEl.innerHTML = `✨ ${INVENTORY_MESSAGES.SOLD_OUT_BANNER}`;
+    }
+  } else {
+    if (labelOnly) labelOnly.style.display = 'inline-block';
+    if (seatsEl) {
+      seatsEl.innerText = String(availableSeats);
+      seatsEl.classList.remove('exp-sold-out-text');
+    }
+    if (remainingLabel) {
+      remainingLabel.style.display = 'inline-block';
+      remainingLabel.innerText = availableSeats === 1
+        ? INVENTORY_MESSAGES.SINGULAR_SEAT_LABEL
+        : INVENTORY_MESSAGES.PLURAL_SEATS_LABEL;
+    }
+
+    if (bookBtn) {
+      bookBtn.disabled = false;
+      bookBtn.classList.remove('disabled');
+      bookBtn.innerText = INVENTORY_MESSAGES.BOOK_SEAT_TEXT;
+    }
+    if (subtextEl) {
+      subtextEl.innerHTML = `Hurry up! This experience is filling fast. <span class="exp-sparkle">✦</span>`;
+    }
   }
 }
 
@@ -144,10 +184,9 @@ export function syncSelectedEventToExperience(clubConfig) {
   const timeEl   = document.getElementById('expEventTimeLabel');
   const venueEl  = document.getElementById('expEventVenueLabel');
   const priceEl  = document.getElementById('expEventPriceLabel');
-  const seatsEl  = document.getElementById('expRemainingCount');
 
   if (titleEl)  titleEl.innerText = (clubConfig.name || clubConfig.title || 'MIDNIGHT MEMORIES').toUpperCase();
-  if (descEl)   descEl.innerText  = clubConfig.description || 'A mysterious dining experience where time keeps the secrets and strangers become stories.';
+  if (descEl)   descEl.innerText  = clubConfig.description || 'A mysterious dining experience where time stops at the table.';
   if (dateEl)   dateEl.innerText  = (clubConfig.displayNight || 'SAT, 15 AUG 2026').toUpperCase();
   if (timeEl)   timeEl.innerText  = '20:00 IST ONWARDS';
   if (venueEl)  venueEl.innerText = (clubConfig.location || clubConfig.venue || 'SECRET VILLA').toUpperCase();
@@ -157,25 +196,5 @@ export function syncSelectedEventToExperience(clubConfig) {
   }
 
   const available = getAvailableSeats(clubConfig);
-  const isSoldOut = available <= 0 || clubConfig.status === 'Closed';
-  const bookBtn = document.getElementById('expBookSeatBtn');
-  const subtextEl = document.querySelector('.exp-action-subtext');
-
-  if (seatsEl) {
-    seatsEl.innerText = String(available);
-  }
-
-  if (bookBtn) {
-    if (isSoldOut) {
-      bookBtn.disabled = true;
-      bookBtn.classList.add('disabled');
-      bookBtn.innerText = '● SOLD OUT — CHRONO FULLY BOOKED';
-      if (subtextEl) subtextEl.innerText = '✨ Time has stopped for this experience. All seats reserved.';
-    } else {
-      bookBtn.disabled = false;
-      bookBtn.classList.remove('disabled');
-      bookBtn.innerText = 'BOOK YOUR SEAT';
-      if (subtextEl) subtextEl.innerText = 'Secure booking. Your experience is our priority.';
-    }
-  }
+  updateSeatsRemaining(available, clubConfig);
 }

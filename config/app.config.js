@@ -180,6 +180,20 @@ export const EXPERIENCE_CONFIG = {
   ]
 };
 
+// ─── Seat Reservation & Dynamic Messaging Config ────────────────────────────
+export const RESERVATION_HOLD_MS = 300000; // 5 Minutes in milliseconds
+
+export const INVENTORY_MESSAGES = {
+  ONLY_X_SEATS_SELECTABLE: 'Only {count} seats are available. Please select fewer tickets.',
+  AVAILABILITY_CHANGED: 'Sorry, the seat availability has changed. Only {count} seats are currently available.',
+  SOLD_OUT_BANNER: 'SOLD OUT — This experience is currently fully booked.',
+  SOLD_OUT_LABEL: 'SOLD OUT',
+  SINGULAR_SEAT_LABEL: 'SEAT REMAINING',
+  PLURAL_SEATS_LABEL: 'SEATS REMAINING',
+  CHRONO_FULL_TEXT: '● SOLD OUT — CHRONO FULLY BOOKED',
+  BOOK_SEAT_TEXT: 'BOOK YOUR SEAT',
+};
+
 export const ERAS_OPTIONS = ['80s', '90s', '2000s', 'Future'];
 export const PREFERENCES = {
   timeOfDay: ['Morning', 'Midnight'],

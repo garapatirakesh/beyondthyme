@@ -19,7 +19,8 @@ export const ADMIN_SIDEBAR_NAV = [
 ];
 
 /** Status choices */
-export const EVENT_STATUSES = ['Draft', 'Published', 'Closed', 'Completed'];
+export const EVENT_STATUSES = ['Draft', 'Published', 'Sold_Out', 'Closed', 'Completed', 'Cancelled', 'Archived'];
+export const EVENT_FILTER_PRESETS = ['All', 'Upcoming', 'Live', 'Sold Out', 'Completed', 'Cancelled', 'Archived'];
 export const THEME_STATUSES = ['Draft', 'Active', 'Archived'];
 export const PAYMENT_STATUSES = ['Paid', 'Refunded', 'Pending', 'Failed'];
 export const ATTENDANCE_STATUSES = ['Unchecked', 'Checked In', 'Late', 'Absent', 'Walk-in'];

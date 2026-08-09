@@ -27,10 +27,11 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    // EVENTS: Read-only for public, admin-only for writes.
+    // EVENTS: Read-only for public, update for booking transactions/admin, create/delete admin-only.
     match /events/{eventId} {
       allow read: if true;
-      allow create, update, delete: if isAdmin();
+      allow update: if signedIn() || isAdmin();
+      allow create, delete: if isAdmin();
     }
 
     // THEMES: Read-only for public, admin-only for writes.
@@ -39,8 +40,22 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
-    // SEAT BOOKINGS: Public read, authenticated creation, admin delete.
+    // SEAT BOOKINGS: Public read, authenticated creation/update, admin delete.
     match /seatBookings/{bookingId} {
+      allow read: if true;
+      allow create: if signedIn();
+      allow update: if signedIn() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // SEAT RESERVATIONS (5-Min Holds): Public read, authenticated create/update/delete.
+    match /seatReservations/{reservationId} {
+      allow read: if true;
+      allow create, update, delete: if signedIn() || isAdmin();
+    }
+
+    // TICKETS: Public read/verification, authenticated creation/update, admin delete.
+    match /tickets/{ticketId} {
       allow read: if true;
       allow create: if signedIn();
       allow update: if signedIn() || isAdmin();

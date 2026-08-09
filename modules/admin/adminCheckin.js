@@ -62,18 +62,19 @@ export async function processDoorCheckin(rawCode) {
     // If entered as Seat number e.g. "Seat_03" or "3"
     let seatNum = parseInt(rawCode.replace(/[^0-9]/g, ''), 10);
     if (!isNaN(seatNum) && seatNum >= 1 && seatNum <= 25) {
-      const docId = `seat_${String(seatNum).padStart(2, '0')}`;
+      const seatIdStr = String(seatNum).padStart(2, '0');
       const nowTime = new Date().toLocaleTimeString();
+      const docId = `seat_${seatIdStr}`;
 
       await writeFirestoreDoc('seatBookings', docId, {
-        seatId: `Seat_${String(seatNum).padStart(2, '0')}`,
+        seatId: `Seat_${seatIdStr}`,
         seatNum: seatNum,
         attendance: 'Checked In',
         checkinTime: nowTime,
       });
 
-      _logCheckin(`Seat_${String(seatNum).padStart(2, '0')}`, 'Checked In (Seat Manual)', nowTime);
-      alert(`✓ Guest for Seat P${String(seatNum).padStart(2, '0')} Checked In at ${nowTime}!`);
+      _logCheckin(`Seat_${seatIdStr}`, 'Checked In (Seat Manual)', nowTime);
+      alert(`✓ Guest for Seat P${seatIdStr} Checked In at ${nowTime}!`);
       return;
     }
 

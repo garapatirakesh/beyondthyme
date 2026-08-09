@@ -5,7 +5,9 @@
   <!-- ─── 1. Auth Lock View (Shown when unauthorized) ──────────────────────── -->
   <div id="adminAuthLock" class="admin-auth-lock">
     <div class="admin-auth-card">
-      <div class="admin-auth-crown">👑</div>
+      <div class="admin-auth-crown">
+        <img src="/logo.jpg" alt="Beyond Thyme Logo" class="admin-auth-logo-img">
+      </div>
       <h2 class="admin-auth-title">BEYOND THYME</h2>
       <p class="admin-auth-subtitle">Restricted Executive Command Suite.<br>Authorized Google authentication required.</p>
       
@@ -30,7 +32,9 @@
     <aside id="adminSidebar" class="admin-sidebar">
       <div class="admin-sidebar-header">
         <div class="admin-brand">
-          <span class="admin-brand-logo">👑</span>
+          <span class="admin-brand-logo">
+            <img src="/logo.jpg" alt="Beyond Thyme Logo" class="admin-brand-logo-img">
+          </span>
           <span class="admin-brand-text">BEYOND THYME</span>
         </div>
         <button id="btnToggleAdminSidebar" class="admin-btn admin-btn-outline admin-btn-sm admin-p-btn-sm" title="Toggle Sidebar">
@@ -44,9 +48,11 @@
 
       <div class="admin-sidebar-footer">
         <div class="admin-user-chip">
-          <div class="admin-avatar">👑</div>
+          <div class="admin-avatar">
+            <img src="/logo.jpg" alt="Beyond Thyme Logo" class="admin-avatar-img">
+          </div>
           <div class="admin-user-info">
-            <span class="admin-user-name" id="adminUserName">Admin</span>
+            <span class="admin-user-name" id="adminUserName">beyondthyme</span>
             <span class="admin-user-role">beyondthyme.in@gmail.com</span>
           </div>
         </div>
@@ -61,6 +67,10 @@
 
       <!-- Topbar Header -->
       <header class="admin-topbar">
+        <div class="admin-topbar-left">
+          <div id="adminGlobalEventSelectorContainer" class="admin-event-selector-wrap"></div>
+        </div>
+
         <div class="admin-topbar-search">
           <span class="admin-search-icon">🔍</span>
           <input type="text" id="adminGlobalSearch" class="admin-search-input" placeholder="Global Search (Users, Bookings, Events, Coordinates...)" />
@@ -120,6 +130,17 @@
               </div>
             </div>
           </div>
+
+          <!-- Event History Section (Requirement 15) -->
+          <div class="admin-card admin-mt-15">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">📜 Event History & Historical Retention</h3>
+              <span class="admin-badge admin-badge-info">Permanent Record</span>
+            </div>
+            <div id="adminDashboardEventHistory" class="admin-kpi-grid">
+              <!-- Past events injected via adminDashboard.js -->
+            </div>
+          </div>
         </section>
 
         <!-- 2. Events Tab View -->
@@ -132,6 +153,16 @@
             <button id="btnCreateEventModal" class="admin-btn admin-btn-gold">
               ➕ Create New Event
             </button>
+          </div>
+
+          <!-- Event Status Filters -->
+          <div class="admin-filter-bar" id="adminEventFilterPills">
+            <button class="admin-filter-btn active" data-filter="All">All</button>
+            <button class="admin-filter-btn" data-filter="Upcoming">Upcoming</button>
+            <button class="admin-filter-btn" data-filter="Published">Published</button>
+            <button class="admin-filter-btn" data-filter="Sold_Out">Sold Out</button>
+            <button class="admin-filter-btn" data-filter="Completed">Completed</button>
+            <button class="admin-filter-btn" data-filter="Closed">Closed</button>
           </div>
 
           <div id="adminEventsGrid" class="admin-kpi-grid">
@@ -160,8 +191,8 @@
         <section id="adminView_seating" class="admin-tab-view">
           <div class="admin-section-header">
             <div>
-              <h1 class="admin-section-title">25-Seat Floorplan Controls</h1>
-              <p class="admin-section-desc">Lock, reserve, assign, or reassign seats in real-time on the digital floorplan.</p>
+              <h1 class="admin-section-title" id="adminSeatingTitle">Event Floorplan Controls</h1>
+              <p class="admin-section-desc" id="adminSeatingDesc">Lock, reserve, assign, or reassign seats in real-time on the selected event's floorplan.</p>
             </div>
             <div class="admin-flex-gap-md">
               <button id="btnResetAllSeats" class="admin-btn admin-btn-danger admin-btn-sm">
@@ -172,7 +203,7 @@
 
           <div class="admin-card">
             <div class="admin-card-header">
-              <h3 class="admin-card-title">Banquet Table Schematic (25 Seats)</h3>
+              <h3 class="admin-card-title" id="adminSeatingSchematicTitle">Banquet Table Schematic</h3>
               <div class="admin-flex-gap-md font-mono">
                 <span class="admin-text-green-indicator">● Available</span>
                 <span class="admin-text-red-indicator">● Booked</span>
@@ -496,7 +527,20 @@
           </div>
         </div>
 
-        <div class="admin-form-row-4col">
+        <div class="admin-form-row">
+          <div>
+            <label class="admin-field-label">Parent Theme</label>
+            <select id="adminEventThemeSelect" class="admin-select-luxury">
+              <!-- Themes injected dynamically -->
+            </select>
+          </div>
+          <div>
+            <label class="admin-field-label">Emblem Emoji</label>
+            <input type="text" id="adminEventEmblemInput" class="admin-input-luxury" placeholder="e.g. 🔥" value="🔥" required>
+          </div>
+        </div>
+
+        <div class="admin-form-row">
           <div>
             <label class="admin-field-label">Ticket Price (₹ INR)</label>
             <input type="number" id="adminEventPriceInput" class="admin-input-luxury" value="3500" placeholder="3500" required>
@@ -505,18 +549,17 @@
             <label class="admin-field-label">Seat Capacity</label>
             <input type="number" id="adminEventCapacityInput" class="admin-input-luxury" value="25" required>
           </div>
-          <div>
-            <label class="admin-field-label">Emblem Emoji</label>
-            <input type="text" id="adminEventEmblemInput" class="admin-input-luxury" placeholder="e.g. 🔥" value="🔥" required>
-          </div>
-          <div>
-            <label class="admin-field-label">Status</label>
-            <select id="adminEventStatusSelect" class="admin-select-luxury">
-              <option value="Published">Published</option>
-              <option value="Closed">Closed</option>
-              <option value="Draft">Draft</option>
-            </select>
-          </div>
+        </div>
+
+        <div class="admin-mb-1rem">
+          <label class="admin-field-label">Status</label>
+          <select id="adminEventStatusSelect" class="admin-select-luxury">
+            <option value="Published">Published</option>
+            <option value="Sold_Out">Sold Out</option>
+            <option value="Closed">Closed</option>
+            <option value="Completed">Completed</option>
+            <option value="Draft">Draft</option>
+          </select>
         </div>
 
         <div class="admin-form-row">

@@ -55,8 +55,23 @@
 .admin-auth-crown {
   font-size: 3rem;
   margin-bottom: 1rem;
-  display: inline-block;
-  animation: pulseGold 3s infinite ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-auth-logo-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--admin-gold);
+  box-shadow: 0 0 20px rgba(196, 120, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease;
+}
+
+.admin-auth-logo-img:hover {
+  transform: scale(1.05);
 }
 
 .admin-auth-title {
@@ -113,7 +128,25 @@
 }
 
 .admin-brand-logo {
-  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-brand-logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--admin-gold);
+  box-shadow: 0 0 10px rgba(196, 120, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-brand-logo-img:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 14px rgba(196, 120, 0, 0.4);
 }
 
 .admin-brand-text {
@@ -189,15 +222,24 @@
 }
 
 .admin-avatar {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--admin-gold-glow);
-  border: 1px solid var(--admin-gold);
+  border: 1.5px solid var(--admin-gold);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(196, 120, 0, 0.2), 0 2px 5px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+.admin-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .admin-user-info {
@@ -234,6 +276,111 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+}
+
+/* ─── Global Event Selector Component Styling ───────────────────────────── */
+.admin-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-event-selector-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.admin-event-selector-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--admin-card-bg);
+  border: 1.5px solid var(--admin-gold);
+  border-radius: 12px;
+  padding: 0.35rem 0.85rem;
+  box-shadow: 0 2px 8px rgba(196, 120, 0, 0.15);
+  transition: all 0.25s ease;
+}
+
+.admin-event-selector-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--admin-gold);
+  white-space: nowrap;
+}
+
+.admin-event-selector-dropdown {
+  background: transparent;
+  border: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--admin-text-primary);
+  outline: none;
+  cursor: pointer;
+  padding-right: 0.5rem;
+}
+
+.admin-event-selector-dropdown optgroup {
+  font-weight: 700;
+  color: var(--admin-gold);
+  background: var(--admin-panel-bg);
+}
+
+.admin-event-selector-dropdown option {
+  font-weight: 500;
+  color: var(--admin-text-primary);
+  background: var(--admin-card-bg);
+}
+
+/* Filter Bar Buttons */
+.admin-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.admin-filter-btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid var(--admin-card-border);
+  background: var(--admin-card-bg);
+  color: var(--admin-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-filter-btn:hover {
+  border-color: var(--admin-gold);
+  color: var(--admin-gold);
+}
+
+.admin-filter-btn.active {
+  background: var(--admin-gold);
+  color: #ffffff;
+  border-color: var(--admin-gold);
+  box-shadow: 0 2px 6px rgba(196, 120, 0, 0.3);
+}
+
+.admin-history-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.2rem;
+  border-radius: 12px;
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-card-border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 .admin-topbar-search {

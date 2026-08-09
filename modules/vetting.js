@@ -2,10 +2,16 @@
  * Multi-step "Your Timeline" Luxury Booking Modal & Razorpay Checkout integration.
  */
 
-import { SEAT_PRICE_INR, MIN_SEATS_PER_BOOKING, MAX_SEATS_PER_BOOKING, RAZORPAY_KEY_ID, EVENT_DETAILS, EMAIL_REGEX } from '../config/app.config.js';
+import { SEAT_PRICE_INR, MIN_SEATS_PER_BOOKING, MAX_SEATS_PER_BOOKING, RAZORPAY_KEY_ID, EVENT_DETAILS, EMAIL_REGEX, INVENTORY_MESSAGES } from '../config/app.config.js';
+import { getAvailableSeats } from '../config/clubs.js';
 import { addTimelineSubmission } from './admin.js';
 import { generateTicketQRCode } from './qrcode.js';
-import { bookSeatTransaction } from './firebase.js';
+import { 
+  bookSeatTransaction, 
+  createTemporaryReservationTransaction, 
+  releaseTemporaryReservation, 
+  confirmBookingFromReservationTransaction 
+} from './firebase.js';
 import { getCurrentUser } from './auth.js';
 import { buildTicketData, persistTicket } from './ticket.js';
 import { cacheTicketLocally, openTicketVerificationModal } from './myTickets.js';
@@ -14,6 +20,7 @@ import { dispatchTicketEmail } from './ticketExporter.js';
 let selectedSeatQuantity = 1;
 let currentPricePerSeat = 3500;
 let currentActiveClubConfig = null;
+let currentActiveReservationId = null;
 
 /**
  * Initialize Timeline Booking overlay.
@@ -50,9 +57,14 @@ export function initVetting(deps) {
 
   btnQtyPlus?.addEventListener('click', (e) => {
     e.preventDefault();
-    if (selectedSeatQuantity < MAX_SEATS_PER_BOOKING) {
+    const availableSeats = currentActiveClubConfig ? getAvailableSeats(currentActiveClubConfig) : MAX_SEATS_PER_BOOKING;
+    const maxSelectable = Math.min(MAX_SEATS_PER_BOOKING, availableSeats);
+
+    if (selectedSeatQuantity < maxSelectable) {
       selectedSeatQuantity++;
       _updatePriceDisplays();
+    } else {
+      alert(INVENTORY_MESSAGES.ONLY_X_SEATS_SELECTABLE.replace('{count}', availableSeats));
     }
   });
 
@@ -104,6 +116,17 @@ export function initVetting(deps) {
       e.preventDefault();
       e.stopPropagation();
     }
+    const availableSeats = currentActiveClubConfig ? getAvailableSeats(currentActiveClubConfig) : 0;
+    if (selectedSeatQuantity > availableSeats) {
+      alert(INVENTORY_MESSAGES.AVAILABILITY_CHANGED.replace('{count}', availableSeats));
+      selectedSeatQuantity = Math.max(1, availableSeats);
+      _updatePriceDisplays();
+      if (availableSeats <= 0) {
+        _hideOverlay();
+      }
+      return;
+    }
+
     const sForm = document.getElementById('vettingStepForm');
     const sSummary = document.getElementById('vettingStepSummary');
     _show(sForm);
@@ -113,11 +136,15 @@ export function initVetting(deps) {
   // Close Overlay
   closeBtn?.addEventListener('click', (e) => {
     if (e) e.preventDefault();
+    if (currentActiveReservationId) {
+      releaseTemporaryReservation(currentActiveReservationId);
+      currentActiveReservationId = null;
+    }
     _hideOverlay();
   });
 
   // Reserve My Seat & Trigger Razorpay
-  reserveBtn?.addEventListener('click', (e) => {
+  reserveBtn?.addEventListener('click', async (e) => {
     if (e) e.preventDefault();
     const fullName     = document.getElementById('tlFullName')?.value.trim();
     const dob          = document.getElementById('tlDOB')?.value.trim();
@@ -151,6 +178,17 @@ export function initVetting(deps) {
 
     if (!phone)    { alert('Please enter your phone number: "How shall we contact your future self?"'); return; }
 
+    const availableSeats = currentActiveClubConfig ? getAvailableSeats(currentActiveClubConfig) : 0;
+    if (selectedSeatQuantity > availableSeats) {
+      alert(INVENTORY_MESSAGES.AVAILABILITY_CHANGED.replace('{count}', availableSeats));
+      selectedSeatQuantity = Math.max(1, availableSeats);
+      _updatePriceDisplays();
+      if (availableSeats <= 0) {
+        _hideOverlay();
+      }
+      return;
+    }
+
     const activeEra = document.querySelector('.era-card-option.active')?.getAttribute('data-era') || '2000s';
 
     const selectedSeatObj = getSelectedSeat?.() || 'Seat_11';
@@ -183,6 +221,24 @@ export function initVetting(deps) {
       time: '20:00 IST ONWARDS',
     };
 
+    // Atomically reserve seat inventory for 5 minutes before opening payment modal
+    try {
+      const res = await createTemporaryReservationTransaction(
+        currentActiveClubConfig?.id || 'zenitsu',
+        selectedSeatQuantity,
+        getCurrentUser(),
+        timelineData
+      );
+      currentActiveReservationId = res.reservationId;
+      timelineData.reservationId = res.reservationId;
+    } catch (err) {
+      alert(err.message || 'Unable to reserve seats. Please check availability.');
+      const currentAvailable = getAvailableSeats(currentActiveClubConfig);
+      selectedSeatQuantity = Math.max(1, Math.min(selectedSeatQuantity, currentAvailable));
+      _updatePriceDisplays();
+      return;
+    }
+
     // Razorpay Integration
     if (window.Razorpay) {
       try {
@@ -206,7 +262,11 @@ export function initVetting(deps) {
           },
           modal: {
             ondismiss: function () {
-              console.log('Payment checkout closed');
+              console.log('Payment checkout closed/cancelled, releasing temporary reservation.');
+              if (currentActiveReservationId) {
+                releaseTemporaryReservation(currentActiveReservationId);
+                currentActiveReservationId = null;
+              }
             }
           }
         };
@@ -234,9 +294,11 @@ async function _handlePaymentSuccess(timelineData, paymentResponse, deps) {
 
   const currentUser = getCurrentUser();
 
-  // Reserve seat atomically using Firestore
+  // Confirm seat booking atomically in Firestore
   try {
-    await bookSeatTransaction(timelineData.seatId, timelineData, currentUser);
+    timelineData.reservationId = currentActiveReservationId;
+    await confirmBookingFromReservationTransaction(currentActiveReservationId, timelineData, currentUser);
+    currentActiveReservationId = null;
   } catch (err) {
     console.warn('Seat booking notice:', err);
   }

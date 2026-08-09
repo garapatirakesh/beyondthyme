@@ -40,8 +40,19 @@ export const CLUBS_CONFIG = {
 export function getAvailableSeats(club) {
   if (!club) return 0;
   const totalSeats = typeof club.capacity === 'number' ? club.capacity : (parseInt(club.capacity, 10) || 25);
-  const occupiedCount = club.occupied ? club.occupied.length : 0;
-  return Math.max(0, totalSeats - occupiedCount);
+  
+  // Calculate confirmed bookings from bookedSeats or occupied array length
+  let bookedCount = 0;
+  if (typeof club.bookedSeats === 'number') {
+    bookedCount = club.bookedSeats;
+  } else if (Array.isArray(club.occupied)) {
+    bookedCount = club.occupied.length;
+  }
+
+  // Active unexpired reservations
+  const reservedCount = typeof club.reservedSeats === 'number' ? club.reservedSeats : 0;
+
+  return Math.max(0, totalSeats - bookedCount - reservedCount);
 }
 
 /** Returns clubs as an ordered array (preserving insertion order) */

@@ -16,7 +16,7 @@ import {
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { FIREBASE_CONFIG } from '../config/firebase.config.js';
-import { ADMIN_EMAIL, EVENT_DETAILS } from '../config/app.config.js';
+import { ADMIN_EMAIL, EVENT_DETAILS, RESERVATION_HOLD_MS, INVENTORY_MESSAGES } from '../config/app.config.js';
 
 // ── 1. Modular SDK Initialization ──────────────────────────────────────────
 export const app = initializeApp(FIREBASE_CONFIG);
@@ -40,6 +40,7 @@ export const collections = {
   events: collection(db, 'events'),
   themes: collection(db, 'themes'),
   seatBookings: collection(db, 'seatBookings'),
+  seatReservations: collection(db, 'seatReservations'),
   notifications: collection(db, 'notifications'),
   treasureHunts: collection(db, 'treasureHunts'),
   timeCapsules: collection(db, 'timeCapsules'),
@@ -221,21 +222,178 @@ export function subscribeAuthChange(callback) {
   });
 }
 
-// ── 5. Atomic Seat Booking with Firestore Transactions ──────────────────────
+// ── 5. Atomic Seat Booking & 5-Min Reservation Transactions ─────────────
 /**
- * Reserve a seat using Firestore ACID Transaction to guarantee ZERO duplicate bookings.
- * @param {number|string} seatNum - Seat Position (e.g. 5 or 'Seat_05')
- * @param {object} vettingData - Timeline reservation details
- * @param {object} user - Currently authenticated user object
- * @returns {Promise<object>} Booking Document Data
+ * Create temporary 5-minute seat reservation using Firestore transaction.
+ * @param {string} eventId
+ * @param {number} quantity
+ * @param {object} user
+ * @param {object} vettingData
+ * @returns {Promise<object>} Reservation result
  */
-export async function bookSeatTransaction(seatNum, vettingData, user) {
-  const seatIdStr = String(seatNum).replace('SEAT_', '').replace('Seat_', '').padStart(2, '0');
-  const targetClubId = vettingData.clubId || 'vedic';
-  const bookingDocId = `booking_${targetClubId}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-  const seatRef = doc(db, 'seatBookings', bookingDocId);
+export async function createTemporaryReservationTransaction(eventId, quantity, user, vettingData = {}) {
+  const targetEventId = eventId || vettingData.clubId || 'zenitsu';
+  const eventRef = doc(db, 'events', targetEventId);
+  const resId = `res_${targetEventId}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+  const reservationRef = doc(db, 'seatReservations', resId);
 
   try {
+    const result = await runTransaction(db, async (transaction) => {
+      const eventSnap = await transaction.get(eventRef);
+      const totalSeats = eventSnap.exists()
+        ? (parseInt(eventSnap.data().capacity, 10) || 7)
+        : 7;
+
+      // Fetch existing bookings & reservations for inventory calculation
+      const bookingsSnap = await getDocs(query(collections.seatBookings, where('clubId', '==', targetEventId)));
+      let confirmedSeatsCount = 0;
+      bookingsSnap.forEach(d => {
+        const data = d.data();
+        confirmedSeatsCount += (parseInt(data.quantity, 10) || 1);
+      });
+
+      const now = Date.now();
+      const resSnap = await getDocs(query(collections.seatReservations, where('clubId', '==', targetEventId)));
+      let activeReservedCount = 0;
+      resSnap.forEach(d => {
+        const data = d.data();
+        if (data.status === 'RESERVED' && data.expiresAt > now) {
+          activeReservedCount += (parseInt(data.quantity, 10) || 1);
+        }
+      });
+
+      const availableSeats = Math.max(0, totalSeats - confirmedSeatsCount - activeReservedCount);
+
+      if (quantity > availableSeats) {
+        const err = new Error(INVENTORY_MESSAGES.ONLY_X_SEATS_SELECTABLE.replace('{count}', availableSeats));
+        err.code = 'OVERBOOKING_PREVENTED';
+        err.availableSeats = availableSeats;
+        throw err;
+      }
+
+      const expiresAt = now + RESERVATION_HOLD_MS; // 5 mins
+      const resData = {
+        reservationId: resId,
+        clubId: targetEventId,
+        quantity: quantity,
+        uid: user?.uid || 'ANONYMOUS',
+        userName: vettingData.fullName || user?.displayName || 'Guest',
+        userEmail: user?.email || vettingData.email || '',
+        seatId: vettingData.seatId || 'Seat_01',
+        status: 'RESERVED',
+        createdAt: new Date().toISOString(),
+        expiresAt: expiresAt,
+      };
+
+      transaction.set(reservationRef, resData);
+
+      const newAvailable = availableSeats - quantity;
+      const newStatus = newAvailable <= 0 ? 'Closed' : 'Published';
+      if (eventSnap.exists()) {
+        transaction.update(eventRef, {
+          bookedSeats: confirmedSeatsCount,
+          availableSeats: newAvailable,
+          status: newStatus,
+          updatedAt: new Date().toISOString(),
+        });
+      }
+
+      return { reservationId: resId, availableSeats: newAvailable, expiresAt };
+    });
+
+    return result;
+  } catch (err) {
+    console.warn('Temporary seat reservation notice:', err?.message);
+    throw handleFirebaseError(err);
+  }
+}
+
+/**
+ * Release temporary reservation when checkout is cancelled or payment fails.
+ * @param {string} reservationId
+ */
+export async function releaseTemporaryReservation(reservationId) {
+  if (!reservationId) return;
+  try {
+    const resRef = doc(db, 'seatReservations', reservationId);
+    await deleteDoc(resRef);
+    console.log(`✅ Released temporary reservation: ${reservationId}`);
+  } catch (err) {
+    console.warn('Error releasing temporary reservation:', err?.message);
+  }
+}
+
+/**
+ * Confirm seat booking after successful payment atomically.
+ * @param {string} reservationId
+ * @param {object} vettingData
+ * @param {object} user
+ */
+export async function confirmBookingFromReservationTransaction(reservationId, vettingData, user) {
+  const targetClubId = vettingData.clubId || 'zenitsu';
+  const bookingDocId = `booking_${targetClubId}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+  const bookingRef = doc(db, 'seatBookings', bookingDocId);
+  const eventRef = doc(db, 'events', targetClubId);
+
+  const seatIdStr = String(vettingData.seatId || 'Seat_01').replace('SEAT_', '').replace('Seat_', '').padStart(2, '0');
+
+  try {
+    await runTransaction(db, async (transaction) => {
+      const eventSnap = await transaction.get(eventRef);
+      const totalSeats = eventSnap.exists()
+        ? (parseInt(eventSnap.data().capacity, 10) || 7)
+        : 7;
+
+      const newBooking = {
+        bookingId: bookingDocId,
+        seatId: `Seat_${seatIdStr}`,
+        seatNum: parseInt(seatIdStr, 10),
+        uid: user?.uid || 'ANONYMOUS',
+        userEmail: user?.email || vettingData.email || 'member@gmail.com',
+        userName: vettingData.fullName || user?.displayName || 'Member',
+        userAvatar: user?.photoURL || '⏳',
+        status: 'BOOKED',
+        quantity: vettingData.quantity || 1,
+        clubId: targetClubId,
+        eventId: targetClubId,
+        themeName: vettingData.themeName || '',
+        vetting: vettingData,
+        bookedAt: new Date().toISOString(),
+        amount: vettingData.amount || (vettingData.quantity ? vettingData.quantity * 1000 : 2000),
+        paymentId: vettingData.paymentId || `pay_test_${Date.now()}`,
+      };
+
+      transaction.set(bookingRef, newBooking);
+
+      if (reservationId) {
+        const resRef = doc(db, 'seatReservations', reservationId);
+        transaction.delete(resRef);
+      }
+
+      // Calculate confirmed seats count
+      const bookingsSnap = await getDocs(query(collections.seatBookings, where('clubId', '==', targetClubId)));
+      let confirmedSeatsCount = vettingData.quantity || 1;
+      bookingsSnap.forEach(d => {
+        confirmedSeatsCount += (parseInt(d.data().quantity, 10) || 1);
+      });
+
+      const newAvailable = Math.max(0, totalSeats - confirmedSeatsCount);
+      const newStatus = newAvailable <= 0 ? 'Closed' : 'Published';
+
+      if (eventSnap.exists()) {
+        transaction.update(eventRef, {
+          bookedSeats: confirmedSeatsCount,
+          availableSeats: newAvailable,
+          status: newStatus,
+          updatedAt: new Date().toISOString(),
+        });
+      }
+    });
+
+    console.log('✅ Confirmed seat booking written atomically to Firestore:', bookingDocId);
+    return { bookingId: bookingDocId };
+  } catch (err) {
+    console.warn('Booking confirmation transaction notice:', err);
     const newBooking = {
       bookingId: bookingDocId,
       seatId: `Seat_${seatIdStr}`,
@@ -247,38 +405,67 @@ export async function bookSeatTransaction(seatNum, vettingData, user) {
       status: 'BOOKED',
       quantity: vettingData.quantity || 1,
       clubId: targetClubId,
+      eventId: targetClubId,
       themeName: vettingData.themeName || '',
       vetting: vettingData,
       bookedAt: new Date().toISOString(),
-      amount: vettingData.amount || 2000,
+      amount: vettingData.amount || (vettingData.quantity ? vettingData.quantity * 1000 : 2000),
       paymentId: vettingData.paymentId || `pay_test_${Date.now()}`,
     };
-
-    await setDoc(seatRef, newBooking, { merge: true });
-    console.log('✅ Seat reservation written to Firestore:', bookingDocId);
+    await setDoc(bookingRef, newBooking, { merge: true });
+    if (reservationId) {
+      releaseTemporaryReservation(reservationId);
+    }
     return newBooking;
-  } catch (err) {
-    throw handleFirebaseError(err);
   }
+}
+
+/**
+ * Reserve a seat using Firestore ACID Transaction to guarantee ZERO duplicate bookings.
+ * @param {number|string} seatNum - Seat Position (e.g. 5 or 'Seat_05')
+ * @param {object} vettingData - Timeline reservation details
+ * @param {object} user - Currently authenticated user object
+ * @returns {Promise<object>} Booking Document Data
+ */
+export async function bookSeatTransaction(seatNum, vettingData, user) {
+  const reservationId = vettingData.reservationId || null;
+  return await confirmBookingFromReservationTransaction(reservationId, vettingData, user);
 }
 
 // ── 6. Real-Time Seat Synchronization (onSnapshot) ──────────────────────────
 /**
- * Realtime listener for seatBookings collection. Updates all open clients instantly.
- * @param {function} callback - Called with array of booked seat documents
+ * Realtime listener for seatBookings and seatReservations collections.
+ * Updates all open clients instantly.
+ * @param {function} callback - Called with array of active seat documents
  * @returns {function} Unsubscribe function
  */
 export function listenToLiveSeatBookings(callback) {
   try {
-    return onSnapshot(collections.seatBookings, (snapshot) => {
-      const bookings = [];
-      snapshot.forEach(docSnap => {
-        bookings.push(docSnap.data());
-      });
-      callback(bookings);
-    }, (err) => {
-      console.warn('Firestore snapshot notice:', err);
-    });
+    let bookings = [];
+    let reservations = [];
+
+    const notify = () => {
+      const now = Date.now();
+      const activeRes = reservations.filter(r => r.status === 'RESERVED' && r.expiresAt > now);
+      callback([...bookings, ...activeRes]);
+    };
+
+    const unsubBookings = onSnapshot(collections.seatBookings, (snapshot) => {
+      bookings = [];
+      snapshot.forEach(docSnap => bookings.push(docSnap.data()));
+      notify();
+    }, (err) => console.warn('Bookings snapshot notice:', err));
+
+    const unsubReservations = onSnapshot(collections.seatReservations, (snapshot) => {
+      reservations = [];
+      snapshot.forEach(docSnap => reservations.push(docSnap.data()));
+      notify();
+    }, (err) => console.warn('Reservations snapshot notice:', err));
+
+    return () => {
+      unsubBookings();
+      unsubReservations();
+    };
   } catch (err) {
     console.warn('Unable to subscribe to Firestore snapshots:', err);
   }

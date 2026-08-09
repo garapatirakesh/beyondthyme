@@ -16,15 +16,24 @@ import { renderAdminCapsulesView } from './admin/adminCapsules.js';
 import { initAdminNotificationsListeners } from './admin/adminNotifications.js';
 import { renderAdminReportsView, initAdminReportsListeners } from './admin/adminReports.js';
 import { initAdminSettingsListeners } from './admin/adminSettings.js';
+import { 
+  renderEventSelector, 
+  getSelectedEventObj, 
+  getSelectedEventId, 
+  setSelectedEventId, 
+  onEventSelectionChanged 
+} from './admin/adminEventSelector.js';
 import { listenToCollection } from './firebase.js';
 
-let liveBookings = [];
+let liveSeatBookings = [];
+let liveTickets = [];
 let liveUsers = [];
 let liveEvents = [];
 let liveThemes = [];
 let liveHunts = [];
 let liveCapsules = [];
 let realtimeUnsubscribers = [];
+let activeTabId = 'dashboard';
 
 /**
  * Initialize Admin Portal system and real-time listeners.
@@ -36,6 +45,7 @@ export function initAdminPortal() {
   // 1. Initialize Auth & Navigation
   initAdminAuth({
     onTabChange: (tabId) => {
+      activeTabId = tabId;
       _refreshCurrentTab(tabId);
     },
     onAuthChange: (adminUser) => {
@@ -43,7 +53,12 @@ export function initAdminPortal() {
     },
   });
 
-  // 2. Initialize Module Event Listeners
+  // 2. Initialize Event Selector change callback
+  onEventSelectionChanged((eventId, selectedEventObj) => {
+    _refreshAllViews();
+  });
+
+  // 3. Initialize Module Event Listeners
   initAdminEventsListeners();
   initAdminThemesListeners();
   initAdminSeatingListeners();
@@ -54,29 +69,30 @@ export function initAdminPortal() {
   initAdminReportsListeners();
   initAdminSettingsListeners();
 
-  // 3. Global Search listener
+  // 4. Global Search listener
   const searchInput = document.getElementById('adminGlobalSearch');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase();
+      const selectedEvent = getSelectedEventObj(liveEvents);
       if (!q) {
-        renderAdminBookingsView(liveBookings);
+        renderAdminBookingsView(liveSeatBookings, liveTickets, selectedEvent);
         return;
       }
-      const filtered = liveBookings.filter(b => 
+      const filteredSeatBookings = liveSeatBookings.filter(b => 
         (b.userName || '').toLowerCase().includes(q) ||
         (b.userEmail || '').toLowerCase().includes(q) ||
         (b.seatId || '').toLowerCase().includes(q)
       );
-      renderAdminBookingsView(filtered);
+      renderAdminBookingsView(filteredSeatBookings, liveTickets, selectedEvent);
     });
   }
 
-  // 4. Refresh Dashboard Button
+  // 5. Refresh Dashboard Button
   const btnRefresh = document.getElementById('btnRefreshDashboard');
   if (btnRefresh) {
     btnRefresh.addEventListener('click', () => {
-      renderAdminDashboardView(liveBookings, liveUsers, liveEvents);
+      _refreshAllViews();
     });
   }
 
@@ -91,47 +107,54 @@ function _subscribeRealtimeListeners() {
   _unsubscribeRealtimeListeners();
 
   realtimeUnsubscribers.push(
+    listenToCollection('events', (data) => {
+      liveEvents = data || [];
+      renderEventSelector(liveEvents, () => _refreshAllViews());
+      renderAdminEventsView(liveEvents, liveThemes);
+      _refreshAllViews();
+    })
+  );
+
+  realtimeUnsubscribers.push(
     listenToCollection('seatBookings', (data) => {
-      liveBookings = data;
-      renderAdminDashboardView(liveBookings, liveUsers, liveEvents);
-      renderAdminSeatingView(liveBookings);
-      renderAdminBookingsView(liveBookings);
-      renderAdminReportsView(liveBookings);
+      liveSeatBookings = data || [];
+      _refreshAllViews();
+    })
+  );
+
+  realtimeUnsubscribers.push(
+    listenToCollection('tickets', (data) => {
+      liveTickets = data || [];
+      _refreshAllViews();
     })
   );
 
   realtimeUnsubscribers.push(
     listenToCollection('users', (data) => {
-      liveUsers = data;
+      liveUsers = data || [];
       renderAdminUsersView(liveUsers);
-      renderAdminDashboardView(liveBookings, liveUsers, liveEvents);
-    })
-  );
-
-  realtimeUnsubscribers.push(
-    listenToCollection('events', (data) => {
-      liveEvents = data;
-      renderAdminEventsView(liveEvents);
+      _refreshAllViews();
     })
   );
 
   realtimeUnsubscribers.push(
     listenToCollection('themes', (data) => {
-      liveThemes = data;
+      liveThemes = data || [];
       renderAdminThemesView(liveThemes);
+      renderAdminEventsView(liveEvents, liveThemes);
     })
   );
 
   realtimeUnsubscribers.push(
     listenToCollection('treasureHunts', (data) => {
-      liveHunts = data;
+      liveHunts = data || [];
       renderAdminTreasureView(liveHunts);
     })
   );
 
   realtimeUnsubscribers.push(
     listenToCollection('timeCapsules', (data) => {
-      liveCapsules = data;
+      liveCapsules = data || [];
       renderAdminCapsulesView(liveCapsules);
     })
   );
@@ -146,7 +169,8 @@ function _unsubscribeRealtimeListeners() {
 
 function _clearAdminData() {
   _unsubscribeRealtimeListeners();
-  liveBookings = [];
+  liveSeatBookings = [];
+  liveTickets = [];
   liveUsers = [];
   liveEvents = [];
   liveThemes = [];
@@ -172,22 +196,31 @@ function _clearAdminData() {
   if (checkins) checkins.innerHTML = '';
 }
 
+function _refreshAllViews() {
+  const selectedEvent = getSelectedEventObj(liveEvents);
+  renderAdminDashboardView(liveSeatBookings, liveTickets, liveUsers, liveEvents, selectedEvent, () => _refreshAllViews());
+  renderAdminSeatingView(liveSeatBookings, liveTickets, selectedEvent);
+  renderAdminBookingsView(liveSeatBookings, liveTickets, selectedEvent);
+  renderAdminReportsView(liveSeatBookings, liveTickets, selectedEvent);
+}
+
 function _refreshCurrentTab(tabId) {
+  const selectedEvent = getSelectedEventObj(liveEvents);
   switch (tabId) {
     case 'dashboard':
-      renderAdminDashboardView(liveBookings, liveUsers, liveEvents);
+      renderAdminDashboardView(liveSeatBookings, liveTickets, liveUsers, liveEvents, selectedEvent, () => _refreshAllViews());
       break;
     case 'events':
-      renderAdminEventsView(liveEvents);
+      renderAdminEventsView(liveEvents, liveThemes);
       break;
     case 'themes':
       renderAdminThemesView(liveThemes);
       break;
     case 'seating':
-      renderAdminSeatingView(liveBookings);
+      renderAdminSeatingView(liveSeatBookings, liveTickets, selectedEvent);
       break;
     case 'bookings':
-      renderAdminBookingsView(liveBookings);
+      renderAdminBookingsView(liveSeatBookings, liveTickets, selectedEvent);
       break;
     case 'users':
       renderAdminUsersView(liveUsers);
@@ -202,7 +235,7 @@ function _refreshCurrentTab(tabId) {
       renderAdminCapsulesView(liveCapsules);
       break;
     case 'reports':
-      renderAdminReportsView(liveBookings);
+      renderAdminReportsView(liveSeatBookings, liveTickets, selectedEvent);
       break;
   }
 }
