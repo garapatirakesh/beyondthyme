@@ -57,7 +57,7 @@ export async function seedInitialFirestoreCollections() {
 
   try {
     // 1. Events Collection (Only seed if empty on fresh startup)
-    // 1. Seed Zenitsu & Tanjiro if events collection is empty
+    const eventsSnap = await getDocs(collections.events);
     if (eventsSnap.empty) {
       const initialAdminEvents = [
         {
@@ -244,12 +244,32 @@ export async function createTemporaryReservationTransaction(eventId, quantity, u
         ? (parseInt(eventSnap.data().capacity, 10) || 7)
         : 7;
 
-      // Fetch existing bookings & reservations for inventory calculation
-      const bookingsSnap = await getDocs(query(collections.seatBookings, where('clubId', '==', targetEventId)));
+      // Fetch existing bookings & tickets for accurate inventory calculation
       let confirmedSeatsCount = 0;
+      const ticketsSnap = await getDocs(collections.tickets);
+      ticketsSnap.forEach(d => {
+        const data = d.data();
+        const status = String(data.status || '').toUpperCase();
+        if (status === 'CONFIRMED' || status === 'BOOKED' || status === 'PAID') {
+          const matchClub = (data.clubId && data.clubId === targetEventId) || 
+                            (data.eventId && data.eventId === targetEventId) || 
+                            (data.themeName && data.themeName.toLowerCase().includes(targetEventId.toLowerCase()));
+          if (matchClub) {
+            confirmedSeatsCount += (parseInt(data.quantity, 10) || 1);
+          }
+        }
+      });
+
+      const bookingsSnap = await getDocs(collections.seatBookings);
       bookingsSnap.forEach(d => {
         const data = d.data();
-        confirmedSeatsCount += (parseInt(data.quantity, 10) || 1);
+        const status = String(data.status || '').toUpperCase();
+        if (status === 'BOOKED' || status === 'CONFIRMED') {
+          const matchClub = (data.clubId && data.clubId === targetEventId) || (data.eventId && data.eventId === targetEventId);
+          if (matchClub) {
+            confirmedSeatsCount += (parseInt(data.quantity, 10) || 1);
+          }
+        }
       });
 
       const now = Date.now();
@@ -370,11 +390,20 @@ export async function confirmBookingFromReservationTransaction(reservationId, ve
         transaction.delete(resRef);
       }
 
-      // Calculate confirmed seats count
-      const bookingsSnap = await getDocs(query(collections.seatBookings, where('clubId', '==', targetClubId)));
+      // Calculate confirmed seats count across tickets & seatBookings
       let confirmedSeatsCount = vettingData.quantity || 1;
-      bookingsSnap.forEach(d => {
-        confirmedSeatsCount += (parseInt(d.data().quantity, 10) || 1);
+      const ticketsSnap = await getDocs(collections.tickets);
+      ticketsSnap.forEach(d => {
+        const data = d.data();
+        const status = String(data.status || '').toUpperCase();
+        if (status === 'CONFIRMED' || status === 'BOOKED' || status === 'PAID') {
+          const matchClub = (data.clubId && data.clubId === targetClubId) || 
+                            (data.eventId && data.eventId === targetClubId) || 
+                            (data.themeName && data.themeName.toLowerCase().includes(targetClubId.toLowerCase()));
+          if (matchClub) {
+            confirmedSeatsCount += (parseInt(data.quantity, 10) || 1);
+          }
+        }
       });
 
       const newAvailable = Math.max(0, totalSeats - confirmedSeatsCount);

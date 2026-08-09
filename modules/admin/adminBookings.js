@@ -23,6 +23,8 @@ export function renderAdminBookingsView(seatBookings = [], tickets = [], selecte
   currentSelectedEvent = selectedEvent;
 
   const eventName = selectedEvent?.name || selectedEvent?.title || 'Selected Event';
+  const eventId = selectedEvent?.id || 'zenitsu';
+  const eventCap = parseInt(selectedEvent?.capacity || 25, 10);
   const canonicalAll = buildCanonicalBookings(seatBookings, tickets);
 
   // Filter bookings strictly for selected event (Requirement 19)
@@ -48,26 +50,35 @@ export function renderAdminBookingsView(seatBookings = [], tickets = [], selecte
   activeBookings.forEach(b => {
     const tr = document.createElement('tr');
     const vetting = b.vetting || {};
-    const ticketLabel = b.quantity > 1 ? `${b.quantity} Tickets` : (b.seatId || 'Seat P01');
+    const ticketLabel = b.quantity > 1 ? `${b.quantity} Tickets` : (b.seatId || 'Seat_01');
+    const guestName = b.guestName || b.userName || 'Member';
+    const email = b.email || b.userEmail || '-';
+    const phone = vetting.phone || b.phone || '-';
+    const bookedTime = b.bookedAt ? new Date(b.bookedAt).toLocaleTimeString() : '-';
+    const paymentStatus = b.paymentStatus || b.status || 'Paid';
+    const totalAmount = typeof b.totalAmount === 'number' ? b.totalAmount : (typeof b.amount === 'number' ? b.amount : (b.quantity || 1) * (b.unitPrice || 500));
+    const attendanceStatus = b.checkedIn ? 'Checked In' : (b.attendance || 'Unchecked');
+    const dietary = vetting.favFood || vetting.era || 'Standard';
+    const allergies = vetting.allergies || 'None';
 
     tr.innerHTML = `
       <td>
         <span class="admin-badge admin-badge-warning">${ticketLabel}</span>
       </td>
       <td>
-        <strong class="admin-text-coral-accent">${b.guestName || 'Member'}</strong><br>
-        <small class="admin-section-desc">${b.email || '-'}</small>
+        <strong class="admin-text-coral-accent">${guestName}</strong><br>
+        <small class="admin-section-desc">${email}</small>
       </td>
-      <td>${vetting.phone || b.phone || '-'}</td>
-      <td><small class="admin-section-desc">${b.bookedAt ? new Date(b.bookedAt).toLocaleTimeString() : '-'}</small></td>
+      <td>${phone}</td>
+      <td><small class="admin-section-desc">${bookedTime}</small></td>
       <td>
-        <span class="admin-badge admin-badge-success">${b.paymentStatus || 'Paid'}</span><br>
+        <span class="admin-badge admin-badge-success">${paymentStatus}</span><br>
         <small class="font-mono">₹${totalAmount.toLocaleString('en-IN')}</small>
       </td>
-      <td><span class="admin-badge ${b.attendance === 'Checked In' ? 'admin-badge-success' : 'admin-badge-info'}">${b.attendance || 'Unchecked'}</span></td>
+      <td><span class="admin-badge ${b.checkedIn ? 'admin-badge-success' : 'admin-badge-info'}">${attendanceStatus}</span></td>
       <td>
-        <small>${vetting.favFood || 'Standard'}</small><br>
-        <small class="admin-badge admin-badge-danger">Allergies: ${vetting.allergies || 'None'}</small>
+        <small>${dietary}</small><br>
+        <small class="admin-badge admin-badge-danger">Allergies: ${allergies}</small>
       </td>
       <td>
         <div class="admin-flex-gap-sm">
@@ -78,7 +89,7 @@ export function renderAdminBookingsView(seatBookings = [], tickets = [], selecte
     `;
 
     tr.querySelector('.btn-move-seat')?.addEventListener('click', async () => {
-      const newSeatNumStr = prompt(`Move ${b.userName} from ${b.seatId} to target Seat Number (1-${eventCap}):`);
+      const newSeatNumStr = prompt(`Move ${guestName} from ${b.seatId} to target Seat Number (1-${eventCap}):`);
       if (newSeatNumStr) {
         const targetSeatNum = parseInt(newSeatNumStr, 10);
         if (targetSeatNum >= 1 && targetSeatNum <= eventCap) {
@@ -105,21 +116,28 @@ export function renderAdminBookingsView(seatBookings = [], tickets = [], selecte
             status: 'BOOKED',
           });
 
-          alert(`Successfully moved booking for ${b.userName} to Seat P${targetSeatNum} (${eventName})`);
+          alert(`Successfully moved booking for ${guestName} to Seat P${targetSeatNum} (${eventName})`);
         }
       }
     });
 
     tr.querySelector('.btn-cancel-booking')?.addEventListener('click', async () => {
-      if (confirm(`Cancel booking for ${b.userName || b.seatId} in ${eventName}?`)) {
-        const seatIdStr = String(b.seatNum || 1).padStart(2, '0');
-        const docId = b.bookingId || `booking_${eventId}_seat_${seatIdStr}`;
-        await writeFirestoreDoc('seatBookings', docId, {
-          status: 'AVAILABLE',
-          userName: '',
-          userAvatar: '',
-          bookedAt: null,
-        });
+      if (confirm(`Cancel booking for ${guestName} (${b.seatId}) in ${eventName}?`)) {
+        try {
+          if (b.source === 'tickets' || (b.bookingId && b.bookingId.startsWith('BT-'))) {
+            await writeFirestoreDoc('tickets', b.bookingId, {
+              status: 'CANCELLED',
+              updatedAt: new Date().toISOString(),
+            });
+          }
+          await writeFirestoreDoc('seatBookings', b.bookingId, {
+            status: 'CANCELLED',
+            updatedAt: new Date().toISOString(),
+          });
+          alert(`Successfully cancelled booking ${b.bookingId} for ${guestName}.`);
+        } catch (err) {
+          console.warn('Cancel booking notice:', err);
+        }
       }
     });
 
