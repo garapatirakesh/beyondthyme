@@ -14,8 +14,6 @@
       <ul class="nav-links">
         <li><a href="#manifesto" class="nav-interactive nav-link font-mono">Manifesto</a></li>
         <li><a href="#eras" class="nav-interactive nav-link font-mono">Eras of Flavor</a></li>
-        <li><a href="#schematic" class="nav-interactive nav-link font-mono">Floorplan</a></li>
-        <li><a href="#vault" class="nav-interactive nav-link font-mono">Access Terminal</a></li>
         <li><a href="#community" class="nav-interactive nav-link font-mono">Community</a></li>
       </ul>
 
@@ -26,6 +24,33 @@
           <span class="audio-pulse" id="audioPulse"></span>
           <span class="audio-label font-mono">SOUND: OFF</span>
         </button>
+
+        <!-- Auth / Login Button Container -->
+        <div class="auth-dropdown-container">
+          <button id="headerLoginBtn" class="btn-pill btn-ghost nav-interactive" aria-label="Login">
+            <span class="ticket-icon">👤</span>
+            <span class="ticket-label font-mono" id="headerLoginText">LOGIN</span>
+          </button>
+          
+          <!-- Chrono-Identity Panel (Hidden by default) -->
+          <div id="chronoIdentityPanel" class="chrono-identity-panel hidden">
+            <div class="chrono-identity-header">
+              <span class="chrono-title font-mono" id="chronoRoleTitle">CHRONO-TRAVELER</span>
+              <span class="chrono-score font-mono">SYNC: 99.4%</span>
+            </div>
+            <div class="chrono-identity-body">
+              <button id="btnGlitchMatrix" class="chrono-btn font-mono glitch-btn nav-interactive">
+                [ OVERRIDE MATRIX ]
+              </button>
+              <button id="btnArchivesShortcut" class="chrono-btn font-mono nav-interactive">
+                > VIEW ARCHIVES
+              </button>
+              <button id="btnLogout" class="chrono-btn font-mono logout-btn nav-interactive">
+                > SEVER LINK
+              </button>
+            </div>
+          </div>
+        </div>
 
         <!-- My Tickets Drawer Button -->
         <button id="myTicketsNavBtn" class="btn-pill btn-ghost nav-interactive" aria-label="My Tickets">

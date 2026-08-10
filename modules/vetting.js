@@ -2,8 +2,8 @@
  * Multi-step "Your Timeline" Luxury Booking Modal & Razorpay Checkout integration.
  */
 
-import { SEAT_PRICE_INR, MIN_SEATS_PER_BOOKING, MAX_SEATS_PER_BOOKING, RAZORPAY_KEY_ID, EVENT_DETAILS, EMAIL_REGEX, INVENTORY_MESSAGES } from '../config/app.config.js';
-import { getAvailableSeats } from '../config/clubs.js';
+import { SEAT_PRICE_INR, MIN_SEATS_PER_BOOKING, MAX_SEATS_PER_BOOKING, RAZORPAY_KEY_ID, EMAIL_REGEX, INVENTORY_MESSAGES } from '../config/app.config.js';
+import { getAvailableSeats, getNextAvailableSeat } from '../config/clubs.js';
 import { addTimelineSubmission } from './admin.js';
 import { generateTicketQRCode } from './qrcode.js';
 import { 
@@ -105,10 +105,10 @@ export function initVetting(deps) {
   const timeEl  = document.getElementById('bookingEventTime');
   const venueEl = document.getElementById('bookingEventVenue');
 
-  if (themeEl) themeEl.innerText = EVENT_DETAILS.theme;
-  if (dateEl)  dateEl.innerText  = EVENT_DETAILS.date;
-  if (timeEl)  timeEl.innerText  = EVENT_DETAILS.time;
-  if (venueEl) venueEl.innerText = EVENT_DETAILS.venue;
+  if (themeEl) themeEl.innerText = 'Exclusive Event';
+  if (dateEl)  dateEl.innerText  = 'TBD';
+  if (timeEl)  timeEl.innerText  = 'TBD';
+  if (venueEl) venueEl.innerText = 'Secret Location';
 
   // Step 1 -> Step 2 (Summary to Timeline Form)
   toFormBtn?.addEventListener('click', (e) => {
@@ -191,10 +191,10 @@ export function initVetting(deps) {
 
     const activeEra = document.querySelector('.era-card-option.active')?.getAttribute('data-era') || '2000s';
 
-    const selectedSeatObj = getSelectedSeat?.() || 'Seat_11';
+    const selectedSeatObj = getSelectedSeat?.() || getNextAvailableSeat(currentActiveClubConfig);
     const seatLabel = typeof selectedSeatObj === 'string' 
       ? selectedSeatObj 
-      : (selectedSeatObj?.seatId || selectedSeatObj?.label || 'Seat_11');
+      : (selectedSeatObj?.seatId || selectedSeatObj?.label || getNextAvailableSeat(currentActiveClubConfig));
 
     const totalAmountINR = selectedSeatQuantity * currentPricePerSeat;
 
@@ -214,10 +214,10 @@ export function initVetting(deps) {
       quantity: selectedSeatQuantity,
       unitPrice: currentPricePerSeat,
       amount: totalAmountINR,
-      clubId: currentActiveClubConfig?.id || 'vedic',
-      themeName: currentActiveClubConfig?.name || currentActiveClubConfig?.title || EVENT_DETAILS.theme,
-      venue: currentActiveClubConfig?.location || currentActiveClubConfig?.venue || EVENT_DETAILS.venue,
-      date: currentActiveClubConfig?.displayNight || currentActiveClubConfig?.eventDate || EVENT_DETAILS.date,
+      clubId: currentActiveClubConfig?.id || 'default_club',
+      themeName: currentActiveClubConfig?.name || currentActiveClubConfig?.title || 'Beyond Thyme Dining',
+      venue: currentActiveClubConfig?.location || currentActiveClubConfig?.venue || 'Secret Location',
+      date: currentActiveClubConfig?.displayNight || currentActiveClubConfig?.eventDate || 'Upcoming Date',
       time: '20:00 IST ONWARDS',
     };
 
@@ -247,7 +247,7 @@ export function initVetting(deps) {
           amount: totalAmountINR * 100, // Multiplied in paise: e.g. 2 seats = 700000 paise = ₹7,000 INR
           currency: 'INR',
           name: 'Beyond Thyme Supper Club',
-          description: `${selectedSeatQuantity} Seat(s) Reservation — ${EVENT_DETAILS.theme}`,
+          description: `${selectedSeatQuantity} Seat(s) Reservation — ${timelineData.themeName}`,
           image: '/logo.jpg',
           prefill: {
             name: fullName,
@@ -311,12 +311,12 @@ async function _handlePaymentSuccess(timelineData, paymentResponse, deps) {
   // Trigger seat claim callback
   deps.callbacks?.onVettingComplete?.(timelineData);
 
-  // Dispatch Email Notification Simulation
-  try {
-    dispatchTicketEmail(ticketData);
-  } catch (e) {
-    console.warn('Email notification notice:', e);
-  }
+  // (Email notification disabled to prevent mail client from popping up automatically)
+  // try {
+  //   dispatchTicketEmail(ticketData);
+  // } catch (e) {
+  //   console.warn('Email notification notice:', e);
+  // }
 
   // Close Vetting Overlay & Open Luxury Digital Ticket Verification Modal
   _hideOverlay();
@@ -353,10 +353,10 @@ export function openVettingModal(seatParam, clubConfig) {
     const timeEl  = document.getElementById('bookingEventTime');
     const venueEl = document.getElementById('bookingEventVenue');
 
-    if (themeEl) themeEl.innerText = clubConfig.name || clubConfig.title || EVENT_DETAILS.theme;
-    if (dateEl)  dateEl.innerText  = clubConfig.displayNight || clubConfig.eventDate || EVENT_DETAILS.date;
-    if (timeEl)  timeEl.innerText  = '20:00 IST';
-    if (venueEl) venueEl.innerText = clubConfig.location || clubConfig.venue || EVENT_DETAILS.venue;
+    if (themeEl) themeEl.innerText = clubConfig.name || clubConfig.title || 'Exclusive Event';
+    if (dateEl)  dateEl.innerText  = clubConfig.displayNight || clubConfig.eventDate || 'TBD';
+    if (timeEl)  timeEl.innerText  = clubConfig.time || '20:00';
+    if (venueEl) venueEl.innerText = clubConfig.location || clubConfig.venue || 'Secret Location';
   } else {
     currentPricePerSeat = 3500;
   }

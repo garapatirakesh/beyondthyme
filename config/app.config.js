@@ -5,14 +5,14 @@
 
 // ─── Seating ─────────────────────────────────────────────────────────────────
 export const TOTAL_SEATS = 25;
-export const TOP_ROW_SEATS    = { start: 1,  end: 12 };
+export const TOP_ROW_SEATS = { start: 1, end: 12 };
 export const BOTTOM_ROW_SEATS = { start: 13, end: 24 };
-export const HEAD_SEAT        = 25;
+export const HEAD_SEAT = 25;
 
 // ─── Timing ──────────────────────────────────────────────────────────────────
 export const COUNTDOWN_INTERVAL_MS = 1000;
-export const DEBOUNCE_PRINT_MS     = 450;
-export const TICK_INTERVAL_MS      = 3500;
+export const DEBOUNCE_PRINT_MS = 450;
+export const TICK_INTERVAL_MS = 3500;
 
 /** Delays (ms) for the diagnostic sequence animation */
 export const DIAGNOSTIC_DELAYS_MS = [600, 1200, 1800, 2400, 3200];
@@ -31,64 +31,64 @@ export const VAULT_JITTER_RESET_MS = 150;
 
 // ─── Audio ───────────────────────────────────────────────────────────────────
 export const AUDIO = {
-  DRONE_FREQ_HZ:       55,       // Low A triangle wave
-  DRONE_GAIN:          0.15,
-  DRONE_FADE_S:        1.5,
-  LFO_BASE_FREQ_HZ:    0.12,
-  LFO_SWEEP_RANGE_HZ:  60,
+  DRONE_FREQ_HZ: 55,       // Low A triangle wave
+  DRONE_GAIN: 0.15,
+  DRONE_FADE_S: 1.5,
+  LFO_BASE_FREQ_HZ: 0.12,
+  LFO_SWEEP_RANGE_HZ: 60,
   FILTER_BASE_FREQ_HZ: 200,
-  TICK_FREQ_HZ:        1000,
-  TICK_HIGHPASS_HZ:    800,
-  TICK_GAIN:           0.04,
-  TICK_DURATION_S:     0.05,
-  BEACON_FREQ_HZ:      880,      // High A
-  BEACON_GAIN:         0.005,
-  BEACON_DURATION_S:   0.3,
-  RESONANCE_FREQ_HZ:   220,      // Low A
-  RESONANCE_GAIN:      0.015,
-  RESONANCE_DURATION_S:0.45,
-  ARPEGGIO_NOTES_HZ:   [261.63, 329.63, 392.00, 523.25], // C4 E4 G4 C5
-  ARPEGGIO_DELAY_MS:   150,
-  ARPEGGIO_GAIN:       0.015,
+  TICK_FREQ_HZ: 1000,
+  TICK_HIGHPASS_HZ: 800,
+  TICK_GAIN: 0.04,
+  TICK_DURATION_S: 0.05,
+  BEACON_FREQ_HZ: 880,      // High A
+  BEACON_GAIN: 0.005,
+  BEACON_DURATION_S: 0.3,
+  RESONANCE_FREQ_HZ: 220,      // Low A
+  RESONANCE_GAIN: 0.015,
+  RESONANCE_DURATION_S: 0.45,
+  ARPEGGIO_NOTES_HZ: [261.63, 329.63, 392.00, 523.25], // C4 E4 G4 C5
+  ARPEGGIO_DELAY_MS: 150,
+  ARPEGGIO_GAIN: 0.015,
   ARPEGGIO_DURATION_S: 0.45,
-  BUZZER_FREQ1_HZ:     100,
-  BUZZER_FREQ2_HZ:     104,
-  BUZZER_GAIN:         0.02,
-  BUZZER_DURATION_S:   0.35,
+  BUZZER_FREQ1_HZ: 100,
+  BUZZER_FREQ2_HZ: 104,
+  BUZZER_GAIN: 0.02,
+  BUZZER_DURATION_S: 0.35,
 
   // New Synthesized Vetting Audio chimes
-  BOOT_START_FREQ_HZ:  80,
-  BOOT_END_FREQ_HZ:    680,
-  BOOT_SWEEP_DURATION_S:0.8,
-  BOOT_GAIN:           0.025,
+  BOOT_START_FREQ_HZ: 80,
+  BOOT_END_FREQ_HZ: 680,
+  BOOT_SWEEP_DURATION_S: 0.8,
+  BOOT_GAIN: 0.025,
 
-  DIAL_TICK_FREQ_HZ:   1200,
-  DIAL_TICK_GAIN:      0.008,
-  DIAL_TICK_DURATION_S:0.005,
+  DIAL_TICK_FREQ_HZ: 1200,
+  DIAL_TICK_GAIN: 0.008,
+  DIAL_TICK_DURATION_S: 0.005,
 
   PRINTER_NOISE_DURATION_S: 1.2,
-  PRINTER_NOISE_GAIN:       0.03,
+  PRINTER_NOISE_GAIN: 0.03,
 };
 
 /** Slider → drone freq mapping: baseFreq + (sliderValue - 50) * multiplier */
 export const AUDIO_CALIBRATION = {
-  FREQ_MULTIPLIER:    0.25,
-  LFO_MIN_FREQ:       0.04,
-  LFO_MAX_DELTA:      0.26,
-  FILTER_BASE:        130,
-  FILTER_RANGE:       170,
+  FREQ_MULTIPLIER: 0.25,
+  LFO_MIN_FREQ: 0.04,
+  LFO_MAX_DELTA: 0.26,
+  FILTER_BASE: 130,
+  FILTER_RANGE: 170,
 };
 
 // ─── Radar Canvas ────────────────────────────────────────────────────────────
 export const RADAR = {
-  MAX_RADIUS:      45,
-  RING_STEP:       15,
-  RING_COLOR:      '#d4c8b8',
-  FILL_COLOR:      'rgba(255, 90, 46, 0.18)',
-  STROKE_COLOR:    '#ff5a2e',
-  STROKE_WIDTH:    1.5,
-  DOT_RADIUS:      3,
-  DEFAULT_VALUE:   50,
+  MAX_RADIUS: 45,
+  RING_STEP: 15,
+  RING_COLOR: '#d4c8b8',
+  FILL_COLOR: 'rgba(255, 90, 46, 0.18)',
+  STROKE_COLOR: '#ff5a2e',
+  STROKE_WIDTH: 1.5,
+  DOT_RADIUS: 3,
+  DEFAULT_VALUE: 50,
 };
 
 // ─── Rotary Dials ────────────────────────────────────────────────────────────
@@ -103,7 +103,7 @@ export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // ─── Treasure Hunt / Coordinate System ───────────────────────────────────────
 export const COORD = {
-  HOUR_MIN:  10,
+  HOUR_MIN: 10,
   HOUR_RANGE: 90,   // results in 10–99
   MINUTE_MAX: 60,
 };
@@ -124,61 +124,12 @@ export const TERMINAL_INITIAL_LINES = [
   { text: '> SEAT_COORDINATES: UNASSIGNED. SELECT A PULSING SEAT ON THE FLOORPLAN.', cls: '', id: 'terminalSelectedSeatLine' },
 ];
 
-export const CALIBRATION_HUD_CONFIG = {
-  TITLE: 'CHRONO-CALIBRATION & VIBE MATRIX',
-  SUBTITLE: 'INTERSTELLAR QUANTUM LOCK • BEYOND THYME v2026',
-  BASE_SYNC_SCORE: 50,
-  DIAL_SCORE_WEIGHT: 0.5,
-  DIAGNOSTIC_STEPS: [
-    '> VERIFYING CHRONO IDENTITY VECTOR...',
-    '> ESTABLISHING QUANTUM LINK WITH VILLA FLOORPLAN...',
-    '> COMPUTING VIBE RESONANCE MATRIX...',
-    '> CALIBRATION COMPLETE: CLEARANCE GRANTED.',
-  ],
-};
-
 // ─── Booking & Auth Config ───────────────────────────────────────────────────
 export const SEAT_PRICE_INR = 3500;
 export const MIN_SEATS_PER_BOOKING = 1;
 export const MAX_SEATS_PER_BOOKING = 6;
-export const RAZORPAY_KEY_ID = 'rzp_test_TKyTi4VEv9WTsk';
-export const ADMIN_EMAIL = 'beyondthyme.in@gmail.com';
-export const BOOKING_THEME = '✨ Midnight Memories';
-
-export const EVENT_DETAILS = {
-  theme: '✨ Midnight Memories',
-  date: 'SAT, 17 MAY 2025',
-  time: '7:30 PM ONWARDS',
-  venue: 'HYDERABAD',
-  totalSeats: 25,
-};
-
-export const EXPERIENCE_CONFIG = {
-  BADGE: "THIS WEEK'S EXPERIENCE",
-  TITLE: "MIDNIGHT MEMORIES",
-  DESCRIPTION: "A mysterious dining experience where time keeps the secrets and strangers become stories.",
-  DATE: "SAT, 17 MAY 2025",
-  TIME: "7:30 PM ONWARDS",
-  LOCATION: "HYDERABAD",
-  DRESS_CODE: "DRESS CODE: ELEGANT",
-  SEATS_REMAINING: 11,
-  TOTAL_SEATS: 25,
-  COUNTDOWN_SECONDS: 300,
-  CTA_TEXT: "BOOK YOUR SEAT",
-  EXPIRED_TEXT: "Reservation Expired — Click to extend",
-  TRUST_LABEL: "Secure booking. Your experience is our priority.",
-  FEATURES: [
-    { title: "LIVE COUNTDOWN", desc: "Your seat is reserved for 5 minutes" },
-    { title: "REAL TIME UPDATES", desc: "Seat availability updates instantly" },
-    { title: "EXCLUSIVE EXPERIENCE", desc: "Limited seats. Unlimited memories." },
-  ],
-  BOTTOM_CARDS: [
-    { title: "MEET STRANGERS", desc: "Connect over great conversations" },
-    { title: "EXQUISITE DINING", desc: "Curated meals for a memorable night" },
-    { title: "TIME TRAVEL THEME", desc: "Every detail is time-inspired" },
-    { title: "MYSTERY & SURPRISES", desc: "Exciting games and hidden rewards" },
-  ]
-};
+export const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
+export const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || 'zenitsu.agatsuma099@gmail.com';
 
 // ─── Seat Reservation & Dynamic Messaging Config ────────────────────────────
 export const RESERVATION_HOLD_MS = 300000; // 5 Minutes in milliseconds
@@ -194,48 +145,41 @@ export const INVENTORY_MESSAGES = {
   BOOK_SEAT_TEXT: 'BOOK YOUR SEAT',
 };
 
-export const ERAS_OPTIONS = ['80s', '90s', '2000s', 'Future'];
-export const PREFERENCES = {
-  timeOfDay: ['Morning', 'Midnight'],
-  beverage: ['Coffee', 'Tea'],
-  personality: ['Introvert', 'Extrovert'],
-};
-
 // ─── 3D Watch & Dark Gold Particle Config ────────────────────────────────────
 export const LUXURY_WATCH_CONFIG = {
-  COLOR_CASE:             '#2a2d38',
-  COLOR_BEZEL_OUTER:      '#404554',
-  COLOR_BEZEL_INNER:      '#1f222a',
-  COLOR_CROWN_STEEL:      '#343946',
-  COLOR_GOLD_GEAR:        '#d4af37',
-  COLOR_ROSE_GOLD_GEAR:   '#b8707a',
-  COLOR_COPPER_GEAR:      '#b87333',
-  COLOR_STEEL_GEAR:       '#8a909d',
-  COLOR_DARK_PLATE:       '#0d0e12',
-  COLOR_NEON_ORANGE:      '#ff5500',
-  COLOR_NEON_EMISSIVE:    '#ff4400',
-  COLOR_NEON_HALO:        '#ff6600',
-  COLOR_RUBY_JEWEL:       '#e6004c',
-  COLOR_SCREW_HEAD:       '#c5c9d4',
-  COLOR_HAND_FACET:       '#f0f3fa',
-  COLOR_SECOND_HAND:      '#ff4400',
-  COLOR_MARKER_BLOCK:     '#1a1c23',
+  COLOR_CASE: '#2a2d38',
+  COLOR_BEZEL_OUTER: '#404554',
+  COLOR_BEZEL_INNER: '#1f222a',
+  COLOR_CROWN_STEEL: '#343946',
+  COLOR_GOLD_GEAR: '#d4af37',
+  COLOR_ROSE_GOLD_GEAR: '#b8707a',
+  COLOR_COPPER_GEAR: '#b87333',
+  COLOR_STEEL_GEAR: '#8a909d',
+  COLOR_DARK_PLATE: '#0d0e12',
+  COLOR_NEON_ORANGE: '#ff5500',
+  COLOR_NEON_EMISSIVE: '#ff4400',
+  COLOR_NEON_HALO: '#ff6600',
+  COLOR_RUBY_JEWEL: '#e6004c',
+  COLOR_SCREW_HEAD: '#c5c9d4',
+  COLOR_HAND_FACET: '#f0f3fa',
+  COLOR_SECOND_HAND: '#ff4400',
+  COLOR_MARKER_BLOCK: '#1a1c23',
   COLOR_MARKER_HIGHLIGHT: '#6e7587',
 
-  MAX_TILT_DEG:       35,
-  TILT_DAMPING:       0.08,
-  DRAG_SENSITIVITY:   0.008,
+  MAX_TILT_DEG: 35,
+  TILT_DAMPING: 0.08,
+  DRAG_SENSITIVITY: 0.008,
 
   // Watch Model Dimensions (Ported from C:\Users\arrab\watch)
-  TORUS_CASE_RADIUS:       3.15,
-  TORUS_CASE_TUBE:         0.22,
-  TORUS_BEZEL_OUTER_R:     2.96,
-  TORUS_BEZEL_OUTER_T:     0.14,
-  TORUS_BEZEL_INNER_R:     2.78,
-  TORUS_BEZEL_INNER_T:     0.10,
-  NEON_TUBE_RADIUS:        2.62,
-  NEON_TUBE_THICKNESS:     0.055,
-  CROWN_X_OFFSET:          3.35,
+  TORUS_CASE_RADIUS: 3.15,
+  TORUS_CASE_TUBE: 0.22,
+  TORUS_BEZEL_OUTER_R: 2.96,
+  TORUS_BEZEL_OUTER_T: 0.14,
+  TORUS_BEZEL_INNER_R: 2.78,
+  TORUS_BEZEL_INNER_T: 0.10,
+  NEON_TUBE_RADIUS: 2.62,
+  NEON_TUBE_THICKNESS: 0.055,
+  CROWN_X_OFFSET: 3.35,
 
   // Gears Configuration
   GEAR_CENTER: { teeth: 34, outerR: 1.4, innerR: 0.4, speedRatio: 1.0, dir: 1, pos: [0, -0.3, -0.05] },
@@ -250,9 +194,9 @@ export const LUXURY_WATCH_CONFIG = {
 };
 
 export const SEAT_ORDER_IMAGE1 = {
-  topRow:    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  topRow: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   bottomRow: [24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 13, 14],
-  headSeat:  25,
+  headSeat: 25,
 };
 
 export const ORBITAL_SEATING_CONFIG = {

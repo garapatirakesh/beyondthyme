@@ -3,9 +3,7 @@
  * All data lives in config/. All logic lives in modules/.
  */
 
-import { CLUBS_CONFIG }          from './config/clubs.js';
-import { MENU_ERAS }             from './config/menu.js';
-import { SEED_GUESTBOOK_ENTRIES } from './config/guestbook.js';
+import { CLUBS_CONFIG, getNextAvailableSeat } from './config/clubs.js';
 import {
   RADAR, EMAIL_REGEX, DEBOUNCE_PRINT_MS,
 } from './config/app.config.js';
@@ -45,10 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initGoldParticles('goldParticleCanvas');
   }, 300);
 
+  let pendingAction = null;
+
   // Initialize Google Auth
   initAuth({
     onAuthSuccess(user) {
-      openVettingModal(selectedSeat || 'Seat_11', CLUBS_CONFIG[activeClubId]);
+      if (pendingAction === 'book') {
+        const seatId = selectedSeat || getNextAvailableSeat(CLUBS_CONFIG[activeClubId]);
+        openVettingModal(seatId, CLUBS_CONFIG[activeClubId]);
+        pendingAction = null;
+      }
     },
     onAdminAccess(user) {
       openAdminDashboard();
@@ -143,6 +147,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Header Login Button logic
+  document.getElementById('headerLoginBtn')?.addEventListener('click', () => {
+    const user = getCurrentUser();
+    if (!user) {
+      pendingAction = null;
+      promptGoogleLogin();
+    } else {
+      const panel = document.getElementById('chronoIdentityPanel');
+      if (panel) {
+        panel.classList.toggle('hidden');
+        if (!panel.classList.contains('hidden')) {
+          const roleTitle = document.getElementById('chronoRoleTitle');
+          if (roleTitle) roleTitle.textContent = user.role === 'admin' ? 'GRAND TIMEKEEPER' : 'CHRONO-TRAVELER';
+        }
+      }
+    }
+  });
+
+  // Chrono-Identity Panel Actions
+  document.getElementById('btnGlitchMatrix')?.addEventListener('click', () => {
+    document.body.classList.add('glitch-active');
+    setTimeout(() => {
+      document.body.classList.remove('glitch-active');
+    }, 2000);
+    document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
+  });
+
+  document.getElementById('btnArchivesShortcut')?.addEventListener('click', () => {
+    document.getElementById('btnToggleArchives')?.click();
+    document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
+  });
+
+  document.getElementById('btnLogout')?.addEventListener('click', async () => {
+    document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
+    document.getElementById('myTicketsDrawer')?.classList.remove('open');
+    const { logoutUser } = await import('./modules/firebase.js');
+    await logoutUser();
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const container = document.querySelector('.auth-dropdown-container');
+    const panel = document.getElementById('chronoIdentityPanel');
+    if (panel && !panel.classList.contains('hidden') && container && !container.contains(e.target)) {
+      panel.classList.add('hidden');
+    }
+  });
+
   window.addEventListener('hashchange', handleAdminHashRoute);
   handleAdminHashRoute();
 
@@ -159,8 +211,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── 2. Render data-driven UI ───────────────────────────────────────────────
   let activeClubId = Object.keys(CLUBS_CONFIG)[0] || 'zenitsu';
 
-  renderMenu(MENU_ERAS);
-  renderGuestbook(SEED_GUESTBOOK_ENTRIES);
+  // Listen to Themes (Menus)
+  listenToCollection('themes', (themes) => {
+    if (!themes || themes.length === 0) return;
+    // Sort themes by their numeral (I, II, III, IV) or ID
+    const sortedThemes = themes.sort((a, b) => {
+      const numerals = { 'I': 1, 'II': 2, 'III': 3, 'IV': 4 };
+      return (numerals[a.numeral] || 99) - (numerals[b.numeral] || 99);
+    });
+    // Render only the first 3 for the main page (exclude Amrit Yuga which is injected by Vault)
+    renderMenu(sortedThemes.slice(0, 3));
+  });
+
+  // Listen to Time Capsules (Guestbook)
+  listenToCollection('timeCapsules', (entries) => {
+    if (!entries || entries.length === 0) return;
+    // Sort descending by timestamp
+    const sortedEntries = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    renderGuestbook(sortedEntries);
+  });
   renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
 
   // Horizontal themes slider navigation controls
@@ -239,7 +308,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isAudioPlaying()) playBeaconChime();
 
-        promptGoogleLogin();
+        const user = getCurrentUser();
+        if (!user) {
+          pendingAction = 'book';
+          promptGoogleLogin();
+        } else {
+          // If already logged in, proceed directly to vetting
+          const seatId = selectedSeat || getNextAvailableSeat(CLUBS_CONFIG[activeClubId]);
+          openVettingModal(seatId, CLUBS_CONFIG[activeClubId]);
+        }
       },
       onSeatHoverEnter() { 
         if (isAudioPlaying()) playBeaconChime(); 
@@ -257,15 +334,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Listen in real time to Firebase Firestore live bookings across all devices
-  listenToLiveSeatBookings((submissions) => {
-    if (!submissions) return;
+  let globalSubmissions = [];
+
+  function recalculateOccupancy() {
+    if (!globalSubmissions) return;
 
     // Reset occupied seat lists for all clubs before calculating live bookings
     Object.values(CLUBS_CONFIG).forEach(club => {
       club.occupied = [];
+      club.bookedSeats = 0;
     });
 
-    submissions.forEach(sub => {
+    globalSubmissions.forEach(sub => {
       const subClubId = sub.clubId || sub.vetting?.clubId;
       const subTheme = (sub.themeName || sub.vetting?.themeName || sub.vetting?.theme || '').toLowerCase().trim();
 
@@ -294,6 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
           targetConfig.occupied.push({ seat: seatNum, alias: alias, emoji: emoji });
         }
       }
+      
+      targetConfig.bookedSeats += qty;
     });
 
     buildSeating();
@@ -301,6 +383,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (CLUBS_CONFIG[activeClubId]) {
       syncSelectedEventToExperience(CLUBS_CONFIG[activeClubId]);
     }
+  }
+
+  listenToLiveSeatBookings((submissions) => {
+    if (!submissions) return;
+    globalSubmissions = submissions;
+    recalculateOccupancy();
   });
 
   // Listen in real time to Admin Portal Events updates (max 4 slots replaced dynamically)
@@ -365,13 +453,13 @@ document.addEventListener('DOMContentLoaded', () => {
       activeClubId = Object.keys(CLUBS_CONFIG)[0] || '';
     }
 
-    renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
     if (CLUBS_CONFIG[activeClubId]) {
       countdownInstance.stop();
       countdownInstance = startCountdown(CLUBS_CONFIG[activeClubId], countdownEls);
-      syncSelectedEventToExperience(CLUBS_CONFIG[activeClubId]);
-      buildSeating();
     }
+    
+    // Re-run the occupancy calculation which will also update the UI (cards, seating, experience)
+    recalculateOccupancy();
   });
 
   // ── 5. Vetting & Timeline Booking Overlay ──────────────────────────────────
@@ -649,6 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const user = getCurrentUser();
     if (!user) {
+      pendingAction = 'guestbook';
       promptGoogleLogin();
       return;
     }
