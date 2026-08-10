@@ -83,7 +83,7 @@ export async function seedInitialFirestoreCollections() {
 
     // 2. Seed Themes (Menu Eras)
     const themesSnap = await getDocs(collections.themes);
-    if (themesSnap.empty) {
+    if (themesSnap.size < 4) {
       const allThemes = [...MENU_ERAS, AMRIT_YUGA_ERA];
       for (const theme of allThemes) {
         await setDoc(doc(db, 'themes', theme.id), theme, { merge: true });
