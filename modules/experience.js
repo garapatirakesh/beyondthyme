@@ -1,11 +1,11 @@
-import { EXPERIENCE_CONFIG, INVENTORY_MESSAGES } from '../config/app.config.js';
+import { INVENTORY_MESSAGES } from '../config/app.config.js';
 import { getAvailableSeats } from '../config/clubs.js';
 import { getCurrentUser, promptGoogleLogin } from './auth.js';
 import { openVettingModal } from './vetting.js';
 
 let countdownTimerId = null;
-let remainingSeconds = EXPERIENCE_CONFIG.COUNTDOWN_SECONDS || 300;
-const totalSeconds = EXPERIENCE_CONFIG.COUNTDOWN_SECONDS || 300;
+let remainingSeconds = 300;
+const totalSeconds = 300;
 let currentActiveClubConfig = null;
 
 /**
@@ -19,8 +19,15 @@ export function initExperienceSection() {
   if (bookBtn) {
     bookBtn.addEventListener('click', async () => {
       if (bookBtn.disabled) return;
-      await promptGoogleLogin();
-      openVettingModal('Seat_01', currentActiveClubConfig);
+      const user = getCurrentUser();
+      if (!user) {
+        promptGoogleLogin();
+        // Since promptGoogleLogin is synchronous and triggers a popup,
+        // we shouldn't immediately open the vetting modal here.
+        // It should be opened by the onAuthSuccess callback in app.js instead.
+      } else {
+        openVettingModal('Seat_01', currentActiveClubConfig);
+      }
     });
   }
 
@@ -88,7 +95,7 @@ function _handleTimerExpired() {
   }
 
   if (timerSub) {
-    timerSub.innerText = EXPERIENCE_CONFIG.EXPIRED_TEXT || 'Reservation Expired — Click to extend';
+    timerSub.innerText = 'Reservation Expired — Click to extend';
     timerSub.classList.add('clickable-extend');
   }
 

@@ -22,6 +22,20 @@ export function initAuth(options = {}) {
   subscribeAuthChange((user) => {
     if (user) {
       currentUser = user;
+    } else {
+      currentUser = null;
+    }
+    
+    // Update Header Login Button Text
+    const headerLoginBtn = document.getElementById('headerLoginBtn');
+    const headerLoginText = document.getElementById('headerLoginText');
+    if (headerLoginBtn && headerLoginText) {
+      if (currentUser) {
+        const alias = currentUser.name || currentUser.email.split('@')[0];
+        headerLoginText.textContent = alias.toUpperCase();
+      } else {
+        headerLoginText.textContent = 'LOGIN';
+      }
     }
   });
 

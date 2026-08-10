@@ -16,7 +16,9 @@ import {
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { FIREBASE_CONFIG } from '../config/firebase.config.js';
-import { ADMIN_EMAIL, EVENT_DETAILS, RESERVATION_HOLD_MS, INVENTORY_MESSAGES } from '../config/app.config.js';
+import { ADMIN_EMAIL, RESERVATION_HOLD_MS, INVENTORY_MESSAGES } from '../config/app.config.js';
+import { MENU_ERAS, AMRIT_YUGA_ERA } from '../config/menu.js';
+import { SEED_GUESTBOOK_ENTRIES } from '../config/guestbook.js';
 
 // ── 1. Modular SDK Initialization ──────────────────────────────────────────
 export const app = initializeApp(FIREBASE_CONFIG);
@@ -46,6 +48,8 @@ export const collections = {
   timeCapsules: collection(db, 'timeCapsules'),
   admins: collection(db, 'admins'),
   tickets: collection(db, 'tickets'),
+  themes: collection(db, 'themes'),
+  timeCapsules: collection(db, 'timeCapsules'),
 };
 
 // ── 3. Automatic Database Seeder ──────────────────────────────────────────
@@ -57,45 +61,9 @@ export async function seedInitialFirestoreCollections() {
 
   try {
     // 1. Events Collection (Only seed if empty on fresh startup)
-    // 1. Seed Zenitsu & Tanjiro if events collection is empty
+    const eventsSnap = await getDocs(collections.events);
     if (eventsSnap.empty) {
-      const initialAdminEvents = [
-        {
-          id: 'zenitsu',
-          clubKey: 'zenitsu',
-          title: 'Zenitsu',
-          name: 'Zenitsu',
-          venue: 'Erragadda',
-          location: 'Erragadda',
-          eventDate: '2026-08-15T20:00:00+05:30',
-          displayNight: 'Sat Aug 15 · 20:00',
-          capacity: 7,
-          price: 500,
-          status: 'Published',
-          description: 'Exclusive luxury mystery dining experience where time stops at the table.',
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: 'tanjiro',
-          clubKey: 'tanjiro',
-          title: 'Tanjiro',
-          name: 'Tanjiro',
-          venue: 'Hyderabad',
-          location: 'Hyderabad',
-          eventDate: '2026-08-26T20:00:00+05:30',
-          displayNight: 'Sat Aug 26 · 20:00',
-          capacity: 5,
-          price: 500,
-          status: 'Published',
-          description: 'Exclusive private dining experiment celebrating precision flavor calibration.',
-          createdAt: new Date(Date.now() - 1000).toISOString(),
-        }
-      ];
-
-      for (const ev of initialAdminEvents) {
-        await setDoc(doc(db, 'events', ev.id), ev, { merge: true });
-        console.log(`✨ Seeded Admin Event into Firestore: events/${ev.id}`);
-      }
+      console.log('Events collection is empty. Please configure events via the Admin Dashboard.');
     }
 
     // Clean up old hardcoded seed themes if present in Firestore
@@ -110,6 +78,29 @@ export async function seedInitialFirestoreCollections() {
         }
       } catch (e) {
         // ignore cleanup notice
+      }
+    }
+
+    // 2. Seed Themes (Menu Eras)
+    const themesSnap = await getDocs(collections.themes);
+    if (themesSnap.empty) {
+      const allThemes = [...MENU_ERAS, AMRIT_YUGA_ERA];
+      for (const theme of allThemes) {
+        await setDoc(doc(db, 'themes', theme.id), theme, { merge: true });
+        console.log(`✨ Seeded Theme into Firestore: themes/${theme.id}`);
+      }
+    }
+
+    // 3. Seed Time Capsules (Guestbook)
+    const timeCapsulesSnap = await getDocs(collections.timeCapsules);
+    if (timeCapsulesSnap.empty) {
+      for (const [index, entry] of SEED_GUESTBOOK_ENTRIES.entries()) {
+        const id = `seed_entry_${index}`;
+        await setDoc(doc(db, 'timeCapsules', id), {
+          ...entry,
+          timestamp: new Date().toISOString()
+        }, { merge: true });
+        console.log(`✨ Seeded Guestbook Entry into Firestore: timeCapsules/${id}`);
       }
     }
 
@@ -443,27 +434,58 @@ export function listenToLiveSeatBookings(callback) {
   try {
     let bookings = [];
     let reservations = [];
+    let tickets = [];
 
     const notify = () => {
       const now = Date.now();
       const activeRes = reservations.filter(r => r.status === 'RESERVED' && r.expiresAt > now);
-      callback([...bookings, ...activeRes]);
+      
+      // Deduplicate bookings and tickets by document ID (mimicking Admin Dashboard)
+      const unified = new Map();
+      
+      bookings.forEach(b => {
+        if (!b || !b.id) return;
+        unified.set(b.id, b);
+      });
+
+      tickets.forEach(t => {
+        if (!t) return;
+        // The ID of the ticket is often the booking ID
+        const ticketId = t.bookingId || t.id;
+        if (!ticketId) return;
+        
+        const existing = unified.get(ticketId);
+        if (!existing) {
+          unified.set(ticketId, t);
+        } else {
+          unified.set(ticketId, { ...existing, ...t });
+        }
+      });
+
+      callback([...Array.from(unified.values()), ...activeRes]);
     };
 
     const unsubBookings = onSnapshot(collections.seatBookings, (snapshot) => {
       bookings = [];
-      snapshot.forEach(docSnap => bookings.push(docSnap.data()));
+      snapshot.forEach(docSnap => bookings.push({ id: docSnap.id, ...docSnap.data() }));
       notify();
     }, (err) => console.warn('Bookings snapshot notice:', err));
 
+    const unsubTickets = onSnapshot(collections.tickets, (snapshot) => {
+      tickets = [];
+      snapshot.forEach(docSnap => tickets.push({ id: docSnap.id, ...docSnap.data() }));
+      notify();
+    }, (err) => console.warn('Tickets snapshot notice:', err));
+
     const unsubReservations = onSnapshot(collections.seatReservations, (snapshot) => {
       reservations = [];
-      snapshot.forEach(docSnap => reservations.push(docSnap.data()));
+      snapshot.forEach(docSnap => reservations.push({ id: docSnap.id, ...docSnap.data() }));
       notify();
     }, (err) => console.warn('Reservations snapshot notice:', err));
 
     return () => {
       unsubBookings();
+      unsubTickets();
       unsubReservations();
     };
   } catch (err) {

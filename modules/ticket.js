@@ -4,7 +4,7 @@
  */
 
 import { TICKET_SYSTEM, TICKET_STATUS, getVerifyUrl } from '../config/ticket.config.js';
-import { EVENT_DETAILS } from '../config/app.config.js';
+import { } from '../config/app.config.js';
 import { generateTicketQRCodeAsync } from './qrcode.js';
 import { saveTicketDoc, getTicketDoc, listenToTicketDoc } from './firebase.js';
 
@@ -30,10 +30,10 @@ export function buildTicketData(vettingData = {}, user = null) {
   const bookingId = generateBookingId();
   const verifyUrl = getVerifyUrl(bookingId);
 
-  const themeName = vettingData.themeName || vettingData.theme || vettingData.title || EVENT_DETAILS.theme;
-  const date = vettingData.date || vettingData.displayNight || vettingData.eventDate || EVENT_DETAILS.date;
-  const time = vettingData.time || '20:00 IST ONWARDS';
-  const venue = vettingData.venue || vettingData.location || EVENT_DETAILS.venue;
+  const themeName = vettingData.themeName || vettingData.theme || vettingData.title || 'Exclusive Event';
+  const date = vettingData.date || vettingData.displayNight || vettingData.eventDate || 'TBD';
+  const time = vettingData.time || '20:00';
+  const venue = vettingData.venue || vettingData.location || 'Secret Location';
   const userName = vettingData.fullName || user?.name || user?.displayName || 'Honored Guest';
   const amount = vettingData.amount || ((vettingData.quantity || 1) * (vettingData.unitPrice || 3500));
 
@@ -117,7 +117,7 @@ export async function renderLuxuryTicket(ticket, container) {
         <div class="luxury-banner-overlay"></div>
         <div class="luxury-banner-content">
           <span class="luxury-banner-tag">EXCLUSIVE INVITATION</span>
-          <h3 class="luxury-banner-title">${ticket.themeName || EVENT_DETAILS.theme}</h3>
+          <h3 class="luxury-banner-title">${ticket.themeName || 'Exclusive Event'}</h3>
         </div>
       </div>
 
@@ -137,11 +137,11 @@ export async function renderLuxuryTicket(ticket, container) {
         </div>
         <div class="luxury-spec-item">
           <span class="luxury-spec-label">DATE & TIME</span>
-          <span class="luxury-spec-value">${ticket.date || EVENT_DETAILS.date} • ${ticket.time || EVENT_DETAILS.time}</span>
+          <span class="luxury-spec-value">${ticket.date || 'TBD'} • ${ticket.time || '20:00'}</span>
         </div>
         <div class="luxury-spec-item">
           <span class="luxury-spec-label">VENUE LOCATION</span>
-          <span class="luxury-spec-value">${ticket.venue || EVENT_DETAILS.venue}</span>
+          <span class="luxury-spec-value">${ticket.venue || 'Secret Location'}</span>
         </div>
         <div class="luxury-spec-item">
           <span class="luxury-spec-label">DRESS CODE</span>

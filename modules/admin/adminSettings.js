@@ -3,6 +3,7 @@
  */
 
 import { writeFirestoreDoc } from '../firebase.js';
+import { RAZORPAY_KEY_ID, ADMIN_EMAIL } from '../../config/app.config.js';
 
 export function initAdminSettingsListeners() {
   const btnSave = document.getElementById('btnSaveSystemSettings');
@@ -11,8 +12,8 @@ export function initAdminSettingsListeners() {
       const venue = document.getElementById('settingVenue')?.value || 'Secret Villa, South Delhi';
       const seats = parseInt(document.getElementById('settingMaxSeats')?.value || '25', 10);
       const price = parseInt(document.getElementById('settingTicketPrice')?.value || '2000', 10);
-      const rzpKey = document.getElementById('settingRazorpayKey')?.value || 'rzp_test_TKyTi4VEv9WTsk';
-      const email = document.getElementById('settingSupportEmail')?.value || 'beyondthyme.in@gmail.com';
+      const rzpKey = document.getElementById('settingRazorpayKey')?.value || RAZORPAY_KEY_ID;
+      const email = document.getElementById('settingSupportEmail')?.value || ADMIN_EMAIL;
 
       await writeFirestoreDoc('settings', 'system_config', {
         venue,

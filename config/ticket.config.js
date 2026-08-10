@@ -5,7 +5,7 @@
 
 export const TICKET_SYSTEM = {
   PREFIX: 'BT',
-  VERIFY_BASE_URL: 'https://beyondthyme.com',
+  VERIFY_BASE_URL: 'https://beyond-thyme.web.app',
   DEFAULT_DRESS_CODE: 'Black Tie & Chrono Elements',
   ORGANIZER_NAME: 'Beyond Thyme Supper Club',
   ORGANIZER_EMAIL: 'beyondthyme.in@gmail.com',
@@ -16,10 +16,8 @@ export const TICKET_SYSTEM = {
 
 export function getVerifyUrl(bookingId) {
   if (!bookingId) return TICKET_SYSTEM.VERIFY_BASE_URL;
-  const origin = (typeof window !== 'undefined' && window.location.origin && !window.location.origin.includes('file://'))
-    ? window.location.origin
-    : TICKET_SYSTEM.VERIFY_BASE_URL;
-  return `${origin}/?id=${bookingId}`;
+  // Always use the production URL for QR codes so mobile scanning works during local dev
+  return `${TICKET_SYSTEM.VERIFY_BASE_URL}/?id=${bookingId}`;
 }
 
 export const TICKET_STATUS = {

@@ -3,7 +3,7 @@
  */
 
 export const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDLpbvRQDqGJPAJIkmaoyuJzSKrbcSfaew",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "beyond-thyme.firebaseapp.com",
   projectId: "beyond-thyme",
   storageBucket: "beyond-thyme.firebasestorage.app",
