@@ -706,3 +706,12 @@ export async function getUserTickets(userIdentifier) {
 }
 
 
+
+export async function logoutUser() {
+  try {
+    await signOut(auth);
+    console.log("Severed temporal link (User logged out)");
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
+}

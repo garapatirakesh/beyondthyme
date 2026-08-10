@@ -4,7 +4,7 @@
  */
 
 import { ADMIN_EMAIL } from '../config/app.config.js';
-import { loginWithGoogle, subscribeAuthChange } from './firebase.js';
+import { loginWithGoogle, subscribeAuthChange, logoutUser } from './firebase.js';
 
 let currentUser = null; // { name, email, avatar, role: 'admin' | 'member', uid }
 
@@ -119,12 +119,7 @@ export function getCurrentUser() {
   return currentUser;
 }
 
-/**
- * Logout current user.
- */
-export function logoutUser() {
-  currentUser = null;
-}
+
 
 function _showModal() {
   const modal = document.getElementById('googleAuthModal');

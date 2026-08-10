@@ -13,3 +13,23 @@
 @import "./css/components/ticket.css";
 @import "./css/admin.css";
 
+
+
+/* --- Chrono-Identity Panel --- */
+.auth-dropdown-container { position: relative; }
+.chrono-identity-panel { position: absolute; top: calc(100% + 1rem); left: 50%; transform: translateX(-50%); width: 260px; background: rgba(250, 245, 235, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--color-gold); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: top center; z-index: 100; }
+.chrono-identity-panel:not(.hidden) { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+.chrono-identity-header { display: flex; flex-direction: column; gap: 0.25rem; border-bottom: 1px solid rgba(198, 168, 114, 0.3); padding-bottom: 0.75rem; align-items: center; text-align: center; }
+.chrono-title { font-size: 0.9rem; font-weight: bold; color: var(--color-ink); letter-spacing: 0.1em; }
+.chrono-score { font-size: 0.7rem; color: var(--color-coral); letter-spacing: 0.05em; }
+.chrono-identity-body { display: flex; flex-direction: column; gap: 0.5rem; }
+.chrono-btn { background: transparent; border: 1px solid rgba(198, 168, 114, 0.3); padding: 0.5rem; border-radius: 6px; font-size: 0.75rem; color: var(--color-ink); text-align: left; cursor: pointer; transition: all 0.2s ease; }
+.chrono-btn:hover { background: rgba(198, 168, 114, 0.1); border-color: var(--color-gold); }
+.glitch-btn { color: var(--color-coral); border-color: rgba(255, 90, 46, 0.3); font-weight: bold; text-align: center; }
+.glitch-btn:hover { background: rgba(255, 90, 46, 0.1); border-color: var(--color-coral); box-shadow: 0 0 10px rgba(255,90,46,0.2); }
+.logout-btn { color: #d32f2f; }
+.logout-btn:hover { background: rgba(211, 47, 47, 0.1); border-color: #d32f2f; }
+
+/* --- Global Glitch Effect --- */
+body.glitch-active { animation: timelineGlitch 0.2s linear infinite; }
+@keyframes timelineGlitch { 0% { filter: hue-rotate(0deg) contrast(1) invert(0); transform: translate(0); } 20% { filter: hue-rotate(90deg) contrast(1.2) invert(0.1); transform: translate(-2px, 1px); } 40% { filter: hue-rotate(-90deg) contrast(1.5) invert(0); transform: translate(2px, -2px); } 60% { filter: hue-rotate(180deg) contrast(2) invert(0.2); transform: translate(-1px, 2px); } 80% { filter: hue-rotate(45deg) contrast(1.2) invert(0); transform: translate(3px, -1px); } 100% { filter: hue-rotate(0deg) contrast(1) invert(0); transform: translate(0); } }

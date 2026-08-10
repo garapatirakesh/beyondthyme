@@ -43,11 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initGoldParticles('goldParticleCanvas');
   }, 300);
 
+  let pendingAction = null;
+
   // Initialize Google Auth
   initAuth({
     onAuthSuccess(user) {
-      const seatId = selectedSeat || getNextAvailableSeat(CLUBS_CONFIG[activeClubId]);
-      openVettingModal(seatId, CLUBS_CONFIG[activeClubId]);
+      if (pendingAction === 'book') {
+        const seatId = selectedSeat || getNextAvailableSeat(CLUBS_CONFIG[activeClubId]);
+        openVettingModal(seatId, CLUBS_CONFIG[activeClubId]);
+        pendingAction = null;
+      }
     },
     onAdminAccess(user) {
       openAdminDashboard();
@@ -146,11 +151,47 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('headerLoginBtn')?.addEventListener('click', () => {
     const user = getCurrentUser();
     if (!user) {
+      pendingAction = null;
       promptGoogleLogin();
     } else {
-      // If already logged in, clicking it could mean view profile or log out.
-      // For now, let's just log them out for simplicity, or open My Tickets.
-      document.getElementById('myTicketsNavBtn')?.click();
+      const panel = document.getElementById('chronoIdentityPanel');
+      if (panel) {
+        panel.classList.toggle('hidden');
+        if (!panel.classList.contains('hidden')) {
+          const roleTitle = document.getElementById('chronoRoleTitle');
+          if (roleTitle) roleTitle.textContent = user.role === 'admin' ? 'GRAND TIMEKEEPER' : 'CHRONO-TRAVELER';
+        }
+      }
+    }
+  });
+
+  // Chrono-Identity Panel Actions
+  document.getElementById('btnGlitchMatrix')?.addEventListener('click', () => {
+    document.body.classList.add('glitch-active');
+    setTimeout(() => {
+      document.body.classList.remove('glitch-active');
+    }, 2000);
+    document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
+  });
+
+  document.getElementById('btnArchivesShortcut')?.addEventListener('click', () => {
+    document.getElementById('btnToggleArchives')?.click();
+    document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
+  });
+
+  document.getElementById('btnLogout')?.addEventListener('click', async () => {
+    document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
+    document.getElementById('myTicketsDrawer')?.classList.remove('open');
+    const { logoutUser } = await import('./modules/firebase.js');
+    await logoutUser();
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const container = document.querySelector('.auth-dropdown-container');
+    const panel = document.getElementById('chronoIdentityPanel');
+    if (panel && !panel.classList.contains('hidden') && container && !container.contains(e.target)) {
+      panel.classList.add('hidden');
     }
   });
 
@@ -269,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const user = getCurrentUser();
         if (!user) {
+          pendingAction = 'book';
           promptGoogleLogin();
         } else {
           // If already logged in, proceed directly to vetting
@@ -695,6 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const user = getCurrentUser();
     if (!user) {
+      pendingAction = 'guestbook';
       promptGoogleLogin();
       return;
     }
