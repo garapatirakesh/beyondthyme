@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
       if (!targetConfig) {
-        targetConfig = CLUBS_CONFIG[activeClubId];
+        return; // Ignore stale bookings from deleted/renamed clubs instead of dumping them into the active club
       }
 
       if (!targetConfig) return;
@@ -630,7 +630,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeSuccessBtn = document.getElementById('closeSuccessBtn');
 
   function validateForm() {
-    const isExpired = new Date(CLUBS_CONFIG[activeClubId].eventDate) <= new Date();
+    const club = CLUBS_CONFIG[activeClubId];
+    const isExpired = club ? new Date(club.eventDate) <= new Date() : true;
     if (submitBtn) submitBtn.disabled = isExpired;
   }
 
@@ -663,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
           seat:      document.getElementById('ticketSeat'),
           vector:    document.getElementById('ticketVector'),
         },
-        clubName: CLUBS_CONFIG[activeClubId].name,
+        clubName: CLUBS_CONFIG[activeClubId]?.name || '',
       }
     );
 

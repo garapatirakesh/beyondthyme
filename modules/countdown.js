@@ -14,6 +14,7 @@ import { COUNTDOWN_INTERVAL_MS } from '../config/app.config.js';
  * @returns {{ stop: Function, update: Function }}
  */
 export function startCountdown(clubConfig, elements) {
+  if (!clubConfig) return { stop: () => {}, update: () => {} };
   const {
     daysBox, hoursBox, minutesBox, secondsBox, clockTargetLabel,
     targetDayName, targetDateNum, targetMonthName, targetTimeHour
