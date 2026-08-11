@@ -95,9 +95,6 @@ export function initAdminPortal() {
       _refreshAllViews();
     });
   }
-
-  // Ensure data is clear until authenticated
-  _clearAdminData();
 }
 
 /**

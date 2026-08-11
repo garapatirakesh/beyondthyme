@@ -72,29 +72,29 @@ export function isValidConfirmedBooking(b) {
 export function isBookingForEvent(b, selectedEvent) {
   if (!b || !selectedEvent) return false;
 
-  const targetEventId = String(selectedEvent.id || '').trim();
-  const bEventId = String(b.eventId || '').trim();
-  const bClubId = String(b.clubId || b.event_id || b.vetting?.clubId || b.vetting?.eventId || '').trim();
+  const targetEventId = String(selectedEvent.id || selectedEvent.clubKey || '').trim().toLowerCase();
+  const targetThemeId = String(selectedEvent.themeId || '').trim().toLowerCase();
 
-  // 1. Exact eventId match (Requirement 1)
-  if (targetEventId && bEventId && targetEventId === bEventId) return true;
+  const bEventId = String(b.eventId || '').trim().toLowerCase();
+  const bClubId = String(b.clubId || b.event_id || b.vetting?.clubId || b.vetting?.eventId || '').trim().toLowerCase();
+  const bThemeId = String(b.themeId || b.vetting?.themeId || '').trim().toLowerCase();
 
-  // 2. Exact clubId reference match
-  if (targetEventId && bClubId && targetEventId === bClubId) return true;
+  // 1. Specific Event ID match (ignoring generic placeholder 'current-event')
+  if (targetEventId) {
+    if (bEventId && bEventId !== 'current-event' && bEventId === targetEventId) return true;
+    if (bClubId && bClubId !== 'current-event' && bClubId === targetEventId) return true;
+  }
+  if (targetThemeId && bThemeId && bThemeId === targetThemeId) return true;
 
-  // 3. Exact themeId reference match
-  const targetThemeId = String(selectedEvent.themeId || '').trim();
-  const bThemeId = String(b.themeId || b.vetting?.themeId || '').trim();
-  if (targetThemeId && bThemeId && targetThemeId === bThemeId) return true;
+  // 2. Fallback to normalized Theme / Event Title matching (handles 'current-event' and name variations)
+  const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const eNameNorm = norm(selectedEvent.name || selectedEvent.title || selectedEvent.id || '');
+  const bNameNorm = norm(b.themeName || b.title || b.name || b.vetting?.themeName || '');
 
-  // 4. Legacy fallback ONLY when document lacks explicit eventId / clubId
-  if (!bEventId && !bClubId && !bThemeId) {
-    const bName = String(b.themeName || b.title || b.name || b.vetting?.themeName || '').trim().toLowerCase();
-    const eName = String(selectedEvent.name || selectedEvent.title || '').trim().toLowerCase();
-    if (bName && eName && bName === eName) return true;
-
-    const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-    if (norm(bName) && norm(eName) && norm(bName) === norm(eName)) return true;
+  if (eNameNorm && bNameNorm) {
+    if (eNameNorm === bNameNorm || eNameNorm.includes(bNameNorm) || bNameNorm.includes(eNameNorm)) {
+      return true;
+    }
   }
 
   return false;

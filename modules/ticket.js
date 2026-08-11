@@ -40,7 +40,8 @@ export function buildTicketData(vettingData = {}, user = null) {
   return {
     ticketId: bookingId,
     bookingId: bookingId,
-    eventId: vettingData.eventId || 'current-event',
+    eventId: vettingData.eventId || vettingData.clubId || 'zenitsu',
+    clubId: vettingData.clubId || vettingData.eventId || 'zenitsu',
     themeId: vettingData.themeId || 'midnight_memories',
     themeName: themeName,
     uid: user?.uid || 'GUEST_ANONYMOUS',
