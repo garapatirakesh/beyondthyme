@@ -26,7 +26,7 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
   Object.values(clubsConfig).forEach((club) => {
     const isExpired = new Date(club.eventDate) <= now || club.status === 'Closed';
     const available = getAvailableSeats(club);
-    const isSoldOut = available <= 0;
+    const isSoldOut = available <= 0 || club.status === 'Sold_Out';
     const isActive  = club.id === activeClubId;
 
     let availLabel = `${available} SEATS OPEN`;
@@ -40,6 +40,13 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
     btn.className  = `club-card nav-interactive${isActive ? ' active' : ''}${(isExpired || isSoldOut) ? ' expired' : ''}`;
     btn.setAttribute('data-club', club.id);
     btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+
+    const d = new Date(club.eventDate);
+    const shortDay = d.toLocaleDateString('en-US', { weekday: 'short' });
+    const shortMonth = d.toLocaleDateString('en-US', { month: 'short' });
+    const dateNum = d.getDate();
+    const timeStr = d.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    const derivedNight = `${shortDay} ${shortMonth} ${dateNum} &middot; ${timeStr}`;
 
     btn.innerHTML = `
       <div class="club-card-image-box">
@@ -57,7 +64,7 @@ export function renderClubCards(clubsConfig, activeClubId, onClubSelect) {
         <h3 class="club-card-name">${club.name}</h3>
         <p class="club-card-location">${club.location}</p>
         <div class="club-card-night">
-          <span>${club.displayNight}</span>
+          <span>${derivedNight}</span>
           <span class="club-card-price-tag">₹${(club.price || 3500).toLocaleString('en-IN')}</span>
         </div>
       </div>

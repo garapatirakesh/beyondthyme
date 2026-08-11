@@ -25,7 +25,7 @@ import {
 } from './modules/vault.js';
 import { initExperienceSection, updateSeatsRemaining, syncSelectedEventToExperience } from './modules/experience.js';
 import { initGoldParticles } from './modules/particles.js';
-import { listenToLiveSeatBookings, listenToCollection, getTicketDoc } from './modules/firebase.js';
+import { listenToLiveSeatBookings, listenToCollection, getTicketDoc, writeFirestoreDoc } from './modules/firebase.js';
 import { initAuth, promptGoogleLogin, getCurrentUser } from './modules/auth.js';
 import { initAdminDashboard, openAdminDashboard } from './modules/admin.js';
 import { initVetting, openVettingModal } from './modules/vetting.js';
@@ -174,10 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
   });
 
-  document.getElementById('btnArchivesShortcut')?.addEventListener('click', () => {
-    document.getElementById('btnToggleArchives')?.click();
-    document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
-  });
 
   document.getElementById('btnLogout')?.addEventListener('click', async () => {
     document.getElementById('chronoIdentityPanel')?.classList.add('hidden');
@@ -226,9 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Listen to Time Capsules (Guestbook)
   listenToCollection('timeCapsules', (entries) => {
     if (!entries || entries.length === 0) return;
-    // Sort descending by timestamp
-    const sortedEntries = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    renderGuestbook(sortedEntries);
+    // Sort descending by timestamp, fallback to 0 for old seed data
+    const sortedEntries = entries.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+    renderGuestbook(sortedEntries.slice(0, 5));
   });
   renderClubCards(CLUBS_CONFIG, activeClubId, onClubSelect);
 
@@ -404,13 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cappedEvents = sortedEvents.slice(0, 4);
     const romanNumerals = ['I', 'II', 'III', 'IV'];
-    const defaultEmblems = ['🔥', '🌊', '🏔️', '⚗️'];
-    const defaultImages = [
-      'assets/vedic_fire_food.png',
-      'assets/coastal_monsoon_food.png',
-      'assets/himalayan_mist_food.png',
-      'assets/neo_bengaluru_food.png'
-    ];
+    // [REMOVED] Hardcoded defaultImages fallback array
 
     const newConfig = {};
 
@@ -429,18 +419,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       newConfig[clubId] = {
         id: clubId,
-        name: ev.title || ev.name || `Supper Club ${idx + 1}`,
-        location: ev.venue || ev.location || 'Secret Villa',
-        emblem: ev.emblem || defaultEmblems[idx] || '✨',
-        glowColor: ev.glowColor || '255,90,46',
-        romanNumeral: romanNumerals[idx] || `${idx + 1}`,
-        price: ev.price || 3500,
-        capacity: ev.capacity !== undefined ? parseInt(ev.capacity, 10) : 25,
-        eventDate: ev.eventDate || ev.eventStartTime || '2026-08-15T20:00:00+05:30',
+        name: ev.title || ev.name || '',
+        location: ev.venue || ev.location || '',
+        emblem: ev.emblem || '',
+        glowColor: ev.glowColor || '255,255,255',
+        romanNumeral: romanNumerals[idx] || '',
+        price: ev.price !== undefined ? ev.price : '',
+        capacity: ev.capacity !== undefined ? parseInt(ev.capacity, 10) : 0,
+        eventDate: ev.eventDate || ev.eventStartTime || '',
         eventEndTime: ev.eventEndTime || null,
-        displayNight: ev.displayNight || 'Sat Aug 15 · 20:00',
-        image: ev.image || defaultImages[idx] || 'assets/vedic_fire_food.png',
-        description: ev.description || 'Exclusive luxury dining experience where time stops at the table.',
+        displayNight: ev.displayNight || '',
+        image: ev.image || '', // Removed hardcoded default image fallback
+        description: ev.description || '',
         status: calculatedStatus,
         occupied: existingOccupied,
       };
@@ -730,7 +720,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── 11. Guestbook ─────────────────────────────────────────────────────────
   const guestbookForm = document.getElementById('guestbookForm');
-  guestbookForm?.addEventListener('submit', (e) => {
+  guestbookForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const message = document.getElementById('guestbookMsg')?.value.trim();
     if (!message) return;
@@ -743,9 +733,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const alias = user.name || (user.email ? user.email.split('@')[0].toUpperCase() : 'MEMBER');
-    appendGuestbookEntry(alias, message);
-    document.getElementById('guestbookMsg').value = '';
-    if (isAudioPlaying()) playBeaconChime();
+    const docId = `gb_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+    const emojis = ['⏳','🕰️','👁️','🔥','⚡','✨','🌀','🔮'];
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    
+    const entryData = {
+      alias: alias,
+      message: `"${message}"`,
+      emoji: emoji,
+      yuga: 'India Yuga',
+      timestamp: new Date().toISOString()
+    };
+    
+    try {
+      await writeFirestoreDoc('timeCapsules', docId, entryData);
+      document.getElementById('guestbookMsg').value = '';
+      if (isAudioPlaying()) playBeaconChime();
+    } catch (err) {
+      console.error('Failed to post message to the timeline:', err);
+    }
   });
 
   // ── 13. Ticker marquee duplicate for seamless loop ─────────────────────────

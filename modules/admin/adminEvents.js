@@ -182,14 +182,14 @@ export function openAdminEventModal(ev = null) {
     if (idInput) idInput.value = '';
     if (titleInput) titleInput.value = '';
     if (venueInput) venueInput.value = '';
-    if (emblemInput) emblemInput.value = '🔥';
-    if (priceInput) priceInput.value = 3500;
-    if (capacityInput) capacityInput.value = 7;
+    if (emblemInput) emblemInput.value = '';
+    if (priceInput) priceInput.value = '';
+    if (capacityInput) capacityInput.value = '';
     if (statusSelect) statusSelect.value = 'Published';
-    if (startTimeInput) startTimeInput.value = '2026-08-15T20:00';
-    if (endTimeInput) endTimeInput.value = '2026-08-15T23:30';
-    if (displayNightInput) displayNightInput.value = 'Sat Aug 15 · 20:00';
-    if (descInput) descInput.value = 'Exclusive luxury mystery dining experience where time stops at the table.';
+    if (startTimeInput) startTimeInput.value = '';
+    if (endTimeInput) endTimeInput.value = '';
+    if (displayNightInput) displayNightInput.value = '';
+    if (descInput) descInput.value = '';
   }
 
   if (fileInput) fileInput.value = '';
@@ -217,10 +217,10 @@ async function _saveAdminEventFromModal() {
   const themeSelect    = document.getElementById('adminEventThemeSelect');
   const title          = document.getElementById('adminEventTitleInput')?.value.trim() || 'Supper Club';
   const id             = rawId ? rawId : _generateCleanEventId(title);
-  const venue          = document.getElementById('adminEventVenueInput')?.value || 'Secret Villa';
-  const emblem         = document.getElementById('adminEventEmblemInput')?.value || '🔥';
-  const price          = parseInt(document.getElementById('adminEventPriceInput')?.value || '3500', 10);
-  const capacity       = parseInt(document.getElementById('adminEventCapacityInput')?.value || '25', 10);
+  const venue          = document.getElementById('adminEventVenueInput')?.value || '';
+  const emblem         = document.getElementById('adminEventEmblemInput')?.value || '';
+  const price          = parseInt(document.getElementById('adminEventPriceInput')?.value || '0', 10);
+  const capacity       = parseInt(document.getElementById('adminEventCapacityInput')?.value || '0', 10);
   const status         = document.getElementById('adminEventStatusSelect')?.value || 'Published';
   const startLocal     = document.getElementById('adminEventStartTimeInput')?.value;
   const endLocal       = document.getElementById('adminEventEndTimeInput')?.value;
@@ -277,9 +277,8 @@ async function _saveAdminEventFromModal() {
 
   if (imageUrl) {
     payload.image = imageUrl;
-  } else if (!payload.image) {
-    payload.image = 'assets/vedic_fire_food.png';
   }
+  // [REMOVED] Hardcoded default image fallback
 
   try {
     await writeFirestoreDoc('events', id, payload);

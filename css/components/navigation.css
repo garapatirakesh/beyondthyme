@@ -226,3 +226,19 @@
   box-shadow: 0 10px 28px rgba(255, 90, 46, 0.48);
   transform: translateY(-2px);
 }
+
+@media (max-width: 900px) {
+  .nav-container { padding: 0 0.5rem; height: 3.5rem; }
+  .logo { margin-right: 0.25rem; padding-right: 0.25rem; border-right: none; }
+  .nav-actions { margin-left: 0.25rem; padding-left: 0.25rem; border-left: none; gap: 0.25rem; }
+  .btn-pill { padding: 0 0.6rem; height: 2rem; font-size: 0.6rem; }
+  .audio-label, .ticket-label { display: none; }
+  .logo-wordmark span { display: none; }
+}
+
+@media (max-width: 600px) {
+  .logo-wordmark { display: none; }
+  .nav-actions .btn-coral .cta-label { display: none; }
+  .nav-actions .btn-coral::before { content: 'BOOK'; font-size: 0.6rem; margin-right: 0.25rem; }
+}
+
